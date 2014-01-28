@@ -1,0 +1,23 @@
+<w:sdt xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+	xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml">
+	<w:sdtPr>
+		<w:id w:val="1390915685" />
+		<w:placeholder>
+			<w:docPart w:val="255B528D18734477B8045D8C0B2DDCBA" />
+		</w:placeholder>
+		<w:showingPlcHdr />
+		<w:text />
+	</w:sdtPr>
+	<w:sdtEndPr />
+	<w:sdtContent>
+		<w:p w:rsidR="003A47A1" w:rsidRPr="006D1440" w:rsidRDefault="0053394A">
+			<w:pPr />
+			<w:r w:rsidRPr="006D1440">
+				<w:rPr>
+					<w:rStyle w:val="PlaceholderText" />
+				</w:rPr>
+				<w:t>Click here to enter text.</w:t>
+			</w:r>
+		</w:p>
+	</w:sdtContent>
+</w:sdt>

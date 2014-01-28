@@ -1,0 +1,16 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+	
+	<!-- only for JPA 2 entity manager!!! -->
+	<persistence-unit name="demo" transaction-type="RESOURCE_LOCAL">		
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>				
+	</persistence-unit>
+
+	<!-- only for JPA 2 entity manager!!! -->
+	<persistence-unit name="wte-templates" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
+	</persistence-unit>
+</persistence>

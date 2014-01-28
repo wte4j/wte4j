@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:wtejsf="http://wte.born.ch/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="../templatesLayout.xhtml">
+	<ui:define name="templatesHeader">
+		<h:outputText value="Organisationen" />
+	</ui:define>
+
+	<ui:define name="templatesTabContent">
+		<div>
+			<rich:dataTable id="templates" border="4"
+				value="#{templateBean.allTemplatesOrganization}" var="template"
+				rules="rows">
+				<rich:column sortBy="#{template.documentName}">
+					<f:facet name="header">#{msgs.documentName}</f:facet>
+					<h:commandLink action="#{templateBean.download(template)}">
+						<h:outputText value="#{template.documentName}" />
+					</h:commandLink>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">#{msgs.templateMenuColHeaderOptions}</f:facet>
+					<div class="center">
+						<h:commandButton value="#{msgs.templateMenuRowDeleteActionLabel}"
+							action="#{templateBean.delete(template)}" />
+						<h:commandButton action="#{uploadTemplateBean.select(template)}"
+							value="#{msgs.updateTemplate}" />
+					</div>
+				</rich:column>
+			</rich:dataTable>
+		</div>
+		<div style="text-align: left">
+			<h:outputText value="#{msgs.newTemplateHeader}" />
+		</div>
+		<h:panelGrid columns="3" style="width: auto;">
+			<h:outputLabel value=" #{msgs.documentName}" />
+			<h:inputText value="#{templateBean.documentName}" required="true" />
+			<h:commandButton
+				action="#{templateBean.createNewTemplate('ORGANIZATION')}"
+				value="#{msgs.newTemplate}" />
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>
+
+</html>

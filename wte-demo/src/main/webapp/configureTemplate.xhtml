@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="templates/masterLayout.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<div class="span-19">
+				<div>
+					<h3>
+						<h:outputText value="#{msgs.configureTemplateHeader}" />
+					</h3>
+				</div>
+				<div class="left">
+					<div>
+						<hr />
+
+						<h:panelGrid columns="2">
+							<h:outputLabel
+								value="#{msgs.configureTemplateConfigurationTemplateDescriptionLabel}" />
+							<h:inputText value="#{configureTemplateBean.templateDescription}"
+								disabled="#{configureTemplateBean.isUiEditMode()==false}" />
+							<h:outputLabel
+								value="#{msgs.configureTemplateConfigurationTemplateFileNameLabel}" />
+							<h:outputText value="#{configureTemplateBean.getFileName()}" />
+						</h:panelGrid>
+						<hr />
+						<div>
+							<div class="left large">
+								<h:outputText value="#{msgs.configureTemplateTagMappingHeader}" />
+							</div>
+						</div>
+
+						<rich:dataTable border="4" columnClasses="center"
+							value="#{editParameterMappingConfigurationBean.allParameters}"
+							var="paramData" rules="rows">
+							<rich:column sortBy="#{paramData.getTagId()}"
+								sortOrder="#{editParameterMappingConfigurationBean.getTagSortOrder()}">
+								<f:facet name="header">
+									<h:outputText
+										value="#{msgs.tagMappingConfigurationTableElementColumnHeader}" />
+								</f:facet>
+								<h:outputText value="#{paramData.getTagId()}" />
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText
+										value="#{msgs.tagMappingConfigurationTableValueColumnHeader}" />
+								</f:facet>
+								<h:selectOneMenu value="#{paramData.value}"
+									disabled="#{configureTemplateBean.isUiEditMode()==false}">
+									<f:selectItems
+										value="#{editParameterMappingConfigurationBean.parameterAssignmentSelection}"
+										var="w" itemLabel="#{w.name}" itemValue="#{w.name}" />
+								</h:selectOneMenu>
+							</rich:column>
+						</rich:dataTable>
+
+
+						<hr />
+					</div>
+
+					<div class="span-10">
+						<h:commandButton value="#{msgs.settingsButtonLabelChangeData}"
+							action="#{configureTemplateBean.toUiEditMode}"
+							rendered="#{configureTemplateBean.isUiEditMode()==false}" />
+						<h:commandButton value="#{msgs.settingsButtonLabelSave}"
+							action="#{configureTemplateBean.saveTemplate}"
+							rendered="#{configureTemplateBean.isUiEditMode()==true}" />
+						&nbsp;
+						<h:commandButton value="#{msgs.settingsButtonLabelCancel}"
+							action="#{configureTemplateBean.cancelDataChange}"
+							rendered="#{configureTemplateBean.isUiEditMode()==true}" />
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

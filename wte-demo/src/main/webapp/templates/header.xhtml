@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<head>
+<title>IGNORED</title>
+</head>
+<body>
+	<ui:composition>
+		<h:form>
+			<div class="span-19 last">
+				<h:link outcome="/index.xhtml" >
+				
+					<h:graphicImage  styleClass="left" library="images"
+						name="biag_logo_02.gif" width="160" height="28" />
+				</h:link>
+				<h2>
+					<h:outputText value="#{applicationInfoService.productName}" />
+				</h2>
+			</div>
+			<div class="span-5 last ">
+				<h:selectOneMenu styleClass="right" onchange="this.form.submit()"
+					value="#{localeSwitcherBean.locale}" immediate="true"
+					valueChangeListener="#{localeSwitcherBean.languageChanged}">
+					<f:selectItems value="#{localeSwitcherBean.locales}" var="w"
+						itemLabel="#{w.getDisplayLanguage(localeSwitcherBean.locale)}"
+						itemValue="#{w}" />
+					<f:converter
+						converterId="ch.born.wte.jsf.converter.localeConverter" />
+				</h:selectOneMenu>
+			</div>
+		</h:form>
+	</ui:composition>
+</body>
+</html>

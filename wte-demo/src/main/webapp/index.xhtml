@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="templates/masterLayout.xhtml">
+	<ui:define name="content">
+		<div class="span-19">
+			<h:form>
+				<br />
+				<h3>
+					<h:outputText value="#{msgs.welcomeText}" />
+				</h3>
+
+			Folgende Features werden von der Web-Applikation unterstützt:
+			<table>
+					<tr>
+						<td>
+							<div class="ui-dt-c">Up- und Download von Word-Templates
+								(.dotx)</div></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="ui-dt-c">Verwaltung der Templates</div></td>
+					</tr>
+					<tr>
+
+						<td>
+							<div class="ui-dt-c">Zuweisung von Werten zu Template
+								Parametern</div></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="ui-dt-c">Generierung von Worddokumenten aus
+								Templates</div></td>
+					</tr>
+				</table>
+
+
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

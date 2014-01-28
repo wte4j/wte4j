@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title><ui:insert name="pageTitle">#{applicationInfoService.productName}</ui:insert>
+	</title>
+	<h:outputStylesheet name="screen.css" library="css/blueprint" />
+	<h:outputStylesheet name="ie.css" library="css/blueprint" />
+	<h:outputStylesheet name="wteStyle.css" library="css/blueprint" />
+
+</h:head>
+
+<h:body>
+	<f:view locale="#{localeSwitcherBean.locale}">
+		<div class="span-24 last" id="container">
+			<div class="span-24 last" id="header">
+				<ui:insert name="header">
+					<ui:include src="header.xhtml" />
+				</ui:insert>
+			</div>
+			<hr />
+
+			<div class="span-24 last " id="mainArea">
+				<div class="span-5" id="leftBar">
+					<ui:insert name="leftBar">
+						<ui:include src="leftBar.xhtml" />
+					</ui:insert>
+				</div>
+
+				<div class="span-9 last" id="content">
+					<ui:insert name="content">
+					</ui:insert>
+				</div>
+			</div>
+			<div class="span-24 last" id="footer">
+				<ui:insert name="footer">
+					<ui:include src="footer.xhtml" />
+				</ui:insert>
+			</div>
+			<ui:debug />
+		</div>
+	</f:view>
+</h:body>
+</html>

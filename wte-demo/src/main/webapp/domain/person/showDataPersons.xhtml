@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:wtejsf="http://wte.born.ch/facelets">
+
+<ui:composition template="templatesPersons.xhtml">
+	<ui:define name="dataContent">
+		<rich:panel>
+			<rich:dataGrid value="#{showDomainDataBean.allPersonsOrdered}"
+				var="person" columns="3" elements="9" border="0" width="800px">
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText
+							value="#{person.getLastName()}, #{person.getFirstName()} (#{person.getId()})"></h:outputText>
+					</f:facet>
+					<h:panelGrid columns="2" rendered="#{person.hasAddress()==true}">
+						<h:outputText value="Street" styleClass="label"></h:outputText>
+						<h:outputText value="#{person.getStreet()}" />
+						<h:outputText value="Housenumber" styleClass="label"></h:outputText>
+						<h:outputText value="#{person.getHouseNumber()} " />
+						<h:outputText value="Zipcode" styleClass="label"></h:outputText>
+						<h:outputText value="#{person.getZipCode()}" />
+						<h:outputText value="Town" styleClass="label"></h:outputText>
+						<h:outputText value="#{person.getTown()}" />
+					</h:panelGrid>
+					<h:outputText rendered="#{person.hasAddress()==false}"
+						value="No Address" />
+				</rich:panel>
+				<f:facet name="footer">
+					<rich:dataScroller />
+				</f:facet>
+			</rich:dataGrid>
+		</rich:panel>
+	</ui:define>
+</ui:composition>
+
+</html>

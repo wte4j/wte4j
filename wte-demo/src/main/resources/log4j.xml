@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "classpath:org/apache/log4j/xml/log4j.dtd">
+
+<log4j:configuration>
+
+    <!-- Appenders -->
+    <!-- TODO configure context root! -->            
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" 
+                   value="[%d] [wte] %-5p %-25c (%13F) %3x - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="logFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/var/log/wte.log"/>
+        <param name="datePattern" value="'.'yyyy-MM-dd" />
+        <param name="Append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" 
+                   value="[%d] [wte] %-5p %-25c (%13F) %3x - %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Root Logger -->
+    <root>
+        <priority value="info"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="logFile"/>
+    </root>
+    
+    
+
+</log4j:configuration>

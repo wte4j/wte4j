@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+</head>
+<body>
+	<ui:composition>
+		<h:panelGrid columns="2">
+			<rich:panelMenu groupExpandedLeftIcon="triangleUp"
+				groupCollapsedLeftIcon="triangleDown"
+				topGroupExpandedRightIcon="chevronUp"
+				topGroupCollapsedRightIcon="chevronDown" itemLeftIcon="disc">
+				<h:form>
+					<rich:panelMenuItem label="#{msgs.leftBarMenuHomepage}"
+						action="/index.xhtml?faces-redirect=true" />
+					<rich:panelMenuItem label="#{msgs.leftBarMenuTemplates}"
+						action="#{panelMenuBean.openTemplates}" />
+					<rich:panelMenuItem label="#{msgs.leftBarMenuDocumentGeneration}"
+						action="#{panelMenuBean.openGeneration}" />
+					<rich:panelMenuItem label="#{msgs.leftBarMenuSettings}"
+						action="#{panelMenuBean.openSettings}" />
+					<rich:panelMenuItem label="#{msgs.leftBarMenuHelp}"
+						action="#{panelMenuBean.openHelp}" />
+				</h:form>
+				<h:form>
+					<rich:panelMenuGroup label="#{msgs.menuDebugLabel}">
+						<h:form>
+							<rich:panelMenuItem label="#{msgs.leftBarAddNewPerson}"
+								action="#{panelMenuBean.openNewPerson}" />
+						</h:form>
+					</rich:panelMenuGroup>
+				</h:form>
+			</rich:panelMenu>
+		</h:panelGrid>
+		<div class="small quiet">
+			<h:outputText
+				value="#{applicationInfoService.displayNameApplication}" />
+		</div>
+	</ui:composition>
+</body>
+</html>

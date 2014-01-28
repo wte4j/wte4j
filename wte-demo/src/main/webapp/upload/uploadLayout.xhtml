@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:wtejsf="http://wte.born.ch/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<h:title>Upload</h:title>
+</h:head>
+<h:body>
+	<ui:composition template="/templates/masterLayout.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<div>
+					<h3>
+						<ui:insert name="fileUploadHeader">
+							<h:outputText value="#{msgs.headingFileUpload}" />
+						</ui:insert>
+					</h3>
+				</div>
+			</h:form>
+			<h:form enctype="multipart/form-data">
+
+				<div class="span-8">
+					<h:panelGrid columns="3">
+
+						<h:column>
+							<h:outputLabel styleClass="ui-dt-c"
+								value="#{msgs.uploadTemplateFileLabel}" />
+						</h:column>
+						<h:column>&nbsp;</h:column>
+						<h:column>
+							<wtejsf:upload />
+						</h:column>
+					</h:panelGrid>
+					<h:messages showDetail="true" errorClass="error" layout="table" />
+				</div>
+				<ui:insert name="uploadButton" />
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

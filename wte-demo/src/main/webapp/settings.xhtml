@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="templates/masterLayout.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<div class="span-19">
+				<div>
+					<h3>
+						<h:outputText value="#{msgs.settingsMenuHeader}" />
+					</h3>
+				</div>
+
+				<h:panelGrid styleClass="span-10 last" columns="2">
+					<h:outputLabel for="generationBranding"
+						value="#{msgs.generationBrandingLabel}" />
+					<h:selectOneRadio id="generationBranding"
+						disabled="#{generationSettingsBean.isUiEditMode()==false}"
+						value="#{generationSettingsBean.generationBrandingMode}"
+						valueChangeListener="#{generationSettingsBean.generationBrandingModeValueChanged}">
+						<f:selectItem itemLabel="#{msgs.generationBrandingOnLabel}"
+							itemValue="true" />
+						<f:selectItem itemLabel="#{msgs.generationBrandingOffLabel}"
+							itemValue="false" />
+					</h:selectOneRadio>
+
+					<h:outputLabel for="debugMode"
+						value="#{msgs.debugGenerationModeLabel}" />
+					<h:selectOneRadio id="debugMode"
+						disabled="#{generationSettingsBean.isUiEditMode()==false}"
+						value="#{generationSettingsBean.debugGenerationMode}"
+						valueChangeListener="#{generationSettingsBean.debugGenerationModeValueChanged}">
+						<f:selectItem itemLabel="#{msgs.debugGenerationModeOnLabel}"
+							itemValue="true" />
+						<f:selectItem itemLabel="#{msgs.debugGenerationModeOffLabel}"
+							itemValue="false" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+				<hr />
+				<div class="span-10">
+					<h:commandButton value="#{msgs.settingsButtonLabelChangeData}"
+						action="#{generationSettingsBean.toUiEditMode}"
+						rendered="#{generationSettingsBean.isUiEditMode()==false}" />
+					<h:commandButton value="#{msgs.settingsButtonLabelSave}"
+						action="#{generationSettingsBean.saveData}"
+						rendered="#{generationSettingsBean.isUiEditMode()==true}" />
+					&nbsp;
+					<h:commandButton value="#{msgs.settingsButtonLabelCancel}"
+						action="#{generationSettingsBean.cancelDataChange}"
+						rendered="#{generationSettingsBean.isUiEditMode()==true}" />
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
