@@ -20,6 +20,7 @@
 	<bean id="wteEntityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="wte-templates"/>
+		<property name="mappingResources" value="META-INF/wte-mapping.xml"/>
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter">
 			<bean id="jpaVendorAdapter"

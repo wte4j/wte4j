@@ -27,7 +27,8 @@
 							<hibernatetool>
 								<classpath>
 									<path location="src/main/java" />
-									<path location="src/test/resources" />
+									<path location="src/main/resources" />
+									<path location="src/test/hibernate-config" />
 								</classpath>
 								<hbm2ddl console="false" export="false" update="false"
 									drop="false" create="true" destdir="${basedir}/src/test/resources/sql"
