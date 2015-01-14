@@ -38,7 +38,7 @@ public class WordTemplateRepository implements TemplateRepository {
 	@PersistenceContext(unitName = "wte-templates")
 	protected EntityManager em;
 
-	@Autowired
+	@Autowired(required=false)
 	@Qualifier("wteModelService")
 	protected WteModelService modelService;
 

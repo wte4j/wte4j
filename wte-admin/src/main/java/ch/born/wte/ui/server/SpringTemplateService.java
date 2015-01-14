@@ -3,6 +3,7 @@ package ch.born.wte.ui.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import ch.born.wte.ui.shared.TemplateService;
 import ch.born.wte.ui.shared.UserDto;
 
 @Service("templateService")
-public class TemplateServiceImpl implements TemplateService {
+public class SpringTemplateService implements TemplateService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private String contextPath = "";
@@ -35,6 +36,15 @@ public class TemplateServiceImpl implements TemplateService {
 			TemplateDto templateDto = createTemplateDto(template);
 			templateDtos.add(templateDto);
 		}
+		UserDto user=new UserDto();
+		user.setDisplayName("editor");
+		
+		TemplateDto templateDto=new TemplateDto();
+		templateDto.setDocumentName("Test");
+		templateDto.setLanguage("de");
+		templateDto.setEditor(user);
+		templateDto.setUpdateAt(new Date());
+		templateDtos.add(templateDto);	
 		return templateDtos;
 	}
 

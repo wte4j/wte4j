@@ -8,7 +8,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>WEB-INF/application-context.xml</param-value>
 	</context-param>
-	
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -27,13 +27,29 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>downloadServlet</servlet-name>
-		<servlet-class>ch.born.wte.ui.server.DownloadServlet</servlet-class>
+		<servlet-name>remoteLogging</servlet-name>
+		<servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>downloadServlet</servlet-name>
-		<url-pattern>/download/template</url-pattern>
+		<servlet-name>remoteLogging</servlet-name>
+		<url-pattern>/WteAdmin/remote_logging</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>documents</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value></param-value>
+		</init-param>			
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>documents</servlet-name>
+		<url-pattern>/WteAdmin/documents/*</url-pattern>
+	</servlet-mapping>
+
+
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

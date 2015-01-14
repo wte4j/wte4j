@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -13,17 +14,18 @@ public class MainPanel extends Composite {
 			.create(MainPanelUiBinder.class);
 
 	@UiField
-	VerticalPanel contentPanel;
-
-	interface MainPanelUiBinder extends UiBinder<Widget, MainPanel> {
-	}
+	FlowPanel contentPanel;	
 
 	public MainPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-
-	public void addContent(Widget content) {
-		contentPanel.add(content);
+	
+	public void setContent(Widget widget){
+		contentPanel.clear();
+		contentPanel.add(widget);
 	}
-
+	
+	
+	interface MainPanelUiBinder extends UiBinder<Widget, MainPanel> {
+	}
 }

@@ -6,6 +6,6 @@
 		<h1>
 			<g:Label ui:field="title" styleName="title" text="{labels.applicationTitle}"></g:Label>
 		</h1>
-		<g:VerticalPanel ui:field="contentPanel" />
+		<g:FlowPanel ui:field="contentPanel" />
 	</g:HTMLPanel>
 </ui:UiBinder> 

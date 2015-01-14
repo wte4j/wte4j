@@ -1,16 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:with field='labels' type="ch.born.wte.ui.client.Labels" />
+	<ui:with field='labels' type="ch.born.wte.ui.client.Labels"  />
 	<g:SimplePanel ui:field="menuContainer" >
 		<g:MenuBar ui:field="contextMenu" vertical="true">
 			<g:MenuItem ui:field="downloadAction" text="{labels.downloadTemplate}" />
-			<g:MenuItem ui:field="updateAction" text="{labels.updateTemplate}" />
+				<g:MenuItem ui:field="updateAction" text="{labels.updateTemplate}" />				
+				
+				<g:MenuItem ui:field="lockAction" text="{labels.lockTemplate}" />
+				<g:MenuItem ui:field="unlockAction" text="{labels.unlockTemplate}" />
 
-			<g:MenuItem ui:field="lockAction" text="{labels.lockTemplate}" />
-			<g:MenuItem ui:field="unlockAction" text="{labels.unlockTemplate}" />
-
-			<g:MenuItem ui:field="deleteAction" text="{labels.deleteTemplate}" />
+				<g:MenuItem ui:field="deleteAction" text="{labels.deleteTemplate}" />
 		</g:MenuBar>
 	</g:SimplePanel>
 </ui:UiBinder> 
