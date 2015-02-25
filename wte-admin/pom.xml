@@ -5,9 +5,9 @@
 	<!-- POM file generated with GWT webAppCreator -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>word-template-engine</artifactId>
-		<groupId>ch.born.wte</groupId>
-		<version>1.0.2-SNAPSHOT</version>
+		<groupId>org.wte</groupId>
+		<artifactId>wte-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>wte-admin</artifactId>
 	<packaging>war</packaging>
@@ -182,6 +182,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -199,30 +204,11 @@
 		</dependency>
 
 		<!-- logging -->
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
-		</dependency>
-
-		<!-- log slf4 to log4j2 -->
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-		</dependency>
-
-		<!-- log log4j over slf4j -->
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId> log4j-over-slf4j</artifactId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+
 
 	</dependencies>
 

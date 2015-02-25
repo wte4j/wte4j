@@ -4,9 +4,9 @@
 	<artifactId>wte-demo</artifactId>
 	<packaging>war</packaging>
 	<parent>
-		<groupId>ch.born.wte</groupId>
-		<artifactId>word-template-engine</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<groupId>org.wte</groupId>
+		<artifactId>wte-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -14,23 +14,10 @@
 		<skipTests>true</skipTests>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-
-	</build>
-
 	<dependencies>
 
 		<dependency>
-			<groupId>ch.born.wte</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>wte-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -133,16 +120,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
 		</dependency>
 
 		<!-- hibernate -->

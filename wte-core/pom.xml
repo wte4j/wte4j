@@ -5,9 +5,9 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>ch.born.wte</groupId>
-		<artifactId>word-template-engine</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<groupId>org.wte</groupId>
+		<artifactId>wte-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<build>
@@ -89,109 +89,99 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
+			<artifactId>spring-beans</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
 
 		<!-- ===== JPA ===== -->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-			<scope>provided</scope>
 		</dependency>
 
-		<!-- ===== database driver ===== -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.2.4</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- file access to microsoft format files -->
 		<dependency>
 			<groupId>org.docx4j</groupId>
 			<artifactId>docx4j</artifactId>
-			<version>3.0.0</version>
+			<version>3.2.1</version>
 			<exclusions>
 				<!-- only needed for pdf export -->
 				<exclusion>
 					<artifactId>fop</artifactId>
 					<groupId>org.apache.xmlgraphics</groupId>
 				</exclusion>
-
 				<exclusion>
-					<groupId>org.apache.avalon.framework</groupId>
-					<artifactId>avalon-framework-api</artifactId>
+					<artifactId>jaxb-xslfo</artifactId>
+					<groupId>org.plutext</groupId>
 				</exclusion>
 
+				<!-- (X)HTML, PDF export -->
 				<exclusion>
-					<groupId>org.apache.avalon.framework</groupId>
-					<artifactId>avalon-framework-impl</artifactId>
+					<artifactId>xalan</artifactId>
+					<groupId>xalan</groupId>
 				</exclusion>
-				<!-- slf4j is used for logging in 3.0.0 -->
+				<!-- Pptx export -->
 				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
+					<artifactId>jaxb-svg11</artifactId>
+					<groupId>org.plutext</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>wmf2svg</artifactId>
+					<groupId>net.arnx</groupId>
+				</exclusion>
+				<!-- OpenDoPE -->
+				<exclusion>
+					<artifactId>stringtemplate</artifactId>
+					<groupId>org.antlr</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>antlr-runtime</artifactId>
+					<groupId>org.antlr</groupId>
 				</exclusion>
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
 					<groupId>org.slf4j</groupId>
 				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 
 		<!-- testing -->
+
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.2.4</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -202,10 +192,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -214,12 +205,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
 
 	</dependencies>
 
