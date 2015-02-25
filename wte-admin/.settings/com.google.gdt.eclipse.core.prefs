@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+jarsExcludedFromWebInfLib=
+lastWarOutDir=C\:/dev/workspace-wte/word-template-engine/wte-admin/target/gwtWebAppDirectory
+launchConfigExternalUrlPrefix=http\://localhost\:8080/wte-admin/
+warSrcDir=src/main/webapp
+warSrcDirIsOutput=false

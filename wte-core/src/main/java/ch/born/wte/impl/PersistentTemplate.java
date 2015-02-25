@@ -20,7 +20,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
@@ -135,6 +134,9 @@ public class PersistentTemplate {
 	}
 
 	public Class<?> getInputType() {
+		if (inputType == null) {
+			initInputClass();
+		}
 		return inputType;
 	}
 
@@ -249,11 +251,6 @@ public class PersistentTemplate {
 		}
 		lockingDate = new Date();
 		lockingUser = user;
-	}
-
-	@PostLoad
-	void initTransientFields() {
-		initInputClass();
 	}
 
 }

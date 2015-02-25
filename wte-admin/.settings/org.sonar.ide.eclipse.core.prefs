@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.surefire.reportsPath\=C\:\\dev\\workspace-wte\\word-template-engine\\wte-admin\\target/surefire-reports\r\nsonar.skippedModules\=wte-demo, wte-admin\r\nsonar.jacoco.reportPath\=C\:\\dev\\workspace-wte\\word-template-engine\\wte-admin\\target/jacoco.exec
+projectKey=ch.born.wte\:wte-admin
+serverUrl=http\://chbehvs052\:9000/sonar
+version=2

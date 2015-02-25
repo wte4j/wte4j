@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WteAdmin" version="3.0">
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/application-context.xml</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>springGwtRemoteService</servlet-name>
+		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springGwtRemoteService</servlet-name>
+		<url-pattern>/WteAdmin/springGwtServices/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>downloadServlet</servlet-name>
+		<servlet-class>ch.born.wte.ui.server.DownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadServlet</servlet-name>
+		<url-pattern>/download/template</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>WteAdmin.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>
