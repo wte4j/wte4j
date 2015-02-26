@@ -218,14 +218,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-	<repositories>
-		<repository>
-			<id>gwt</id>
-			<url>https://code.google.com/p/gwtrepo/</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>	
-	</repositories>
 
 </project>

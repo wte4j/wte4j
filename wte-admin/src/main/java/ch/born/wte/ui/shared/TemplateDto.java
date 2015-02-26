@@ -10,7 +10,6 @@ public class TemplateDto implements Serializable {
 	private Date updatedAt;
 	private UserDto editor;
 	private UserDto lockingUser;
-	private String templatePath;
 
 	public String getDocumentName() {
 		return documentName;
@@ -50,13 +49,5 @@ public class TemplateDto implements Serializable {
 
 	public void setLockingUser(UserDto lockingUser) {
 		this.lockingUser = lockingUser;
-	}
-
-	public String getTemplatePath() {
-		return templatePath;
-	}
-
-	public void setTemplatePath(String templatePath) {
-		this.templatePath = templatePath;
 	}
 }

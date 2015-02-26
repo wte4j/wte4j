@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 
-@RemoteServiceRelativePath("springGwtServices/templateService")
+@RemoteServiceRelativePath("templateService")
 public interface TemplateService extends RemoteService {
 	List<TemplateDto> getTemplates();
 

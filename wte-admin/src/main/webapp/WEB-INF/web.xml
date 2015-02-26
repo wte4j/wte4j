@@ -18,12 +18,12 @@
 	</listener>
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>springGwtRemoteService</servlet-name>
-		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
+		<servlet-name>templateService</servlet-name>
+		<servlet-class>ch.born.wte.ui.server.TemplateServiceGWTAdapter</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>springGwtRemoteService</servlet-name>
-		<url-pattern>/WteAdmin/springGwtServices/*</url-pattern>
+		<servlet-name>templateService</servlet-name>
+		<url-pattern>/WteAdmin/templateService/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
