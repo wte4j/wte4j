@@ -5,65 +5,13 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>org.wte</groupId>
+		<groupId>org.wte4j</groupId>
 		<artifactId>wte-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>hibernate3-maven-plugin</artifactId>
-				<version>3.0</version>
-				<executions>
-					<execution>
-						<id>test-db-schema</id>
-						<phase>generate-test-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<hibernatetool>
-								<classpath>
-									<path location="src/main/java" />
-									<path location="src/main/resources" />
-									<path location="src/test/hibernate-config" />
-								</classpath>
-								<hbm2ddl console="false" export="false" update="false"
-									drop="false" create="true" destdir="${basedir}/src/test/resources/sql"
-									outputfilename="create-schema.sql" format="false" haltonerror="true">
-									<jpaconfiguration persistenceunit="wte-templates" />
-								</hbm2ddl>
-							</hibernatetool>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<!-- hibernate tools -->
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-core</artifactId>
-						<version>3.6.10.Final</version>
-					</dependency>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-entitymanager</artifactId>
-						<version>3.6.10.Final</version>
-					</dependency>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-validator</artifactId>
-						<version>4.1.0.Final</version>
-					</dependency>
-					<dependency>
-						<groupId>javassist</groupId>
-						<artifactId>javassist</artifactId>
-						<version>3.4.GA</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

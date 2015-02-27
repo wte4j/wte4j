@@ -4,7 +4,7 @@
 	<artifactId>wte-demo</artifactId>
 	<packaging>war</packaging>
 	<parent>
-		<groupId>org.wte</groupId>
+		<groupId>org.wte4j</groupId>
 		<artifactId>wte-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
