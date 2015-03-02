@@ -3,7 +3,6 @@ package ch.born.wte.ui.server.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages={"ch.born.wte.ui.server.services", "ch.born.wte.impl"})
 @PropertySource("/WEB-INF/wte.properties")
-@ImportResource("classpath:datasource-config.xml")
 public class SpringApplicationConfig {
     
     @Bean
