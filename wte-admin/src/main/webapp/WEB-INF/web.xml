@@ -19,7 +19,7 @@
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>templateService</servlet-name>
-		<servlet-class>ch.born.wte.ui.server.TemplateServiceGWTAdapter</servlet-class>
+		<servlet-class>ch.born.wte.ui.server.services.TemplateServiceGWTAdapter</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>templateService</servlet-name>

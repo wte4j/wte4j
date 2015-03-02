@@ -1,4 +1,4 @@
-package ch.born.wte.ui.server;
+package ch.born.wte.ui.server.services;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
