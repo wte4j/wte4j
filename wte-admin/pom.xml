@@ -97,12 +97,6 @@
 			<artifactId>gwt-dev</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<classifier>sources</classifier>
-		</dependency>
 
 		<!-- wte -->
 
@@ -124,16 +118,6 @@
 			<artifactId>hsqldb</artifactId>
 			<version>2.2.4</version>
 			<scope>compile</scope>
-		</dependency>
-
-		<!-- hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
 		</dependency>
 
 		<!-- Spring -->
