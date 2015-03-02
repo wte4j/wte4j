@@ -5,8 +5,14 @@
 	id="WteAdmin" version="3.0">
 
 	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+	</context-param>
+	<!-- Configuration locations must consist of one or more comma- or space-delimited 
+		fully-qualified @Configuration classes -->
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>WEB-INF/application-context.xml</param-value>
+		<param-value>ch.born.wte.ui.server.config</param-value>
 	</context-param>
 
 	<listener>
@@ -41,7 +47,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value></param-value>
-		</init-param>			
+		</init-param>
 	</servlet>
 
 	<servlet-mapping>
