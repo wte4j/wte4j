@@ -15,6 +15,7 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -34,7 +35,7 @@ public class StandaloneJPAConfig {
     public LocalContainerEntityManagerFactoryBean wteEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emfFactoryBean = new LocalContainerEntityManagerFactoryBean();
         emfFactoryBean.setDataSource(lookUpDataSource());
-        emfFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        emfFactoryBean.setJpaVendorAdapter(new OpenJpaVendorAdapter());
         emfFactoryBean.setPersistenceUnitName("wte-templates");
         return emfFactoryBean;
     }
@@ -63,7 +64,7 @@ public class StandaloneJPAConfig {
         else if(env.containsProperty("wte.jdbc.url")){
             BasicDataSource dataSource=new BasicDataSource();
             dataSource.setUrl(env.getProperty("wte.jdbc.url"));
-            dataSource.setDriverClassName(env.getProperty(""));
+            dataSource.setDriverClassName(env.getProperty("wte.jdbc.driver"));
             dataSource.setUsername(env.getProperty("wte.jdbc.user"));
             dataSource.setPassword(env.getProperty("wte.jdbc.password"));
             return dataSource;
