@@ -1,5 +1,19 @@
 package ch.born.wte.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -16,25 +30,26 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.born.wte.EmbeddedDataBaseConfig;
 import ch.born.wte.FileStore;
 import ch.born.wte.FormatterFactory;
 import ch.born.wte.LockingException;
 import ch.born.wte.Template;
 import ch.born.wte.TemplateQuery;
-import ch.born.wte.TestWithEmbeddedDataSource;
 import ch.born.wte.User;
 import ch.born.wte.WteModelService;
 
-import static org.junit.Assert.*;
-
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-@TransactionConfiguration
-public class WordTemplateRepositoryTest extends TestWithEmbeddedDataSource {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes={EmbeddedDataBaseConfig.class})
+@TransactionConfiguration(defaultRollback=true)
+@Transactional
+public class WordTemplateRepositoryTest  {
 	private static final long LOCKED_TEMPLATE = 2;
 
 	private static final long UNLOCKED_TEMPLATE = 1;
