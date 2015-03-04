@@ -1,16 +1,17 @@
 package ch.born.wte;
 
 import javax.annotation.Generated;
+import javax.persistence.Embeddable;
 
 import org.apache.commons.lang.StringUtils;
-
+@Embeddable
 public class User {
 
 	private String userId;
 
 	private String displayName;
 
-	User() {
+	public User() {
 	}
 
 	public User(String userName, String displayName) {
@@ -54,7 +55,7 @@ public class User {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof User))
 			return false;
 		User other = (User) obj;
 		if (userId == null) {

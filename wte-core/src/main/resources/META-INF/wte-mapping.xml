@@ -4,5 +4,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm 
         http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	version="2.0">
-	<entity class="ch.born.wte.impl.PersistentTemplate"/>	
+	<entity class="ch.born.wte.impl.PersistentTemplate"/>
+	<embeddable class="ch.born.wte.User"></embeddable>	
 </entity-mappings>
