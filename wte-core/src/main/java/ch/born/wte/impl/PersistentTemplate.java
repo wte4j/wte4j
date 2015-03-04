@@ -39,7 +39,7 @@ import ch.born.wte.User;
 @Entity
 @Table(name = "wte_template", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"document_name", "language" }))
-@TableGenerator(name = "wte_gen", table = "wte_gen")
+@TableGenerator(name = "wte_gen", table = "wte_gen", valueColumnName = "sequence_next", pkColumnName = "sequence_name", pkColumnValue = "wte_template")
 public class PersistentTemplate {
 
 	private static final String TEMPLATE_SUFFIX = ".docx";
@@ -233,7 +233,7 @@ public class PersistentTemplate {
 	}
 
 	public boolean isLocked() {
-		return lockingUser != null;
+		return lockingUser != null && lockingUser.getUserId() != null;
 	}
 
 	public boolean isLockedBy(User user) {
