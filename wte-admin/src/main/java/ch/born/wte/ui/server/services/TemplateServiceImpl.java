@@ -35,15 +35,6 @@ public class TemplateServiceImpl implements TemplateService {
 			TemplateDto templateDto = createTemplateDto(template);
 			templateDtos.add(templateDto);
 		}
-		UserDto user=new UserDto();
-		user.setDisplayName("editor");
-		
-		TemplateDto templateDto=new TemplateDto();
-		templateDto.setDocumentName("Test");
-		templateDto.setLanguage("de");
-		templateDto.setEditor(user);
-		templateDto.setUpdateAt(new Date());
-		templateDtos.add(templateDto);	
 		return templateDtos;
 	}
 
@@ -78,15 +69,18 @@ public class TemplateServiceImpl implements TemplateService {
 		TemplateDto dto = new TemplateDto();
 		dto.setDocumentName(template.getDocumentName());
 		dto.setLanguage(template.getLanguage());
-		dto.setUpdateAt(template.getEditedAt());
+
+		if (template.getEditedAt() != null) {
+			dto.setUpdateAt(new Date(template.getEditedAt().getTime()));
+		}
+
 		dto.setEditor(createUserDto(template.getEditor()));
 		if (template.getLockingUser() != null) {
 			dto.setLockingUser(createUserDto(template.getLockingUser()));
-		}	
+		}
 
 		return dto;
 	}
-
 
 	UserDto createUserDto(User user) {
 		UserDto dto = new UserDto();
