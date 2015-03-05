@@ -1,5 +1,8 @@
 package ch.born.wte.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,25 +17,24 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import ch.born.wte.EmbeddedDataBaseConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:test-persistence-context.xml" })
-@TransactionConfiguration()
-public class WordTemplateQueryTest {
+@ContextConfiguration(classes={EmbeddedDataBaseConfig.class})
+@TransactionConfiguration(defaultRollback=true)
+@Transactional
+public class WordTemplateQueryTest  {
 
 	@PersistenceContext
 	EntityManager entityManager;
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryAll() {
 		List<PersistentTemplate> result = query().list(entityManager);
 		assertEquals(4, result.size());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryDocumentName() {
 		List<PersistentTemplate> result = query().documentName("test1").list(
 				entityManager);
@@ -40,8 +42,7 @@ public class WordTemplateQueryTest {
 		assertEquals("test1", result.get(0).getDocumentName());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryLanguage() {
 		WordTemplateQuery query = query().language("en");
 		List<PersistentTemplate> result = query.list(entityManager);
@@ -49,8 +50,7 @@ public class WordTemplateQueryTest {
 		assertEquals("en", result.get(0).getLanguage());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryInputType() {
 
 		WordTemplateQuery query = query().inputType(Integer.class);
@@ -59,8 +59,7 @@ public class WordTemplateQueryTest {
 		assertEquals(Integer.class, result.get(0).getInputType());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryEditor() {
 		WordTemplateQuery query = query().editor("test_user");
 		List<PersistentTemplate> result = query.list(entityManager);
@@ -68,8 +67,7 @@ public class WordTemplateQueryTest {
 		assertEquals("test_user", result.get(0).getEditor().getUserId());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryLocked() {
 		WordTemplateQuery query = query().isLocked(true);
 		List<PersistentTemplate> result = query.list(entityManager);
@@ -77,8 +75,7 @@ public class WordTemplateQueryTest {
 		assertEquals(true, result.get(0).isLocked());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryNotLocked() {
 		WordTemplateQuery query = query().isLocked(false);
 		List<PersistentTemplate> result = query.list(entityManager);
@@ -86,8 +83,7 @@ public class WordTemplateQueryTest {
 		assertEquals(false, result.get(0).isLocked());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryLockedBy() {
 		WordTemplateQuery query = query().isLockedBy("test_user");
 		List<PersistentTemplate> result = query.list(entityManager);
@@ -95,8 +91,7 @@ public class WordTemplateQueryTest {
 		assertEquals("test_user", result.get(0).getLockingUser().getUserId());
 	}
 
-	@Test
-	@Transactional
+	@Test	
 	public void queryProperty() {
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("key1", "value1");

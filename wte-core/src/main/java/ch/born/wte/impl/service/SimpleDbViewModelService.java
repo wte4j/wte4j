@@ -29,8 +29,6 @@ import ch.born.wte.WteModelService;
  * parameter <code>input</code> must contain the primary key of the row and must
  * be of type Integer.
  * 
- * @author trytz
- * 
  */
 public class SimpleDbViewModelService implements WteModelService {
 

@@ -1,4 +1,4 @@
-drop table wte_gen
-drop table wte_template_properties
-drop table wte_template
-drop table testDbView
+drop table wte_gen;
+drop table wte_template_properties;
+drop table wte_template;
+
