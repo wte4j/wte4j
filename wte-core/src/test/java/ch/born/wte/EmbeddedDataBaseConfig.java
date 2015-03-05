@@ -21,8 +21,7 @@ public class EmbeddedDataBaseConfig {
 	public void init() {
 		database = new EmbeddedDatabaseBuilder()
 				.setName(this.toString())
-				.setType(EmbeddedDatabaseType.HSQL).ignoreFailedDrops(true)				
-				.addScript("classpath:sql/drops.sql")
+				.setType(EmbeddedDatabaseType.HSQL).ignoreFailedDrops(true)
 				.addScript("classpath:sql/create-schema.sql")
 				.addScript("classpath:sql/wte_template.sql")
 				.addScript("classpath:sql/wte_template_properties.sql").build();
@@ -36,7 +35,7 @@ public class EmbeddedDataBaseConfig {
 	@PreDestroy
 	public void shutdown() {
 		database.shutdown();
-		database=null;
+		database = null;
 	}
 
 }
