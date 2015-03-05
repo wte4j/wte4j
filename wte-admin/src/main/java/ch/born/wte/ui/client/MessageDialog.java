@@ -114,6 +114,8 @@ public class MessageDialog extends DialogBox {
         vPanel.setWidth(width + "px");
         hPanel.add(vPanel);
         setWidget(hPanel);
+        setGlassEnabled(true);
+        center();
     }
 
 }
