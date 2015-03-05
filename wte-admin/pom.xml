@@ -43,8 +43,8 @@
 									<artifactId>wte-core</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -57,7 +57,8 @@
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>2.3.0</version>
 				<configuration>
-					<includes>/ch/born/**/*.class</includes>
+					<classes>${project.build.outputDirectory}</classes>
+					<includes>ch/born/wte/impl/PersistentTemplate.java</includes>					
 				</configuration>
 				<executions>
 					<execution>
