@@ -3,14 +3,20 @@ package ch.born.wte.ui.client.templates;
 import java.util.List;
 
 import ch.born.wte.ui.client.MessageDialog;
+import ch.born.wte.ui.client.templates.TemplateUploadFormPanel.FileUploadedHandler;
 import ch.born.wte.ui.shared.TemplateDto;
 import ch.born.wte.ui.shared.TemplateService;
 import ch.born.wte.ui.shared.TemplateServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -81,6 +87,14 @@ public class TemplateListPresenter {
 
 			}
 		});
+		display.setUpdateCommand(new ScheduledCommand() {
+
+			@Override
+			public void execute() {
+				updateTemplate();
+
+			}
+		});
 
 	}
 
@@ -120,7 +134,6 @@ public class TemplateListPresenter {
 						.show();
 			}
 		});
-
 	}
 
 	void lockTemplate() {
@@ -137,7 +150,6 @@ public class TemplateListPresenter {
 				showError(caught.getMessage());
 			}
 		});
-
 	}
 
 	void unlockTemplate() {
@@ -156,10 +168,86 @@ public class TemplateListPresenter {
 		});
 	}
 
+	void updateTemplate() {
+
+		PopupPanel updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
+		updateTemplatePopupPanel.show();
+	}
+	
+	private PopupPanel getUpdateTemplatePopupPanel() {
+		final PopupPanel updateTemplatePopupPanel = new PopupPanel();
+
+		updateTemplatePopupPanel.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
+		updateTemplatePopupPanel.setGlassEnabled(true);
+		updateTemplatePopupPanel.center();
+		
+	    return updateTemplatePopupPanel;
+	}
+	
+	private Widget getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
+		TemplateUploadFormPanel updateTemplateFormPanel = new TemplateUploadFormPanel(current, getTemplateFileRestURL());
+		PopupPanel uploadingPopup = getUploadingPopup();
+		updateTemplateFormPanel.addSubmitButtonClickHandler(getSubmitButtonClickHandler(uploadingPopup));
+		updateTemplateFormPanel.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel,uploadingPopup));
+		updateTemplateFormPanel.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
+		return updateTemplateFormPanel;
+	}
+
+	private FileUploadedHandler getFileUploadedHandler(
+			final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+		return new FileUploadedHandler() {
+			
+			@Override
+			public void onSuccess(String result) {
+				uploadingPopup.hide();
+				updateTemplatePopupPanel.hide();
+				new MessageDialog("Template Updated", result, MessageDialog.INFO).show();
+			}
+			
+			@Override
+			public void onFailure(String errorMessage) {
+				uploadingPopup.hide();
+				new MessageDialog("Error", errorMessage, MessageDialog.ERROR).show();
+			}
+		};
+	}
+
+	private ClickHandler getSubmitButtonClickHandler(final PopupPanel uploadingPopup) {
+		return new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				uploadingPopup.show();
+			}
+		};
+	}
+
+	private PopupPanel getUploadingPopup() {
+		PopupPanel updateTemplatePopupPanel = new PopupPanel();
+		updateTemplatePopupPanel.center();
+		updateTemplatePopupPanel.setGlassEnabled(true);
+		updateTemplatePopupPanel.add(new Label("Uploading..."));
+		return updateTemplatePopupPanel;
+	}
+
+	private ClickHandler getCancelButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				uploadingPopup.hide();
+				updateTemplatePopupPanel.hide();
+			}
+		};
+	}
+
 	void downLoadTemplate() {
 		TemplateDto template = current;
-		String url = GWT.getModuleBaseURL() + "documents/templates?" + "name=" + template.getDocumentName() + "&language=" + template.getLanguage();
+		String url = getTemplateFileRestURL() + "?name=" + template.getDocumentName() + "&language=" + template.getLanguage();
 		Window.open(url, "parent", "");
+	}
+	
+	String getTemplateFileRestURL() {
+		return GWT.getModuleBaseURL() + "documents/templates";
 	}
 
 	void replaceInList(TemplateDto toReplace, TemplateDto newTemplateDto) {

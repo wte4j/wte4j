@@ -3,6 +3,8 @@ package ch.born.wte.ui.server.services;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,6 @@ public class SpringDocumentController {
 	public @ResponseBody byte[] getTemplate(@RequestParam String name, @RequestParam String language)
 			throws Exception {
 		byte[] documentContent = null;
-
 		Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
 		if (template != null) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -39,18 +40,26 @@ public class SpringDocumentController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void updateTemplate(@RequestParam("name") String name, @RequestParam String locale,
+	public Map<String,String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
+		Map<String,String> response = new HashMap<String,String>();
 		if (!file.isEmpty()) {
-			Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, locale);
+			Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
 			User editor = new User("admin", "admin");
-			try (InputStream in = file.getInputStream()) {
-				template.update(in, editor);
-			} catch (IOException e) {
-				throw new WteException(e);
+			if (template != null) {
+				try (InputStream in = file.getInputStream()) {
+					template.update(in, editor);
+					response.put("result", "wte.message.fileupload.ok");
+				} catch (IOException e) {
+					response.put("error", "wte.message.fileupload.err.inputstream");
+				}
+			} else {
+				response.put("error", "wte.message.fileupload.err.missingtemplate");
 			}
+		} else {
+			response.put("error", "wte.message.fileupload.err.missingfile");
 		}
-
+		return response;
 	}
 
 }
