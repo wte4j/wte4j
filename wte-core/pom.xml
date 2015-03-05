@@ -147,8 +147,7 @@
 
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>
-			<artifactId>openjpa</artifactId>
-			<version>${openjpa.version}</version>
+			<artifactId>openjpa</artifactId>			
 			<scope>test</scope>
 		</dependency>
 
