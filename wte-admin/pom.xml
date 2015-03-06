@@ -37,6 +37,7 @@
 							<goal>unpack</goal>
 						</goals>
 						<configuration>
+							<includes>**/PersistentTemplate.class, **/User.class</includes>
 							<artifactItems>
 								<artifactItem>
 									<groupId> ${project.parent.groupId}</groupId>
@@ -159,7 +160,6 @@
 			<groupId> ${project.parent.groupId}</groupId>
 			<artifactId>wte-core</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- databasese -->
