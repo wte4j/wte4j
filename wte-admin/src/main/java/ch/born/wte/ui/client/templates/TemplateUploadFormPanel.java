@@ -73,8 +73,10 @@ public class TemplateUploadFormPanel extends FormPanel {
 
 	protected FileUploadResponse parseResponse(String results) {
 		FileUploadResponse fileUploadResponse = null;
-		if (results != null) {
+		if (results != null && JsonUtils.safeToEval(results.replaceAll("\\<[^>]*>",""))) {
 			fileUploadResponse = JsonUtils.safeEval(results.replaceAll("\\<[^>]*>",""));
+		} else {
+			fileUploadResponse = JsonUtils.safeEval("{\"error\":\"wte.message.fileupload.err.format\"}");
 		}
 		return fileUploadResponse;
 	}

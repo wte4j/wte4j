@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -68,6 +69,15 @@ public class SpringDocumentController {
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleException(WteFileUploadException e) {
+		Map<String,String> response = new HashMap<String,String>();
+		response.put("error", e.getMessage());
+	    return response;
+	}
+	
+	@ExceptionHandler(Exception.class)
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public Map<String, String> handleException(Exception e) {
 		Map<String,String> response = new HashMap<String,String>();
 		response.put("error", e.getMessage());
 	    return response;
