@@ -9,7 +9,7 @@
 		<artifactId>wte-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<properties>
 		<openjpa.version>2.3.0</openjpa.version>
 	</properties>
@@ -39,6 +39,34 @@
 					<argLine>-javaagent:${settings.localRepository}/org/apache/openjpa/openjpa/${openjpa.version}/openjpa-${openjpa.version}.jar</argLine>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openJPA.version}</version>
+				<configuration>					
+					<connectionDriverName>org.hsqldb.jdbc.JDBCDriver</connectionDriverName>
+					<persistenceXmlFile>${project.basedir}/src/test/resources/META-INF/persistence.xml</persistenceXmlFile>
+					<sqlFile>${project.basedir}/src/test/resources/sql/create-schema.sql</sqlFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-sql</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>sql</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.openjpa</groupId>
+						<artifactId>openjpa</artifactId>
+						<version>${openJPA.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 		</plugins>
 
 		<pluginManagement>
@@ -141,14 +169,12 @@
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>2.2.4</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa</artifactId>
-			<version>${openjpa.version}</version>
 			<scope>test</scope>
 		</dependency>
 

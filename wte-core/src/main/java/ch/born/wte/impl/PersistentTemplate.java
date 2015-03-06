@@ -90,6 +90,7 @@ public class PersistentTemplate {
 	private User lockingUser;
 
 	@Lob
+	@Column(name = "content", nullable = true, columnDefinition = "BLOB")
 	private byte[] content;
 
 	@Version
