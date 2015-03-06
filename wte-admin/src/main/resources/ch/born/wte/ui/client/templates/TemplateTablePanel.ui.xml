@@ -3,9 +3,12 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 
-	<g:SimplePanel ui:field="tablePanel" width="100%">
-		<c:CellTable ui:field="templateTable" width="100%"/>		
-	</g:SimplePanel>
+	<g:FlowPanel ui:field="tablePanel" width="100%">	
+		<c:CellTable ui:field="templateTable" />
+		<c:AbstractPager ui:field="tablePager" />
+		
+
+	</g:FlowPanel>
 
 
 </ui:UiBinder> 
