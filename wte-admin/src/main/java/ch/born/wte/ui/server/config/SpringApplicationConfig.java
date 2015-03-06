@@ -25,7 +25,7 @@ public class SpringApplicationConfig {
     
     @Bean
     @Value("${wte.fileupload.maxsizeinbytes}")
-    public static MultipartResolver multipartResolver(long maxUploadSize) {
+    public MultipartResolver multipartResolver(long maxUploadSize) {
     	CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
     	multipartResolver.setMaxUploadSize(maxUploadSize);
     	return multipartResolver;
