@@ -19,6 +19,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.AnimationType;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
@@ -55,16 +56,15 @@ public class TemplateTablePanel extends Composite implements
 		templateContextMenu = new TemplateContextMenu();
 		contextPanel = new PopupPanel(true);
 		contextPanel.add(templateContextMenu);
-
+		contextPanel.setAnimationType(AnimationType.ONE_WAY_CORNER);
 		ClickHandler clickHandler = new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				contextPanel.hide();
-
 			}
 		};
-
+		addHandler(clickHandler, ClickEvent.getType());
 		contextPanel.addHandler(clickHandler, ClickEvent.getType());
 		templateContextMenu.addHandler(clickHandler, ClickEvent.getType());
 	}
@@ -118,32 +118,46 @@ public class TemplateTablePanel extends Composite implements
 
 	@Override
 	public void setDowndLoadCommand(ScheduledCommand command) {
-		templateContextMenu.getDownloadAction().setScheduledCommand(command);
-
+		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getDownloadAction().setScheduledCommand(commandWithCloseContextMenu);
 	}
 
 	@Override
 	public void setUpdateCommand(ScheduledCommand command) {
-		templateContextMenu.getUpdateAction().setScheduledCommand(command);
+		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getUpdateAction().setScheduledCommand(commandWithCloseContextMenu);
 
 	}
 
 	@Override
 	public void setUnlockCommand(ScheduledCommand command) {
-		templateContextMenu.getUnlockAction().setScheduledCommand(command);
+		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getUnlockAction().setScheduledCommand(commandWithCloseContextMenu);
 
 	}
 
 	@Override
 	public void setLockCommand(ScheduledCommand command) {
-		templateContextMenu.getLockAction().setScheduledCommand(command);
+		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getLockAction().setScheduledCommand(commandWithCloseContextMenu);
 
 	}
 
 	@Override
 	public void setDeleteCommand(ScheduledCommand command) {
-		templateContextMenu.getDeleteAction().setScheduledCommand(command);
+		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
+	}
+	
+	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
+		return new ScheduledCommand() {
+			@Override
+			public void execute() {
+				contextPanel.hide();
+				command.execute();
+			}
+		};
 	}
 
 	interface DocumentTemplatePanelUiBinder extends

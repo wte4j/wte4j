@@ -2,6 +2,7 @@ package ch.born.wte.ui.client.templates;
 
 import java.util.List;
 
+import ch.born.wte.ui.client.Application;
 import ch.born.wte.ui.client.MessageDialog;
 import ch.born.wte.ui.client.templates.TemplateUploadFormPanel.FileUploadedHandler;
 import ch.born.wte.ui.shared.TemplateDto;
@@ -48,7 +49,7 @@ public class TemplateListPresenter {
 	public void bindTo(TemplateListDisplay aDisplay) {
 		if (display != null) {
 			throw new IllegalStateException(
-					"presenter is allready bound to a display");
+					"presenter is already bound to a display");
 		}
 
 		display = aDisplay;
@@ -147,7 +148,7 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				showError(caught.getMessage());
+				showError(Application.LABELS.lockTemplate(), caught.getMessage());
 			}
 		});
 	}
@@ -163,9 +164,15 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				showError(caught.getMessage());
+				showError(Application.LABELS.unlockTemplate(), caught.getMessage());
 			}
 		});
+	}
+	
+	void downLoadTemplate() {
+		TemplateDto toDownload = current;
+		String url = getTemplateFileRestURL() + "?name=" + toDownload.getDocumentName() + "&language=" + toDownload.getLanguage();
+		Window.open(url, "parent", "");
 	}
 
 	void updateTemplate() {
@@ -201,13 +208,13 @@ public class TemplateListPresenter {
 			public void onSuccess(String result) {
 				uploadingPopup.hide();
 				updateTemplatePopupPanel.hide();
-				new MessageDialog("Template Updated", result, MessageDialog.INFO).show();
+				new MessageDialog(Application.LABELS.updateTemplate(), result, MessageDialog.INFO).show();
 			}
 			
 			@Override
 			public void onFailure(String errorMessage) {
 				uploadingPopup.hide();
-				new MessageDialog("Error", errorMessage, MessageDialog.ERROR).show();
+				showError(Application.LABELS.updateTemplate(), errorMessage);
 			}
 		};
 	}
@@ -240,13 +247,9 @@ public class TemplateListPresenter {
 		};
 	}
 
-	void downLoadTemplate() {
-		TemplateDto template = current;
-		String url = getTemplateFileRestURL() + "?name=" + template.getDocumentName() + "&language=" + template.getLanguage();
-		Window.open(url, "parent", "");
-	}
 	
-	String getTemplateFileRestURL() {
+	
+	private String getTemplateFileRestURL() {
 		return GWT.getModuleBaseURL() + "documents/templates";
 	}
 
@@ -257,8 +260,15 @@ public class TemplateListPresenter {
 		}
 	}
 
-	void showError(String message) {
-		new MessageDialog("", message, MessageDialog.ERROR).show();
+	void showError(String title, String message) {
+		showDialog(title, message, MessageDialog.ERROR);
 	}
 
+	void showInfo(String title, String message) {
+		showDialog(title, message, MessageDialog.INFO);
+	}
+	
+	void showDialog(String title, String message, int dialogType) {
+		new MessageDialog(title, message, dialogType).show();
+	}
 }
