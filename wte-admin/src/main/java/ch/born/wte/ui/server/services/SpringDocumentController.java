@@ -7,17 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ch.born.wte.Template;
 import ch.born.wte.TemplateEngine;
 import ch.born.wte.User;
-import ch.born.wte.WteException;
 
 @RestController
 @RequestMapping("/templates")
@@ -51,15 +53,24 @@ public class SpringDocumentController {
 					template.update(in, editor);
 					response.put("result", "wte.message.fileupload.ok");
 				} catch (IOException e) {
-					response.put("error", "wte.message.fileupload.err.inputstream");
+					throw new WteFileUploadException("wte.message.fileupload.err.inputstream", e);
 				}
 			} else {
-				response.put("error", "wte.message.fileupload.err.missingtemplate");
+				throw new WteFileUploadException("wte.message.fileupload.err.missingtemplate");
 			}
 		} else {
-			response.put("error", "wte.message.fileupload.err.missingfile");
+			throw new WteFileUploadException("wte.message.fileupload.err.missingfile");
 		}
 		return response;
+	}
+	
+	@ExceptionHandler(WteFileUploadException.class)
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public Map<String, String> handleException(WteFileUploadException e) {
+		Map<String,String> response = new HashMap<String,String>();
+		response.put("error", e.getMessage());
+	    return response;
 	}
 
 }
