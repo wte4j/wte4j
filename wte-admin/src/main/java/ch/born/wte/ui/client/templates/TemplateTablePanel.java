@@ -2,8 +2,12 @@ package ch.born.wte.ui.client.templates;
 
 import static ch.born.wte.ui.client.Application.LABELS;
 import static ch.born.wte.ui.client.Application.RESOURCES;
+
+import java.util.Date;
+
 import ch.born.wte.ui.shared.TemplateDto;
 
+import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -14,28 +18,38 @@ import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.AbstractPager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
-
-//import static ch.born.wte.ui.client.Application.*;
 
 public class TemplateTablePanel extends Composite implements
 		TemplateListDisplay {
 
-	private static DocumentTemplatePanelUiBinder uiBinder = GWT
-			.create(DocumentTemplatePanelUiBinder.class);
+	private static TemplateTablePanelUiBInder uiBinder = GWT
+			.create(TemplateTablePanelUiBInder.class);
 
 	@UiField
-	SimplePanel tablePanel;
+	FlowPanel tablePanel;
 
-	@UiField()
-	CellTable<TemplateDto> templateTable;
+	@UiField(provided = true)
+	CellTable<TemplateDto> templateTable = new CellTable<TemplateDto>();
+
+	private Column<TemplateDto, String> nameColumn;
+	private Column<TemplateDto, Date> editedAtColumn;
+	private Column<TemplateDto, String> editorColumn;
+	private Column<TemplateDto, ?> actionColumn;
+
+	@UiField(provided = true)
+	AbstractPager tablePager = new SimplePager();
 
 	private DateTimeFormat timeStampFormat = DateTimeFormat
 			.getFormat(PredefinedFormat.DATE_TIME_SHORT);
@@ -70,7 +84,17 @@ public class TemplateTablePanel extends Composite implements
 	}
 
 	private void initTemplateTable() {
-		TextColumn<TemplateDto> nameColumn = new TextColumn<TemplateDto>() {
+		templateTable.addStyleName("templates-table");
+		tablePager.setDisplay(templateTable);
+
+		initNameColumn();
+		initEditedAtColumn();
+		initEditorColumn();
+		initActionColumn();
+	}
+
+	private void initNameColumn() {
+		nameColumn = new TextColumn<TemplateDto>() {
 
 			@Override
 			public String getValue(TemplateDto template) {
@@ -78,37 +102,58 @@ public class TemplateTablePanel extends Composite implements
 			}
 
 		};
-		templateTable.addColumn(nameColumn, LABELS.templateDocumentName());
+		nameColumn.setCellStyleNames("templates-name-cell");
+		addColumntoTemplateTable(nameColumn, LABELS.templateDocumentName());
+	}
 
-		TextColumn<TemplateDto> changeDateColumn = new TextColumn<TemplateDto>() {
+	private void initEditedAtColumn() {
+		DateCell dateCell = new DateCell(timeStampFormat);
+		editedAtColumn = new Column<TemplateDto, Date>(dateCell) {
 
 			@Override
-			public String getValue(TemplateDto template) {
-				return timeStampFormat.format(template.getUpdatedAt());
+			public Date getValue(TemplateDto object) {
+				return object.getUpdatedAt();
 			}
 		};
-		templateTable.addColumn(changeDateColumn, LABELS.templateEditedAt());
+		editedAtColumn.setCellStyleNames("templates-editedAt-cell");
+		editedAtColumn.setHorizontalAlignment(Column.ALIGN_RIGHT);
+		addColumntoTemplateTable(editedAtColumn, LABELS.templateEditedAt());
 
-		TextColumn<TemplateDto> editorColumn = new TextColumn<TemplateDto>() {
+	}
+
+	private void initEditorColumn() {
+		editorColumn = new TextColumn<TemplateDto>() {
 
 			@Override
 			public String getValue(TemplateDto template) {
 				return template.getEditor().getDisplayName();
 			}
 		};
-		templateTable.addColumn(editorColumn, LABELS.templateEditor());
+		editorColumn.setCellStyleNames("templates-editor-cell");
+		editorColumn.setHorizontalAlignment(Column.ALIGN_LEFT);
+		addColumntoTemplateTable(editorColumn, LABELS.templateEditor());
+	}
+
+	private void initActionColumn() {
 
 		ImageResourceCell imageResourceCell = new ImageResourceCell();
 		PopupCell<ImageResource> popupCell = new PopupCell<ImageResource>(
 				contextPanel, imageResourceCell);
-		Column<TemplateDto, ImageResource> actionColumn = new Column<TemplateDto, ImageResource>(
+		actionColumn = new Column<TemplateDto, ImageResource>(
 				popupCell) {
 			@Override
 			public ImageResource getValue(TemplateDto object) {
 				return RESOURCES.tableActionMenu();
 			}
 		};
-		templateTable.addColumn(actionColumn);
+		actionColumn.setCellStyleNames("templates-action-cell");
+		addColumntoTemplateTable(actionColumn, "");
+	}
+
+	private void addColumntoTemplateTable(Column<TemplateDto, ?> column, String headerText) {
+		Header<String> header = new TextHeader(headerText);
+		header.setHeaderStyleNames("templates-header-cell");
+		templateTable.addColumn(column, header);
 	}
 
 	@Override
@@ -146,7 +191,7 @@ public class TemplateTablePanel extends Composite implements
 
 	}
 
-	interface DocumentTemplatePanelUiBinder extends
+	interface TemplateTablePanelUiBInder extends
 			UiBinder<Widget, TemplateTablePanel> {
 	}
 
