@@ -146,7 +146,7 @@ public class TemplateTablePanel extends Composite implements
 				popupCell) {
 			@Override
 			public ImageResource getValue(TemplateDto object) {
-				return RESOURCES.tableActionMenu();
+				return RESOURCES.contextMenuIcon();
 			}
 		};
 		actionColumn.setCellStyleNames("templates-action-cell");
@@ -213,7 +213,7 @@ public class TemplateTablePanel extends Composite implements
 		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
 	}
-	
+
 	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
 		return new ScheduledCommand() {
 			@Override
