@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,11 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ch.born.wte.Template;
 import ch.born.wte.TemplateEngine;
-import ch.born.wte.User;
 
 @RestController
 @RequestMapping("/templates")
 public class SpringDocumentController {
+
+	@Autowired
+	private ServiceContext serviceContext;
 
 	@Autowired
 	private TemplateEngine templateEngine;
@@ -43,15 +44,15 @@ public class SpringDocumentController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public Map<String,String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
+	public Map<String, String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		if (!file.isEmpty()) {
 			Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
-			User editor = new User("admin", "admin");
+
 			if (template != null) {
 				try (InputStream in = file.getInputStream()) {
-					template.update(in, editor);
+					template.update(in, serviceContext.getCurrentUser());
 					response.put("result", "wte.message.fileupload.ok");
 				} catch (IOException e) {
 					throw new WteFileUploadException("wte.message.fileupload.err.inputstream", e);
@@ -64,23 +65,23 @@ public class SpringDocumentController {
 		}
 		return response;
 	}
-	
+
 	@ExceptionHandler(WteFileUploadException.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleException(WteFileUploadException e) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("error", e.getMessage());
-	    return response;
+		return response;
 	}
-	
+
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleException(Exception e) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("error", e.getMessage());
-	    return response;
+		return response;
 	}
 
 }
