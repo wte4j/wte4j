@@ -5,6 +5,7 @@ import static ch.born.wte.ui.client.Application.RESOURCES;
 
 import java.util.Date;
 
+import ch.born.wte.ui.client.cell.CellTableResources;
 import ch.born.wte.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
@@ -41,7 +42,7 @@ public class TemplateTablePanel extends Composite implements
 	FlowPanel tablePanel;
 
 	@UiField(provided = true)
-	CellTable<TemplateDto> templateTable = new CellTable<TemplateDto>();
+	CellTable<TemplateDto> templateTable = new CellTable<TemplateDto>(20, CellTableResources.RESOURCES);
 
 	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
@@ -86,7 +87,7 @@ public class TemplateTablePanel extends Composite implements
 	}
 
 	private void initTemplateTable() {
-		templateTable.addStyleName("templates-table");
+		templateTable.addStyleName("wte-cellTable");
 		tablePager.setDisplay(templateTable);
 
 		initNameColumn();
@@ -171,7 +172,6 @@ public class TemplateTablePanel extends Composite implements
 	
 	private void addColumntoTemplateTable(Column<TemplateDto, ?> column, String headerText) {
 		Header<String> header = new TextHeader(headerText);
-		header.setHeaderStyleNames("templates-header-cell");
 		templateTable.addColumn(column, header);
 	}	
 	
