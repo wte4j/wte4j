@@ -6,6 +6,7 @@ import static ch.born.wte.ui.client.Application.RESOURCES;
 import java.util.Date;
 
 import ch.born.wte.ui.client.cell.CellTableResources;
+import ch.born.wte.ui.client.cell.PopupCell;
 import ch.born.wte.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
