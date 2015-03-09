@@ -15,7 +15,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -139,34 +139,28 @@ public class TemplateListPresenter {
 
 	void lockTemplate() {
 		final TemplateDto toLock = current;
-		templateService.unlockTemplate(toLock, new AsyncCallback<TemplateDto>() {
-
-			@Override
-			public void onSuccess(TemplateDto updated) {
-				replaceInList(toLock, updated);
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				showError(Application.LABELS.lockTemplate(), caught.getMessage());
-			}
-		});
+		templateService.lockTemplate(toLock, getRefreshAsCallback(toLock, Application.LABELS.unlockTemplate()));
 	}
 
 	void unlockTemplate() {
 		final TemplateDto toUnlock = current;
-		templateService.unlockTemplate(toUnlock, new AsyncCallback<TemplateDto>() {
+		templateService.unlockTemplate(toUnlock, getRefreshAsCallback(toUnlock, Application.LABELS.unlockTemplate()));
+	}
+	
+	private AsyncCallback<TemplateDto> getRefreshAsCallback(final TemplateDto templateToRefresh, final String actionDescriptor) {
+		
+		return new AsyncCallback<TemplateDto>() {
 
 			@Override
 			public void onSuccess(TemplateDto updated) {
-				replaceInList(toUnlock, updated);
+				replaceInList(templateToRefresh, updated);
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
-				showError(Application.LABELS.unlockTemplate(), caught.getMessage());
+				showError(actionDescriptor, caught.getMessage());
 			}
-		});
+		};
 	}
 	
 	void downLoadTemplate() {
@@ -194,7 +188,7 @@ public class TemplateListPresenter {
 	private Widget getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
 		TemplateUploadFormPanel updateTemplateFormPanel = new TemplateUploadFormPanel(current, getTemplateFileRestURL());
 		PopupPanel uploadingPopup = getUploadingPopup();
-		updateTemplateFormPanel.addSubmitButtonClickHandler(getSubmitButtonClickHandler(uploadingPopup));
+		updateTemplateFormPanel.addSubmitButtonClickHandler(getSubmitButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
 		updateTemplateFormPanel.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel,uploadingPopup));
 		updateTemplateFormPanel.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
 		return updateTemplateFormPanel;
@@ -208,33 +202,35 @@ public class TemplateListPresenter {
 			public void onSuccess(String result) {
 				uploadingPopup.hide();
 				updateTemplatePopupPanel.hide();
-				new MessageDialog(Application.LABELS.updateTemplate(), result, MessageDialog.INFO).show();
+				showInfo(Application.LABELS.updateTemplate(), result);
 			}
 			
 			@Override
 			public void onFailure(String errorMessage) {
 				uploadingPopup.hide();
+				updateTemplatePopupPanel.setVisible(true);
 				showError(Application.LABELS.updateTemplate(), errorMessage);
 			}
 		};
 	}
 
-	private ClickHandler getSubmitButtonClickHandler(final PopupPanel uploadingPopup) {
+	private ClickHandler getSubmitButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
+				updateTemplatePopupPanel.setVisible(false);
 				uploadingPopup.show();
 			}
 		};
 	}
 
 	private PopupPanel getUploadingPopup() {
-		PopupPanel updateTemplatePopupPanel = new PopupPanel();
-		updateTemplatePopupPanel.center();
-		updateTemplatePopupPanel.setGlassEnabled(true);
-		updateTemplatePopupPanel.add(new Label("Uploading..."));
-		return updateTemplatePopupPanel;
+		PopupPanel uploadingPanel = new PopupPanel();
+		uploadingPanel.center();
+		uploadingPanel.setGlassEnabled(true);
+		uploadingPanel.add(new Image(Application.RESOURCES.loading()));
+		return uploadingPanel;
 	}
 
 	private ClickHandler getCancelButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {

@@ -57,6 +57,8 @@ public class TemplateTablePanel extends Composite implements
 	private PopupPanel contextPanel;
 	private TemplateContextMenu templateContextMenu;
 
+	private TextColumn<TemplateDto> statusColumn;
+
 	public TemplateTablePanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initContextMenu();
@@ -90,6 +92,7 @@ public class TemplateTablePanel extends Composite implements
 		initNameColumn();
 		initEditedAtColumn();
 		initEditorColumn();
+		initStatusColumn();
 		initActionColumn();
 	}
 
@@ -149,13 +152,29 @@ public class TemplateTablePanel extends Composite implements
 		actionColumn.setCellStyleNames("templates-action-cell");
 		addColumntoTemplateTable(actionColumn, "");
 	}
+	
+	private void initStatusColumn() {
+		statusColumn = new TextColumn<TemplateDto>() {
 
+			@Override
+			public String getValue(TemplateDto template) {
+				String lockingUserName = "";
+				if (template.getLockingUser() != null) {
+					lockingUserName = template.getLockingUser().getDisplayName();
+				}
+				return lockingUserName;
+			}
+		};
+		statusColumn.setCellStyleNames("locking-user-cell");
+		addColumntoTemplateTable(statusColumn, LABELS.templateLockingUser());
+	}
+	
 	private void addColumntoTemplateTable(Column<TemplateDto, ?> column, String headerText) {
 		Header<String> header = new TextHeader(headerText);
 		header.setHeaderStyleNames("templates-header-cell");
 		templateTable.addColumn(column, header);
-	}
-
+	}	
+	
 	@Override
 	public HasData<TemplateDto> getDataContainer() {
 		return templateTable;
