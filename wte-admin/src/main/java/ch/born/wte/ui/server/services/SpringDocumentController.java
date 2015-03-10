@@ -6,14 +6,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +28,7 @@ public class SpringDocumentController {
 	private TemplateEngine templateEngine;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-	public @ResponseBody byte[] getTemplate(@RequestParam String name, @RequestParam String language)
+	public byte[] getTemplate(@RequestParam String name, @RequestParam String language)
 			throws Exception {
 		byte[] documentContent = null;
 		Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
@@ -42,10 +40,10 @@ public class SpringDocumentController {
 		return documentContent;
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public Map<String,String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
+	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
+	public Map<String, String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		if (!file.isEmpty()) {
 			Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
 			User editor = new User("admin", "admin");
@@ -64,23 +62,21 @@ public class SpringDocumentController {
 		}
 		return response;
 	}
-	
+
 	@ExceptionHandler(WteFileUploadException.class)
-	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleException(WteFileUploadException e) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("error", e.getMessage());
-	    return response;
+		return response;
 	}
-	
+
 	@ExceptionHandler(Exception.class)
-	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleException(Exception e) {
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("error", e.getMessage());
-	    return response;
+		return response;
 	}
 
 }
