@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +30,7 @@ public class SpringDocumentController {
 	private TemplateEngine templateEngine;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-	public byte[] getTemplate(@RequestParam String name, @RequestParam String language)
+	public byte[] getTemplate(@RequestParam String name, @RequestParam String language, HttpServletResponse response)
 			throws Exception {
 		byte[] documentContent = null;
 		Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
@@ -36,6 +38,7 @@ public class SpringDocumentController {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			template.write(out);
 			documentContent = out.toByteArray();
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + template.getDocumentName() + ".docx\"");
 		}
 		return documentContent;
 	}
