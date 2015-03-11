@@ -1,5 +1,7 @@
 package ch.born.wte.ui.server.services;
 
+import java.util.Locale;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,11 @@ public class SimpleServiceContext implements ServiceContext {
 	public User getCurrentUser() {
 		return new User("anonymous", "anonymous");
 
+	}
+
+	@Override
+	public Locale getCurrentLocale() {
+		return Locale.ENGLISH;
 	}
 
 }
