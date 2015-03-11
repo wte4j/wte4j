@@ -3,11 +3,11 @@ package ch.born.wte.ui.server.services;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import ch.born.wte.InvalidTemplateException;
+import ch.born.wte.LockingException;
 import ch.born.wte.Template;
 import ch.born.wte.TemplateEngine;
 
@@ -25,8 +27,13 @@ import ch.born.wte.TemplateEngine;
 @RequestMapping("/templates")
 public class SpringDocumentController {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	private ServiceContext serviceContext;
+
+	@Autowired
+	private MessageFactory messageFactory;
 
 	@Autowired
 	private TemplateEngine templateEngine;
@@ -46,42 +53,52 @@ public class SpringDocumentController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public Map<String, String> updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
+	public String updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
-		Map<String, String> response = new HashMap<String, String>();
-		if (!file.isEmpty()) {
-			Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
 
-			if (template != null) {
-				try (InputStream in = file.getInputStream()) {
-					template.update(in, serviceContext.getCurrentUser());
-					response.put("result", "wte.message.fileupload.ok");
-				} catch (IOException e) {
-					throw new WteFileUploadException("wte.message.fileupload.err.inputstream", e);
-				}
-			} else {
-				throw new WteFileUploadException("wte.message.fileupload.err.missingtemplate");
-			}
-		} else {
-			throw new WteFileUploadException("wte.message.fileupload.err.missingfile");
+		if (file.isEmpty()) {
+			throw new WteFileUploadException(
+					messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_READABLE));
 		}
-		return response;
+
+		Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
+		if (template == null) {
+			throw new WteFileUploadException(
+					messageFactory.createMessage(MessageKeys.TEMPLATE_NOT_FOUND));
+		}
+
+		try (InputStream in = file.getInputStream()) {
+			template.update(in, serviceContext.getCurrentUser());
+		} catch (IOException e) {
+			throw new WteFileUploadException(
+					messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_READABLE), e);
+		}
+		return "";
 	}
 
 	@ExceptionHandler(WteFileUploadException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public Map<String, String> handleException(WteFileUploadException e) {
-		Map<String, String> response = new HashMap<String, String>();
-		response.put("error", e.getMessage());
-		return response;
+	public String handleException(WteFileUploadException e) {
+		return e.getMessage();
+	}
+
+	@ExceptionHandler(LockingException.class)
+	@ResponseStatus(value = HttpStatus.LOCKED)
+	public String handleException(LockingException e) {
+		return messageFactory.createMessage(MessageKeys.LOCKED_TEMPLATE);
+	}
+
+	@ExceptionHandler(InvalidTemplateException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public String handleException(InvalidTemplateException e) {
+		return messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_VALID);
 	}
 
 	@ExceptionHandler(Exception.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public Map<String, String> handleException(Exception e) {
-		Map<String, String> response = new HashMap<String, String>();
-		response.put("error", e.getMessage());
-		return response;
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public String handleException(Exception e) {
+		logger.error("error on processing request", e);
+		return messageFactory.createMessage(MessageKeys.INTERNAL_SERVER_ERROR);
 	}
 
 }
