@@ -10,3 +10,6 @@ The wte4j consists of three modules:
 - wte-core module 	is a Spring-Component and is the template engine
 - wte-demo module 	is a small demo webApp basend on the wte-core and wte-admin to give a functional overview of wte4j
 - wte-admin module  is a webApp for managing the template in a repository of a specific wte4j-instance
+
+## How to run the wte4j-demo
+TODO
