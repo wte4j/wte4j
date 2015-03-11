@@ -4,7 +4,7 @@ import java.util.List;
 
 import ch.born.wte.ui.client.Application;
 import ch.born.wte.ui.client.MessageDialog;
-import ch.born.wte.ui.client.templates.TemplateUploadFormPanel.FileUploadedHandler;
+import ch.born.wte.ui.client.templates.TemplateUploadPresenter.FileUploadedHandler;
 import ch.born.wte.ui.shared.TemplateDto;
 import ch.born.wte.ui.shared.TemplateService;
 import ch.born.wte.ui.shared.TemplateServiceAsync;
@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -185,12 +184,14 @@ public class TemplateListPresenter {
 		return updateTemplatePopupPanel;
 	}
 
-	private Widget getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
-		TemplateUploadFormPanel updateTemplateFormPanel = new TemplateUploadFormPanel(current, getTemplateFileRestURL());
+	private TemplateUploadDisplay getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
+		TemplateUploadDisplay updateTemplateFormPanel = new TemplateUploadFormPanel();
+		TemplateUploadPresenter templateListPresenter = new TemplateUploadPresenter(current, getTemplateFileRestURL());
+		templateListPresenter.bindTo(updateTemplateFormPanel);
 		PopupPanel uploadingPopup = getUploadingPopup();
-		updateTemplateFormPanel.addSubmitButtonClickHandler(getSubmitButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
-		updateTemplateFormPanel.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
-		updateTemplateFormPanel.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
+		templateListPresenter.addSubmitButtonClickHandler(getSubmitButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
+		templateListPresenter.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
+		templateListPresenter.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
 		return updateTemplateFormPanel;
 	}
 
@@ -228,8 +229,8 @@ public class TemplateListPresenter {
 	private PopupPanel getUploadingPopup() {
 		PopupPanel uploadingPanel = new PopupPanel();
 		uploadingPanel.center();
-		uploadingPanel.setGlassEnabled(true);
 		uploadingPanel.add(new Image(Application.RESOURCES.loading()));
+		uploadingPanel.setGlassEnabled(true);
 		return uploadingPanel;
 	}
 
