@@ -13,3 +13,6 @@ The wte4j consists of three modules:
 
 ## How to run the wte4j-demo?
 TODO
+
+
+For a more detailed documentation visit the projects wiki here: https://github.com/ofreivogel/wte4j/wiki
