@@ -131,8 +131,7 @@ public class TemplateListPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadData();
-				new MessageDialog("", caught.getMessage(), MessageDialog.ERROR)
-						.show();
+				showError(Application.LABELS.deleteTemplate(), caught.getLocalizedMessage());
 			}
 		});
 	}
@@ -146,9 +145,9 @@ public class TemplateListPresenter {
 		final TemplateDto toUnlock = current;
 		templateService.unlockTemplate(toUnlock, getRefreshAsCallback(toUnlock, Application.LABELS.unlockTemplate()));
 	}
-	
+
 	private AsyncCallback<TemplateDto> getRefreshAsCallback(final TemplateDto templateToRefresh, final String actionDescriptor) {
-		
+
 		return new AsyncCallback<TemplateDto>() {
 
 			@Override
@@ -158,11 +157,12 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				showError(actionDescriptor, caught.getMessage());
+				showError(actionDescriptor, caught.getLocalizedMessage());
+				loadData();
 			}
 		};
 	}
-	
+
 	void downLoadTemplate() {
 		TemplateDto toDownload = current;
 		String url = getTemplateFileRestURL() + "?name=" + toDownload.getDocumentName() + "&language=" + toDownload.getLanguage();
@@ -174,22 +174,22 @@ public class TemplateListPresenter {
 		PopupPanel updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
 		updateTemplatePopupPanel.show();
 	}
-	
+
 	private PopupPanel getUpdateTemplatePopupPanel() {
 		final PopupPanel updateTemplatePopupPanel = new PopupPanel();
 
 		updateTemplatePopupPanel.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
 		updateTemplatePopupPanel.setGlassEnabled(true);
 		updateTemplatePopupPanel.center();
-		
-	    return updateTemplatePopupPanel;
+
+		return updateTemplatePopupPanel;
 	}
-	
+
 	private Widget getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
 		TemplateUploadFormPanel updateTemplateFormPanel = new TemplateUploadFormPanel(current, getTemplateFileRestURL());
 		PopupPanel uploadingPopup = getUploadingPopup();
 		updateTemplateFormPanel.addSubmitButtonClickHandler(getSubmitButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
-		updateTemplateFormPanel.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel,uploadingPopup));
+		updateTemplateFormPanel.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
 		updateTemplateFormPanel.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
 		return updateTemplateFormPanel;
 	}
@@ -197,14 +197,14 @@ public class TemplateListPresenter {
 	private FileUploadedHandler getFileUploadedHandler(
 			final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new FileUploadedHandler() {
-			
+
 			@Override
 			public void onSuccess(String result) {
 				uploadingPopup.hide();
 				updateTemplatePopupPanel.hide();
 				showInfo(Application.LABELS.updateTemplate(), result);
 			}
-			
+
 			@Override
 			public void onFailure(String errorMessage) {
 				uploadingPopup.hide();
@@ -216,7 +216,7 @@ public class TemplateListPresenter {
 
 	private ClickHandler getSubmitButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent arg0) {
 				updateTemplatePopupPanel.setVisible(false);
@@ -243,8 +243,6 @@ public class TemplateListPresenter {
 		};
 	}
 
-	
-	
 	private String getTemplateFileRestURL() {
 		return GWT.getModuleBaseURL() + "documents/templates";
 	}
@@ -263,7 +261,7 @@ public class TemplateListPresenter {
 	void showInfo(String title, String message) {
 		showDialog(title, message, MessageDialog.INFO);
 	}
-	
+
 	void showDialog(String title, String message, int dialogType) {
 		new MessageDialog(title, message, dialogType).show();
 	}
