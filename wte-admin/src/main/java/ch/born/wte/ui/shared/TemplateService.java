@@ -5,14 +5,13 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-
 @RemoteServiceRelativePath("templateService")
 public interface TemplateService extends RemoteService {
-	List<TemplateDto> getTemplates();
+	List<TemplateDto> getTemplates() throws TemplateServiceException;;
 
-	TemplateDto lockTemplate(TemplateDto template);
+	TemplateDto lockTemplate(TemplateDto template) throws TemplateServiceException;
 
-	TemplateDto unlockTemplate(TemplateDto template);
+	TemplateDto unlockTemplate(TemplateDto template) throws TemplateServiceException;;
 
-	void deleteTemplate(TemplateDto template);
+	void deleteTemplate(TemplateDto template) throws TemplateServiceException;
 }
