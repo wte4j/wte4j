@@ -12,6 +12,7 @@ import ch.born.wte.User;
 public class SimpleServiceContext implements ServiceContext {
 
 	private User currentUser = new User("anonymous", "anonymous");
+	private Locale currentLocale = Locale.ENGLISH;
 
 	@Override
 	public User getUser() {
@@ -26,7 +27,13 @@ public class SimpleServiceContext implements ServiceContext {
 
 	@Override
 	public Locale getLocale() {
-		return Locale.ENGLISH;
+		return currentLocale;
+	}
+
+	@Override
+	public void setLocale(Locale locale) {
+		currentLocale = locale;
+
 	}
 
 }

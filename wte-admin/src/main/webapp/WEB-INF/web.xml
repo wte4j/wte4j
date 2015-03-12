@@ -99,7 +99,7 @@
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>ch.born.wte.ui.server.config.AdminApplicationConfig</param-value>
+			<param-value>ch.born.wte.ui.server.config.RestServiceApplicationConfig</param-value>
 		</init-param>
 	</servlet>
 
