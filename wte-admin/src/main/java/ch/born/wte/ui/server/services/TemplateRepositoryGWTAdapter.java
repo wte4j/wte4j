@@ -61,7 +61,7 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 					template.getLanguage(),
 					template.getLockingUser().getDisplayName(),
 					e);
-			throw createServiceException(MessageKeys.LOCKED_TEMPLATE);
+			throw createServiceException(MessageKey.LOCKED_TEMPLATE);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 					template.getLanguage(),
 					template.getLockingUser().getDisplayName(),
 					e);
-			throw createServiceException(MessageKeys.LOCKED_TEMPLATE);
+			throw createServiceException(MessageKey.LOCKED_TEMPLATE);
 		}
 
 	}
@@ -92,7 +92,7 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 	Template<?> lookup(TemplateDto dto) {
 		Template<?> template = templateRepository.getTemplate(dto.getDocumentName(), dto.getLanguage());
 		if (template == null) {
-			throw createServiceException(MessageKeys.TEMPLATE_NOT_FOUND);
+			throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
 		}
 		return template;
 	}
@@ -121,8 +121,8 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 		return dto;
 	}
 
-	TemplateServiceException createServiceException(String key) {
-		String message = messageFactory.createMessage(key);
+	TemplateServiceException createServiceException(MessageKey key) {
+		String message = messageFactory.createMessage(key.getValue());
 		return new TemplateServiceException(message);
 	}
 

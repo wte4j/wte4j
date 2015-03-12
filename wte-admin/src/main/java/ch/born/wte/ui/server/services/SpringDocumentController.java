@@ -22,6 +22,8 @@ import ch.born.wte.InvalidTemplateException;
 import ch.born.wte.LockingException;
 import ch.born.wte.Template;
 import ch.born.wte.TemplateEngine;
+import ch.born.wte.ui.shared.FileUploadResponse;
+import ch.born.wte.ui.shared.FileUploadResponseDto;
 
 @RestController
 @RequestMapping("/templates")
@@ -53,52 +55,60 @@ public class SpringDocumentController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public String updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
+	public FileUploadResponse updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
 
 		if (file.isEmpty()) {
-			throw new WteFileUploadException(
-					messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_READABLE));
+			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
 		}
 
-		Template<?> template = templateEngine.getTemplateRepository().getTemplate(name, language);
+		Template<?> template =
+				templateEngine.getTemplateRepository().getTemplate(name, language);
 		if (template == null) {
-			throw new WteFileUploadException(
-					messageFactory.createMessage(MessageKeys.TEMPLATE_NOT_FOUND));
+			throw new WteFileUploadException(MessageKey.TEMPLATE_NOT_FOUND);
 		}
 
 		try (InputStream in = file.getInputStream()) {
 			template.update(in, serviceContext.getCurrentUser());
+			return new FileUploadResponseDto(true, messageFactory.createMessage(MessageKey.TEMPLATE_UPLOADED.getValue()));
 		} catch (IOException e) {
-			throw new WteFileUploadException(
-					messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_READABLE), e);
+			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE,
+					e);
 		}
-		return "";
+
 	}
 
 	@ExceptionHandler(WteFileUploadException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public String handleException(WteFileUploadException e) {
-		return e.getMessage();
+	public FileUploadResponse handleException(WteFileUploadException e) {
+		return createErrorResponse(e.getMessageKey());
 	}
 
 	@ExceptionHandler(LockingException.class)
 	@ResponseStatus(value = HttpStatus.LOCKED)
-	public String handleException(LockingException e) {
-		return messageFactory.createMessage(MessageKeys.LOCKED_TEMPLATE);
+	public FileUploadResponse handleException(LockingException e) {
+		return createErrorResponse(MessageKey.LOCKED_TEMPLATE);
 	}
 
 	@ExceptionHandler(InvalidTemplateException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public String handleException(InvalidTemplateException e) {
-		return messageFactory.createMessage(MessageKeys.UPLOADED_FILE_NOT_VALID);
+	public FileUploadResponse handleException(InvalidTemplateException e) {
+		return createErrorResponse(MessageKey.UPLOADED_FILE_NOT_VALID);
 	}
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	public String handleException(Exception e) {
+	public FileUploadResponse handleException(RuntimeException e) {
 		logger.error("error on processing request", e);
-		return messageFactory.createMessage(MessageKeys.INTERNAL_SERVER_ERROR);
+		return createErrorResponse(MessageKey.INTERNAL_SERVER_ERROR);
+	}
+
+	private FileUploadResponse createErrorResponse(MessageKey messageKey) {
+		FileUploadResponseDto response = new FileUploadResponseDto();
+		response.setDone(false);
+		String message = messageFactory.createMessage(messageKey.getValue());
+		response.setMessage(message);
+		return response;
 	}
 
 }

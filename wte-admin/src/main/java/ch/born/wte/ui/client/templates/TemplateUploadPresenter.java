@@ -3,6 +3,7 @@ package ch.born.wte.ui.client.templates;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.born.wte.ui.shared.FileUploadResponse;
 import ch.born.wte.ui.shared.TemplateDto;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -56,12 +57,12 @@ public class TemplateUploadPresenter {
 	}
 
 	public void onSubmitComplete(SubmitCompleteEvent submitCompleteEvent) {
-		FileUploadResponse fileUploadResponse = parseResponse(submitCompleteEvent
-				.getResults());
-		if (isSubmissionSuccess(fileUploadResponse)) {
-			fireSuccessfulFileUpload(fileUploadResponse.getResponse());
-		} else {
-			fireFailedFileUpload(fileUploadResponse.getError());
+		FileUploadResponse response = parseResponse(submitCompleteEvent.getResults());
+		if (response.getDone()) {
+			fireSuccessfulFileUpload(response.getMessage());
+		}
+		else {
+			fireFailedFileUpload(response.getMessage());
 		}
 	}
 
@@ -73,23 +74,15 @@ public class TemplateUploadPresenter {
 
 	private FileUploadResponse parseResponse(String results) {
 		FileUploadResponse fileUploadResponse = null;
-		if (results != null
-				&& JsonUtils.safeToEval(results.replaceAll("\\<[^>]*>", ""))) {
-			fileUploadResponse = JsonUtils.safeEval(results.replaceAll(
-					"\\<[^>]*>", ""));
-		} else {
-			fileUploadResponse = JsonUtils
-					.safeEval("{\"error\":\"wte.message.fileupload.err.format\"}");
-		}
-		return fileUploadResponse;
-	}
+		if (results != null) {
+			// json is wrapped in <pre/> tag
+			String resultConent = results.replaceAll("\\<[^>]*>", "");
+			if (JsonUtils.safeToEval(resultConent)) {
+				return JsonUtils.<FileUploadResponseJso> safeEval(resultConent);
+			}
 
-	protected boolean isSubmissionSuccess(FileUploadResponse fileUploadResponse) {
-		boolean isSuccess = (fileUploadResponse != null);
-		if (isSuccess) {
-			isSuccess = isSuccess && (fileUploadResponse.getError() == null);
 		}
-		return isSuccess;
+		throw new IllegalArgumentException("no response or no valid response from server");
 	}
 
 	private void fireFailedFileUpload(String errorMessage) {
@@ -110,16 +103,17 @@ public class TemplateUploadPresenter {
 		public void onFailure(String errorMessage);
 	}
 
-	public static class FileUploadResponse extends JavaScriptObject {
-		protected FileUploadResponse() {
+	public static class FileUploadResponseJso extends JavaScriptObject implements FileUploadResponse {
+		protected FileUploadResponseJso() {
 		}
 
-		public final native String getError()/*-{
-			return this.error;
+		public final native boolean getDone()/*-{
+			return this.done;
 		}-*/;
 
-		public final native String getResponse()/*-{
-			return this.response;
+		public final native String getMessage() /*-{
+			return this.message;
 		}-*/;
+
 	}
 }
