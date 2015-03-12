@@ -26,7 +26,7 @@ import ch.born.wte.ui.shared.FileUploadResponse;
 import ch.born.wte.ui.shared.FileUploadResponseDto;
 
 @RestController
-@RequestMapping("/templates")
+@RequestMapping("/WteAdmin/documents/templates")
 public class SpringDocumentController {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -69,7 +69,7 @@ public class SpringDocumentController {
 		}
 
 		try (InputStream in = file.getInputStream()) {
-			template.update(in, serviceContext.getCurrentUser());
+			template.update(in, serviceContext.getUser());
 			return new FileUploadResponseDto(true, messageFactory.createMessage(MessageKey.TEMPLATE_UPLOADED.getValue()));
 		} catch (IOException e) {
 			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE,

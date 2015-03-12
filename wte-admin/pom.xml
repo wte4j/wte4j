@@ -98,6 +98,7 @@
 				<configuration>
 					<modules>
 						<module>ch.born.wte.ui.WteAdmin</module>
+						<module>ch.born.wte.ui.auth.WteAuth</module>
 					</modules>
 					<runTarget>WteAdmin.html</runTarget>
 					<i18nMessagesBundle>ch.born.wte.ui.client.Labels</i18nMessagesBundle>

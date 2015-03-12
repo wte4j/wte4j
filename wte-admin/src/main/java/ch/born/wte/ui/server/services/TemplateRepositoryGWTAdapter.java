@@ -53,7 +53,7 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 	public TemplateDto lockTemplate(TemplateDto templateDto) {
 		Template<?> template = lookup(templateDto);
 		try {
-			template = templateRepository.lockForEdit(template, serviceContext.getCurrentUser());
+			template = templateRepository.lockForEdit(template, serviceContext.getUser());
 			return createTemplateDto(template);
 		} catch (LockingException e) {
 			logger.debug("template {}_{} is locked by {}",
