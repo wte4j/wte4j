@@ -3,28 +3,17 @@ package ch.born.wte.ui.server.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@Configuration
-@EnableTransactionManagement
-@EnableWebMvc
-@ComponentScan(basePackages = { "ch.born.wte.ui.server.services", "ch.born.wte.impl" }, scopedProxy = ScopedProxyMode.INTERFACES)
-@PropertySource("/WEB-INF/wte.properties")
-public class SpringApplicationConfig {
+import ch.born.wte.ui.server.services.SpringDocumentController;
 
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-		return new PropertySourcesPlaceholderConfigurer();
-	}
+@Configuration
+@EnableWebMvc
+public class AdminApplicationConfig {
 
 	@Bean
 	@Value("${wte.fileupload.maxsizeinbytes}")
@@ -39,6 +28,11 @@ public class SpringApplicationConfig {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("ch.born.wte.ui.shared.Messages");
 		return messageSource;
+	}
+
+	@Bean
+	public SpringDocumentController documentController() {
+		return new SpringDocumentController();
 	}
 
 }

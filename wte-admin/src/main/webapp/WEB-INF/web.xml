@@ -11,7 +11,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>ch.born.wte.ui.server.config</param-value>
+		<param-value>ch.born.wte.ui.server.config.CoreApplicationConfig</param-value>
 	</context-param>
 
 	<listener>
@@ -99,7 +99,7 @@
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>ch.born.wte.ui.server.config.SpringApplicationConfig</param-value>
+			<param-value>ch.born.wte.ui.server.config.AdminApplicationConfig</param-value>
 		</init-param>
 	</servlet>
 
