@@ -27,7 +27,7 @@ import ch.born.wte.ui.shared.FileUploadResponseDto;
 
 @RestController
 @RequestMapping("/WteAdmin/documents/templates")
-public class SpringDocumentController {
+public class TemplateRestService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
