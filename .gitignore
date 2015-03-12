@@ -2,3 +2,4 @@
 /.project
 /.classpath
 /.settings/
+/wte-demo/src/main/webapp/WEB-INF/hsql/demo.properties
