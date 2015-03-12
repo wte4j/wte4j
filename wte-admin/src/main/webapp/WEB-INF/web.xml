@@ -8,7 +8,7 @@
 		<param-name>contextClass</param-name>
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>ch.born.wte.ui.server.config</param-value>
@@ -21,11 +21,54 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
-	 <listener>
-        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
-	
+
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+	<!-- Filters -->
+	<filter>
+		<filter-name>SessionUserFilter</filter-name>
+		<filter-class>ch.born.wte.ui.server.filters.SessionContextFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>SessionUserFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
+	<!-- Auth -->
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Wte Protected</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>wte-admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Wte Auth</web-resource-name>
+			<url-pattern>/WteAuth/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+
+	<security-role>
+		<role-name>wte-admin</role-name>
+	</security-role>
+
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/WteAuth.html</form-login-page>
+			<form-error-page>/WteAuth.html</form-error-page>
+		</form-login-config>
+	</login-config>
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>templateService</servlet-name>
@@ -49,8 +92,14 @@
 		<servlet-name>documents</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>
+            	org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        	</param-value>
+		</init-param>
+		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value></param-value>
+			<param-value>ch.born.wte.ui.server.config.SpringApplicationConfig</param-value>
 		</init-param>
 	</servlet>
 
@@ -59,7 +108,25 @@
 		<url-pattern>/WteAdmin/documents/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>wte-auth</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>
+            	org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        	</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>ch.born.wte.ui.auth.config.SpringApplicationConfig</param-value>
+		</init-param>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>wte-auth</servlet-name>
+		<url-pattern>/WteAuth/rest/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

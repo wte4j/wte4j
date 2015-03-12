@@ -21,7 +21,7 @@ import ch.born.wte.Template;
 import ch.born.wte.TemplateEngine;
 
 @RestController
-@RequestMapping("/templates")
+@RequestMapping("/WteAdmin/documents/templates")
 public class SpringDocumentController {
 
 	@Autowired
@@ -52,7 +52,7 @@ public class SpringDocumentController {
 
 			if (template != null) {
 				try (InputStream in = file.getInputStream()) {
-					template.update(in, serviceContext.getCurrentUser());
+					template.update(in, serviceContext.getUser());
 					response.put("result", "wte.message.fileupload.ok");
 				} catch (IOException e) {
 					throw new WteFileUploadException("wte.message.fileupload.err.inputstream", e);

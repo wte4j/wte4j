@@ -9,10 +9,17 @@ import ch.born.wte.User;
 @Scope(value = "request")
 public class SimpleServiceContext implements ServiceContext {
 
+	private User currentUser = new User("anonymous", "anonymous");
+	
 	@Override
-	public User getCurrentUser() {
-		return new User("anonymous", "anonymous");
+	public User getUser() {
+		return currentUser;
 
+	}
+
+	@Override
+	public void setUser(User user) {
+		currentUser = user;
 	}
 
 }

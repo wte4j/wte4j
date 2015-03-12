@@ -44,7 +44,7 @@ public class TemplateServiceImpl implements TemplateService {
 	@Override
 	public TemplateDto lockTemplate(TemplateDto templateDto) {
 		Template<Object> template = lookup(templateDto);
-		template = templateRepository.lockForEdit(template, serviceContext.getCurrentUser());
+		template = templateRepository.lockForEdit(template, serviceContext.getUser());
 		return createTemplateDto(template);
 	}
 
