@@ -12,6 +12,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import ch.born.wte.ui.server.services.MessageFactory;
+import ch.born.wte.ui.server.services.MessageFactoryImpl;
 import ch.born.wte.ui.server.services.ServiceContext;
 import ch.born.wte.ui.server.services.SimpleServiceContext;
 
@@ -32,6 +34,11 @@ public class CoreApplicationConfig {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("ch.born.wte.ui.shared.Messages");
 		return messageSource;
+	}
+
+	@Bean
+	public MessageFactory messageFactory() {
+		return new MessageFactoryImpl();
 	}
 
 	@Bean
