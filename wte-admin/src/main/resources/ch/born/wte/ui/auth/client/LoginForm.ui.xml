@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.formelement { display:block; margin:5px }
+		.formbutton { float:left }
+	</ui:style>
+	<g:HTMLPanel>
+		<form target="" action="j_security_check" method="post" >
+			<g:FlowPanel>
+				<g:Label text="Login" styleName="{style.formelement}"/>
+				<g:TextBox name="j_username" styleName="{style.formelement}"/>
+				<g:Label text="Password" styleName="{style.formelement}"/>
+				<g:PasswordTextBox name="j_password" styleName="{style.formelement}"/>
+				<g:SubmitButton text="Submit" styleName="{style.formelement} {style.formbutton}" />
+				<g:ResetButton text="Reset" styleName="{style.formelement} {style.formbutton}"/>
+			</g:FlowPanel>
+		</form>
+	</g:HTMLPanel>
+</ui:UiBinder> 
