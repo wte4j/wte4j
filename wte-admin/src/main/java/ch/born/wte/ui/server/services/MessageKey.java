@@ -8,10 +8,11 @@ public enum MessageKey {
 	UPLOADED_FILE_NOT_READABLE,
 	UPLOADED_FILE_NOT_VALID;
 
+	private static final String WTE4J_MESSAGE_BASE = "wte4j.message.";
 	private final String value;
 
 	private MessageKey() {
-		value = this.name().toLowerCase();
+		value = WTE4J_MESSAGE_BASE + this.name().toLowerCase();
 	}
 
 	public String getValue() {
