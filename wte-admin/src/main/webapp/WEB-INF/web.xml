@@ -46,7 +46,7 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>documents</servlet-name>
+		<servlet-name>wteAdminRestServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -55,8 +55,8 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>documents</servlet-name>
-		<url-pattern>/WteAdmin/documents/*</url-pattern>
+		<servlet-name>wteAdminRestServlet</servlet-name>
+		<url-pattern>/WteAdmin/rest/*</url-pattern>
 	</servlet-mapping>
 
 

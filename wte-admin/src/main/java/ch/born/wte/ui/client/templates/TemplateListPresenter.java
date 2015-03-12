@@ -245,7 +245,7 @@ public class TemplateListPresenter {
 	}
 
 	private String getTemplateFileRestURL() {
-		return GWT.getModuleBaseURL() + "documents/templates";
+		return Application.REST_SERVICE_BASE_URL + "templates";
 	}
 
 	void replaceInList(TemplateDto toReplace, TemplateDto newTemplateDto) {
