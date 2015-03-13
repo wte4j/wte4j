@@ -6,15 +6,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import ch.born.wte.ui.server.services.RestExceptionHandler;
 import ch.born.wte.ui.server.services.TemplateRestService;
 
 @Configuration
-@EnableWebMvc
 @Import(PropertiesConfig.class)
-public class RestServiceConfig {
-	
+public class RestServiceConfig extends WebMvcConfigurationSupport {
+
 	@Bean
 	@Value("${wte.fileupload.maxsizeinbytes}")
 	public MultipartResolver multipartResolver(long maxUploadSize) {
@@ -26,6 +26,11 @@ public class RestServiceConfig {
 	@Bean
 	public TemplateRestService templateRestService() {
 		return new TemplateRestService();
+	}
+
+	@Bean
+	public RestExceptionHandler restExceptionHandler() {
+		return new RestExceptionHandler();
 	}
 
 }
