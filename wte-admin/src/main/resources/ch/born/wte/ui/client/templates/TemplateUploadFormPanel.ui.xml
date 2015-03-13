@@ -1,0 +1,24 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.formelement {
+		display: block;
+		margin: 5px
+	}
+	
+	.formbutton {
+		float: left
+	}
+	</ui:style>
+	<g:FormPanel ui:field="formPanel">
+		<g:FlowPanel ui:field="flowPanel">
+			<g:Label ui:field="formTitle" styleName="{style.formelement}" />
+			<g:FileUpload ui:field="fileUpload" styleName="{style.formelement}" />
+			<g:Hidden  ui:field="templateName" styleName="{style.formelement}" />
+			<g:Hidden  ui:field="templateLanguage" styleName="{style.formelement}" />
+			<g:SubmitButton ui:field="submitButton" styleName="{style.formelement} {style.formbutton}" />
+			<g:Button ui:field="cancelButton" styleName="{style.formelement} {style.formbutton}" />
+		</g:FlowPanel>
+	</g:FormPanel>
+</ui:UiBinder> 
