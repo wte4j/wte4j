@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -20,15 +18,9 @@ import ch.born.wte.ui.server.services.SimpleServiceContext;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "ch.born.wte.impl" })
-@PropertySource("/WEB-INF/wte.properties")
-@Import(StandaloneJPAConfig.class)
+@Import({StandaloneJPAConfig.class, PropertiesConfig.class})
 public class CoreApplicationConfig {
-
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-		return new PropertySourcesPlaceholderConfigurer();
-	}
-
+	
 	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

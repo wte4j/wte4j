@@ -99,7 +99,7 @@
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>ch.born.wte.ui.server.config.RestServiceApplicationConfig</param-value>
+			<param-value>ch.born.wte.ui.server.config.RestServiceConfig</param-value>
 		</init-param>
 	</servlet>
 
@@ -119,7 +119,7 @@
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>ch.born.wte.ui.auth.config.SpringApplicationConfig</param-value>
+			<param-value>ch.born.wte.ui.auth.config.AuthApplicationConfig</param-value>
 		</init-param>
 	</servlet>
 

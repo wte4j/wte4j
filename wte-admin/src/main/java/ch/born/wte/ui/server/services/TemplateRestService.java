@@ -26,7 +26,7 @@ import ch.born.wte.ui.shared.FileUploadResponse;
 import ch.born.wte.ui.shared.FileUploadResponseDto;
 
 @RestController
-@RequestMapping("/WteAdmin/documents/templates")
+@RequestMapping("/templates")
 public class TemplateRestService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
