@@ -40,15 +40,15 @@
 
 	<!-- Auth -->
 
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Wte Protected</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>wte-admin</role-name>
-		</auth-constraint>
-	</security-constraint>
+<!-- 	<security-constraint> -->
+<!-- 		<web-resource-collection> -->
+<!-- 			<web-resource-name>Wte Protected</web-resource-name> -->
+<!-- 			<url-pattern>/*</url-pattern> -->
+<!-- 		</web-resource-collection> -->
+<!-- 		<auth-constraint> -->
+<!-- 			<role-name>wte-admin</role-name> -->
+<!-- 		</auth-constraint> -->
+<!-- 	</security-constraint> -->
 
 	<security-constraint>
 		<web-resource-collection>
@@ -90,17 +90,7 @@
 
 	<servlet>
 		<servlet-name>wteAdminRestServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextClass</param-name>
-			<param-value>
-            	org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-        	</param-value>
-		</init-param>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>ch.born.wte.ui.server.config.RestServiceConfig</param-value>
-		</init-param>
+		<servlet-class>ch.born.wte.ui.server.services.WteFileServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
