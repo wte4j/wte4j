@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import ch.born.wte.ui.server.services.FileUploadResponseFactory;
+import ch.born.wte.ui.server.services.FileUploadResponseFactoryImpl;
 import ch.born.wte.ui.server.services.MessageFactory;
 import ch.born.wte.ui.server.services.MessageFactoryImpl;
 import ch.born.wte.ui.server.services.ServiceContext;
@@ -31,6 +33,11 @@ public class CoreApplicationConfig {
 	@Bean
 	public MessageFactory messageFactory() {
 		return new MessageFactoryImpl();
+	}
+	
+	@Bean
+	public FileUploadResponseFactory fileUploadResponseFactory() {
+		return new FileUploadResponseFactoryImpl();
 	}
 
 	@Bean

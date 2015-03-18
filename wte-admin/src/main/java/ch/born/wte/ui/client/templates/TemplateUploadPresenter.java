@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.born.wte.ui.shared.FileUploadResponse;
+import ch.born.wte.ui.shared.FileUploadResponseDto;
 import ch.born.wte.ui.shared.TemplateDto;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -73,7 +74,6 @@ public class TemplateUploadPresenter {
 	}
 
 	private FileUploadResponse parseResponse(String results) {
-		FileUploadResponse fileUploadResponse = null;
 		if (results != null) {
 			// json is wrapped in <pre/> tag
 			String resultConent = results.replaceAll("\\<[^>]*>", "");
@@ -82,7 +82,7 @@ public class TemplateUploadPresenter {
 			}
 
 		}
-		throw new IllegalArgumentException("no response or no valid response from server");
+		return new FileUploadResponseDto(false, results);
 	}
 
 	private void fireFailedFileUpload(String errorMessage) {

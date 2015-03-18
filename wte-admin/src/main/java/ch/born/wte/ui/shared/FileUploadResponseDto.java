@@ -31,4 +31,8 @@ public class FileUploadResponseDto implements FileUploadResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public String toJson() {
+		return "{\"done\":"+done+",\"message\":\""+message+"\"}";
+	}
 }

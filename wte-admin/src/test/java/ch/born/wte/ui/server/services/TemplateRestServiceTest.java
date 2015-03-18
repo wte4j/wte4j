@@ -66,7 +66,7 @@ public class TemplateRestServiceTest {
 						.param("name", "template")
 						.param("language", "de"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"));
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html"));
 	}
 
 	@Test
@@ -76,8 +76,8 @@ public class TemplateRestServiceTest {
 						.file("file", "test".getBytes())
 						.param("name", "template")
 						.param("language", "de"));
-		resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"));
+		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html"));
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
 		assertTrue(content.contains(MessageKey.TEMPLATE_NOT_FOUND.getValue()));
@@ -99,8 +99,8 @@ public class TemplateRestServiceTest {
 						.file("file", bytes)
 						.param("name", "template")
 						.param("language", "de"));
-		resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.content().contentType("application/json"));
+		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html"));
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
 		assertTrue(content.contains("done"));
@@ -130,6 +130,11 @@ public class TemplateRestServiceTest {
 				}
 			});
 			return messageFactory;
+		}
+		
+		@Bean
+		public FileUploadResponseFactory fileUploadResponseFactory() {
+			return new FileUploadResponseFactoryImpl();
 		}
 	}
 

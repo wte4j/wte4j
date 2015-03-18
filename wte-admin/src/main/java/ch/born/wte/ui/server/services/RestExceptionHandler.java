@@ -1,24 +1,34 @@
 package ch.born.wte.ui.server.services;
 
-import org.springframework.http.HttpStatus;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import ch.born.wte.ui.shared.FileUploadResponse;
-import ch.born.wte.ui.shared.FileUploadResponseDto;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+@ResponseBody
+public class RestExceptionHandler {
 
+	@Autowired
+	FileUploadResponseFactory fileUploadResponseFactory;
+	
+	private final Logger logger = Logger.getLogger(getClass().getName());
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public String handleMaxUploadSizeExceededException(final MaxUploadSizeExceededException e) {
+		logger.warning("MaxUploadSizeExceededException: " + e.getLocalizedMessage());
+		return fileUploadResponseFactory.createJsonErrorResponse(MessageKey.UPLOADED_FILE_TOO_LARGE);
+	}
+	
+	@Order(Ordered.LOWEST_PRECEDENCE)
 	@ExceptionHandler(RuntimeException.class)
-	@ResponseBody
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public FileUploadResponse handleException(final RuntimeException e, WebRequest request) {
-		handleExceptionInternal(e, null, null, HttpStatus.INTERNAL_SERVER_ERROR, request);
-		return new FileUploadResponseDto(false, "INTERNAL_EXCEPTION" + e.getClass());
+	public String handleRuntimeException(final RuntimeException e) {
+		logger.warning("RuntimeException: " + e.getLocalizedMessage());
+		return fileUploadResponseFactory.createJsonErrorResponse(MessageKey.INTERNAL_SERVER_ERROR);
 	}
 }
