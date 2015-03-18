@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Activate this if you use Java-Bean as Models -->
+	<!-- <bean id="wteFlatBeanModelService" class="ch.born.wte.impl.service.FlatBeanModelService"/> -->
+
+	<!-- Activate this if you provide the data via jdbc to the engine -->
+	<!-- per default it uses the same datasource as the engine ueses. You can define an other data source by adding a constructor-arg tag -->
+	<!-- <bean id="wteJdbcModelService" class="ch.born.wte.impl.service.SimpleDbViewModelService"> -->
+
+
+</beans>
