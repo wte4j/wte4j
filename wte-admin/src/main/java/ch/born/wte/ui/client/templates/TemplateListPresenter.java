@@ -4,7 +4,10 @@ import java.util.List;
 
 import ch.born.wte.ui.client.Application;
 import ch.born.wte.ui.client.MessageDialog;
-import ch.born.wte.ui.client.templates.TemplateUploadPresenter.FileUploadedHandler;
+import ch.born.wte.ui.client.templates.upload.TemplateUploadDisplay;
+import ch.born.wte.ui.client.templates.upload.TemplateUploadFormPanel;
+import ch.born.wte.ui.client.templates.upload.TemplateUploadPresenter;
+import ch.born.wte.ui.client.templates.upload.TemplateUploadPresenter.FileUploadedHandler;
 import ch.born.wte.ui.shared.TemplateDto;
 import ch.born.wte.ui.shared.TemplateService;
 import ch.born.wte.ui.shared.TemplateServiceAsync;
@@ -39,6 +42,7 @@ public class TemplateListPresenter {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				current = selectionModel.getLastSelectedObject();
+				display.setSelectedTemplate(current);
 			}
 		});
 		dataProvider = new ListDataProvider<TemplateDto>();

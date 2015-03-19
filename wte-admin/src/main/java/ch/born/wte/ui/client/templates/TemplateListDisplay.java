@@ -20,4 +20,6 @@ public interface TemplateListDisplay extends IsWidget {
 
 	void setDeleteCommand(ScheduledCommand command);
 
+	void setSelectedTemplate(TemplateDto current);
+
 }

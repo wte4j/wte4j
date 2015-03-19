@@ -4,9 +4,11 @@ import static ch.born.wte.ui.client.Application.LABELS;
 import static ch.born.wte.ui.client.Application.RESOURCES;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import ch.born.wte.ui.client.cell.CellTableResources;
 import ch.born.wte.ui.client.cell.PopupCell;
+import ch.born.wte.ui.client.templates.contextmenu.TemplateContextMenu;
 import ch.born.wte.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
@@ -33,12 +35,14 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
-public class TemplateTablePanel extends Composite implements
+public class TemplateListPanel extends Composite implements
 		TemplateListDisplay {
 
 	private static TemplateTablePanelUiBInder uiBinder = GWT
 			.create(TemplateTablePanelUiBInder.class);
 
+	private Logger logger = Logger.getLogger(getClass().getName());
+	
 	@UiField
 	FlowPanel tablePanel;
 
@@ -61,7 +65,7 @@ public class TemplateTablePanel extends Composite implements
 
 	private TextColumn<TemplateDto> statusColumn;
 
-	public TemplateTablePanel() {
+	public TemplateListPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initContextMenu();
 		initTemplateTable();
@@ -183,28 +187,28 @@ public class TemplateTablePanel extends Composite implements
 
 	@Override
 	public void setDowndLoadCommand(ScheduledCommand command) {
-		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getDownloadAction().setScheduledCommand(commandWithCloseContextMenu);
+		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getDownloadAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 	}
 
 	@Override
 	public void setUpdateCommand(ScheduledCommand command) {
-		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUpdateAction().setScheduledCommand(commandWithCloseContextMenu);
+		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getUpdateAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
 	}
 
 	@Override
 	public void setUnlockCommand(ScheduledCommand command) {
-		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUnlockAction().setScheduledCommand(commandWithCloseContextMenu);
+		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getUnlockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
 	}
 
 	@Override
 	public void setLockCommand(ScheduledCommand command) {
-		ScheduledCommand commandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getLockAction().setScheduledCommand(commandWithCloseContextMenu);
+		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
+		templateContextMenu.getLockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
 	}
 
@@ -213,6 +217,15 @@ public class TemplateTablePanel extends Composite implements
 		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
 		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
+	}
+	
+	
+	@Override
+	public void setSelectedTemplate(TemplateDto current) {
+		boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getDisplayName() != null);
+		logger.info("current template locking status = " + isCurrentTemplateLocked);
+		templateContextMenu.getLockAction().setVisible(!isCurrentTemplateLocked);
+		templateContextMenu.getUnlockAction().setVisible(isCurrentTemplateLocked);
 	}
 
 	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
@@ -226,7 +239,7 @@ public class TemplateTablePanel extends Composite implements
 	}
 
 	interface TemplateTablePanelUiBInder extends
-			UiBinder<Widget, TemplateTablePanel> {
+			UiBinder<Widget, TemplateListPanel> {
 	}
 
 }
