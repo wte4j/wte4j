@@ -120,6 +120,25 @@ public class TemplateListPresenter {
 
 	void deleteTemplate() {
 		final TemplateDto toRemove = current;
+		String documentName = toRemove.getDocumentName();
+		MessageDialog deleteConfirmationDialog = new MessageDialog(
+				documentName, 
+				Application.LABELS.deleteConfirmation(documentName), 
+				MessageDialog.QUESTION, 
+				getDeleteTemplateConfirmationOkHandler(toRemove));
+		deleteConfirmationDialog.show();
+	}
+
+	private ClickHandler getDeleteTemplateConfirmationOkHandler(final TemplateDto toRemove) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent clickEvent) {
+				sendDeleteTemplateRequest(toRemove);
+			}
+		};
+	}
+
+	private void sendDeleteTemplateRequest(final TemplateDto toRemove) {
 		templateService.deleteTemplate(toRemove, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
