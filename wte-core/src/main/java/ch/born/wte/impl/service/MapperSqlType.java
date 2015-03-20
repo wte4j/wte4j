@@ -22,8 +22,6 @@ import ch.born.wte.WteException;
  * mappings have been taken from [1]
  * "JDBC 4.0 Specification, JSR 221, November 7, 2006, Appendix B, Table B-3"
  * 
- * @author trytz
- * 
  */
 final class MapperSqlType {
 	private MapperSqlType() {

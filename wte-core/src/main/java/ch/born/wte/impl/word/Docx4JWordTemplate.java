@@ -45,8 +45,6 @@ import ch.born.wte.WteException;
  * Ein {@linkplain Docx4JWordTemplate} ist ein Word im OpenXml Format mit
  * Content Control elements.
  * 
- * @author ofreivogel
- * 
  */
 public class Docx4JWordTemplate {
 
