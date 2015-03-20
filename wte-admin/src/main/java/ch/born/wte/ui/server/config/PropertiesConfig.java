@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@PropertySource("/WEB-INF/wte.properties")
+@PropertySource("/WEB-INF/wte4j.properties")
 public class PropertiesConfig {
 
 	@Bean

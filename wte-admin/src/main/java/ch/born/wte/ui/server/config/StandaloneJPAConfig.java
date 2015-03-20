@@ -19,69 +19,62 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class StandaloneJPAConfig {
-    
-    @Autowired
-    Environment env;
-    
-    @Autowired(required=false)
-    @Qualifier("wte")
-    private DataSource externalDataSource;
-    
-    
 
-    @Bean
-    @Qualifier("wte")
-    public LocalContainerEntityManagerFactoryBean wteEntityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean emfFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        emfFactoryBean.setDataSource(lookUpDataSource());
-        emfFactoryBean.setJpaVendorAdapter(new OpenJpaVendorAdapter());
-        emfFactoryBean.setPersistenceUnitName("wte-templates");
-        return emfFactoryBean;
-    }
-    
-    
-    private DataSource lookUpDataSource(){
-        if(env.containsProperty("wte.jdbc.jndi") || env.containsProperty("wte.jdbc.url")){
-            return wteInternalDataSource();
-        }
-        else {
-            return externalDataSource;
-        }
-        
-    }
+	@Autowired
+	Environment env;
 
+	@Autowired(required = false)
+	@Qualifier("wte4j")
+	private DataSource externalDataSource;
 
-    @Bean
-    @Lazy
-    public DataSource wteInternalDataSource() {
-        if(env.containsProperty("wte.jdbc.jndi")){
-            JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
-            DataSource dataSource = dsLookup.getDataSource(env.getProperty("wte.jdbc.jndi"));
-            return dataSource;
-            
-        }
-        else if(env.containsProperty("wte.jdbc.url")){
-            BasicDataSource dataSource=new BasicDataSource();
-            dataSource.setUrl(env.getProperty("wte.jdbc.url"));
-            dataSource.setDriverClassName(env.getProperty("wte.jdbc.driver"));
-            dataSource.setUsername(env.getProperty("wte.jdbc.user"));
-            dataSource.setPassword(env.getProperty("wte.jdbc.password"));
-            return dataSource;
-            
-        } else{
-            throw new BeanCreationException("NO Datasource defined");
-        }
-        
-    }
+	@Bean
+	@Qualifier("wte4j")
+	public LocalContainerEntityManagerFactoryBean wteEntityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean emfFactoryBean = new LocalContainerEntityManagerFactoryBean();
+		emfFactoryBean.setDataSource(lookUpDataSource());
+		emfFactoryBean.setJpaVendorAdapter(new OpenJpaVendorAdapter());
+		emfFactoryBean.setPersistenceUnitName("wte-templates");
+		return emfFactoryBean;
+	}
 
+	private DataSource lookUpDataSource() {
+		if (env.containsProperty("wte.jdbc.jndi") || env.containsProperty("wte.jdbc.url")) {
+			return wteInternalDataSource();
+		}
+		else {
+			return externalDataSource;
+		}
 
+	}
 
+	@Bean
+	@Lazy
+	public DataSource wteInternalDataSource() {
+		if (env.containsProperty("wte.jdbc.jndi")) {
+			JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
+			DataSource dataSource = dsLookup.getDataSource(env.getProperty("wte.jdbc.jndi"));
+			return dataSource;
 
-    @Bean
-    @Qualifier("wte")
-    public PlatformTransactionManager wteTransactionManager(@Qualifier("wte") EntityManagerFactory emf) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
-    }
+		}
+		else if (env.containsProperty("wte.jdbc.url")) {
+			BasicDataSource dataSource = new BasicDataSource();
+			dataSource.setUrl(env.getProperty("wte.jdbc.url"));
+			dataSource.setDriverClassName(env.getProperty("wte.jdbc.driver"));
+			dataSource.setUsername(env.getProperty("wte.jdbc.user"));
+			dataSource.setPassword(env.getProperty("wte.jdbc.password"));
+			return dataSource;
+
+		} else {
+			throw new BeanCreationException("NO Datasource defined");
+		}
+
+	}
+
+	@Bean
+	@Qualifier("wte4j")
+	public PlatformTransactionManager wteTransactionManager(@Qualifier("wte4j") EntityManagerFactory emf) {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(emf);
+		return transactionManager;
+	}
 }

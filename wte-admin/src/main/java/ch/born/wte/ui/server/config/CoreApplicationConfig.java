@@ -2,9 +2,9 @@ package ch.born.wte.ui.server.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -19,10 +19,10 @@ import ch.born.wte.ui.server.services.SimpleServiceContext;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "ch.born.wte.impl" })
-@Import({StandaloneJPAConfig.class, PropertiesConfig.class})
+@Import({ StandaloneJPAConfig.class, PropertiesConfig.class })
+@ImportResource({ "WEB-INF/wte4j-model-service-config.xml", "classpath:wte4j-core-application-context.xml" })
 public class CoreApplicationConfig {
-	
+
 	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -34,7 +34,7 @@ public class CoreApplicationConfig {
 	public MessageFactory messageFactory() {
 		return new MessageFactoryImpl();
 	}
-	
+
 	@Bean
 	public FileUploadResponseFactory fileUploadResponseFactory() {
 		return new FileUploadResponseFactoryImpl();

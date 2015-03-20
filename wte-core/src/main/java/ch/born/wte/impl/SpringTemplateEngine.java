@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import ch.born.wte.FormatterFactory;
@@ -17,13 +16,13 @@ import ch.born.wte.TemplateRepository;
 import ch.born.wte.WteException;
 import ch.born.wte.WteModelService;
 
-@Service
+@Service("wordTemplateEngine")
 public class SpringTemplateEngine implements TemplateEngine {
 
 	@Autowired
 	protected TemplateRepository templateRepository;
 
-	@Autowired(required=false)
+	@Autowired(required = false)
 	@Qualifier("wteModelService")
 	protected WteModelService modelService;
 
@@ -32,7 +31,7 @@ public class SpringTemplateEngine implements TemplateEngine {
 
 	@Override
 	public <E> TemplateBuilder<E> getTemplateBuilder(Class<E> inputType) {
-		if(modelService ==null){
+		if (modelService == null) {
 			throw new WteException("no bean with qualifier wteModelService of type " + WteModelService.class.getName() + " is defined");
 		}
 		return new WordTemplateBuilder<E>(formatterFactory, modelService,
