@@ -9,12 +9,16 @@ import com.google.gwt.view.client.HasData;
 public interface TemplateListDisplay extends IsWidget {
 
 	HasData<TemplateDto> getDataContainer();
-	
+
 	void setDowndLoadCommand(ScheduledCommand command);
 
 	void setUpdateCommand(ScheduledCommand command);
 
+	void setUnLockCommandVisible(boolean visible);
+
 	void setUnlockCommand(ScheduledCommand command);
+
+	void setLockCommandVisible(boolean visible);
 
 	void setLockCommand(ScheduledCommand command);
 

@@ -1,4 +1,4 @@
-package ch.born.wte.ui.client.templates;
+package ch.born.wte.ui.client.templates.upload;
 
 import java.util.ArrayList;
 import java.util.List;

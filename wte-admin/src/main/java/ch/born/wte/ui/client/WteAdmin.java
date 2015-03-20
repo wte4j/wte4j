@@ -1,7 +1,7 @@
 package ch.born.wte.ui.client;
 
 import ch.born.wte.ui.client.templates.TemplateListPresenter;
-import ch.born.wte.ui.client.templates.TemplateTablePanel;
+import ch.born.wte.ui.client.templates.TemplateListPanel;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -15,7 +15,7 @@ public class WteAdmin implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {		
-		TemplateTablePanel display=new TemplateTablePanel();	
+		TemplateListPanel display=new TemplateListPanel();	
 		
 		TemplateListPresenter presenter=new TemplateListPresenter();
 		presenter.bindTo(display);		

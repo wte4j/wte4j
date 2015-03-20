@@ -1,4 +1,4 @@
-package ch.born.wte.ui.client.templates;
+package ch.born.wte.ui.client.templates.upload;
 
 import static ch.born.wte.ui.client.Application.LABELS;
 import ch.born.wte.ui.shared.TemplateDto;
