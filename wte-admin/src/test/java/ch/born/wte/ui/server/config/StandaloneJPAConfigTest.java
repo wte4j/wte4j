@@ -48,7 +48,7 @@ public class StandaloneJPAConfigTest {
     public static class TestConfiguration {
         
         @Bean
-        @Qualifier("wte")
+        @Qualifier("wte4j")
         public DataSource dataSource(){
             
             EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
