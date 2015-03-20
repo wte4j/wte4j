@@ -1,6 +1,7 @@
 package ch.born.wte.ui.client.templates;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import ch.born.wte.ui.client.Application;
 import ch.born.wte.ui.client.MessageDialog;
@@ -27,6 +28,8 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 public class TemplateListPresenter {
 
+	private Logger logger = Logger.getLogger(getClass().getName());
+
 	private TemplateServiceAsync templateService = GWT
 			.create(TemplateService.class);
 
@@ -42,7 +45,10 @@ public class TemplateListPresenter {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				current = selectionModel.getLastSelectedObject();
-				display.setSelectedTemplate(current);
+				boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
+				logger.fine("current template locking status = " + isCurrentTemplateLocked);
+				display.setLockCommandVisible(!isCurrentTemplateLocked);
+				display.setUnLockCommandVisible(isCurrentTemplateLocked);
 			}
 		});
 		dataProvider = new ListDataProvider<TemplateDto>();

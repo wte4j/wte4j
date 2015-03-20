@@ -4,7 +4,6 @@ import static ch.born.wte.ui.client.Application.LABELS;
 import static ch.born.wte.ui.client.Application.RESOURCES;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 import ch.born.wte.ui.client.cell.CellTableResources;
 import ch.born.wte.ui.client.cell.PopupCell;
@@ -41,8 +40,6 @@ public class TemplateListPanel extends Composite implements
 	private static TemplateTablePanelUiBInder uiBinder = GWT
 			.create(TemplateTablePanelUiBInder.class);
 
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	@UiField
 	FlowPanel tablePanel;
 
@@ -158,7 +155,7 @@ public class TemplateListPanel extends Composite implements
 		actionColumn.setCellStyleNames("templates-action-cell");
 		addColumntoTemplateTable(actionColumn, "");
 	}
-	
+
 	private void initStatusColumn() {
 		statusColumn = new TextColumn<TemplateDto>() {
 
@@ -174,12 +171,12 @@ public class TemplateListPanel extends Composite implements
 		statusColumn.setCellStyleNames("locking-user-cell");
 		addColumntoTemplateTable(statusColumn, LABELS.templateLockingUser());
 	}
-	
+
 	private void addColumntoTemplateTable(Column<TemplateDto, ?> column, String headerText) {
 		Header<String> header = new TextHeader(headerText);
 		templateTable.addColumn(column, header);
-	}	
-	
+	}
+
 	@Override
 	public HasData<TemplateDto> getDataContainer() {
 		return templateTable;
@@ -218,14 +215,16 @@ public class TemplateListPanel extends Composite implements
 		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
 
 	}
-	
-	
+
 	@Override
-	public void setSelectedTemplate(TemplateDto current) {
-		boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getDisplayName() != null);
-		logger.info("current template locking status = " + isCurrentTemplateLocked);
-		templateContextMenu.getLockAction().setVisible(!isCurrentTemplateLocked);
-		templateContextMenu.getUnlockAction().setVisible(isCurrentTemplateLocked);
+	public void setUnLockCommandVisible(boolean visible) {
+		templateContextMenu.getUnlockAction().setVisible(visible);
+
+	}
+
+	@Override
+	public void setLockCommandVisible(boolean visible) {
+		templateContextMenu.getLockAction().setVisible(visible);
 	}
 
 	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
