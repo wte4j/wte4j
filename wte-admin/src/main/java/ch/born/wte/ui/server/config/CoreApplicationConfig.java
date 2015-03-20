@@ -20,7 +20,7 @@ import ch.born.wte.ui.server.services.SimpleServiceContext;
 @Configuration
 @EnableTransactionManagement
 @Import({ StandaloneJPAConfig.class, PropertiesConfig.class })
-@ImportResource({ "WEB-INF/wte-model-service-config.xml", "classpath:wte-core-application-context.xml" })
+@ImportResource({ "WEB-INF/wte4j-model-service-config.xml", "classpath:wte4j-core-application-context.xml" })
 public class CoreApplicationConfig {
 
 	@Bean
@@ -34,7 +34,7 @@ public class CoreApplicationConfig {
 	public MessageFactory messageFactory() {
 		return new MessageFactoryImpl();
 	}
-	
+
 	@Bean
 	public FileUploadResponseFactory fileUploadResponseFactory() {
 		return new FileUploadResponseFactoryImpl();

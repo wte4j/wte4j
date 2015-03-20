@@ -30,7 +30,7 @@ import ch.born.wte.User;
 import ch.born.wte.WteModelService;
 
 @Repository
-@Transactional("wte")
+@Transactional("wte4j")
 public class WordTemplateRepository implements TemplateRepository {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -38,7 +38,7 @@ public class WordTemplateRepository implements TemplateRepository {
 	@PersistenceContext(unitName = "wte-templates")
 	protected EntityManager em;
 
-	@Autowired(required=false)
+	@Autowired(required = false)
 	@Qualifier("wteModelService")
 	protected WteModelService modelService;
 
