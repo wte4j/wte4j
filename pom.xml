@@ -6,6 +6,36 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>wte4j</name>
+	<inceptionYear>2015</inceptionYear>
+	
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Oliver Freivogel</name>
+			<email>oliver.freivogel@born.ch</email>
+		</developer>
+
+		<developer>
+			<name>Thomas Selber</name>
+			<email>thomas.selber@born.ch</email>
+		</developer>
+
+		<developer>
+			<name>Thomas Stettler</name>
+			<email>thomas.stettler@born.ch</email>
+		</developer>
+
+	</developers>
+
 	<modules>
 		<module>wte-core</module>
 		<module>wte-admin</module>
@@ -88,7 +118,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- JPA Provider -->
 
 			<dependency>
