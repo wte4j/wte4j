@@ -22,8 +22,8 @@ public class WteAdmin implements EntryPoint {
 		
 		MainPanel mainPanel=new MainPanel();
 		mainPanel.setContent(display);
-		
-		RootPanel root= RootPanel.get();
+
+		RootPanel root = RootPanel.get("wte4j-admin");
 		root.add(mainPanel);
 		
 		presenter.loadData();
