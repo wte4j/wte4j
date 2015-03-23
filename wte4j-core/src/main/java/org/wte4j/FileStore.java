@@ -18,9 +18,6 @@ package org.wte4j;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * 
- */
 public interface FileStore {
 
 	OutputStream getOutStream(String fileName) throws IOException;

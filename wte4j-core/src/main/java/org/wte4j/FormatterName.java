@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Definiert den Namen eines Formatters. Ist die Annotation nicht gesetzt, wird
- * der einfache Klassenamen verwendet.
+ * Defines a name for a formatter class. In template this name will be used to
+ * adress the formatter.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

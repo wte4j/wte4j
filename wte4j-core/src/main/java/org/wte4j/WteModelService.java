@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * The engine requires a WteModelService to generate documents and create new
- * templates with the suported tags for a given model configuration.
+ * templates with the supported tags for a given model configuration.
  */
 public interface WteModelService {
 

@@ -17,6 +17,13 @@ package org.wte4j;
 
 import java.util.Locale;
 
+/**
+ * Interface for formatter used by the engine. To register a new formatter
+ * create a new implementation and register it with
+ * {@link FormatterRegistry#registerClass(Class)}
+ * 
+ * @see {@link DefaultFormatter} {@link FormatterName}
+ */
 public interface Formatter {
 	public void setLocale(Locale locale);
 

@@ -15,10 +15,8 @@
  */
 package org.wte4j;
 
-
 /**
  * Exception to be thrown if a template contains incorrect settings.
- *
  */
 public class TemplateBuildException extends WteException {
 
