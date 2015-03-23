@@ -19,7 +19,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wte4j</groupId>
-	<artifactId>wte-parent</artifactId>
+	<artifactId>wte4j-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -54,9 +54,9 @@
 	</developers>
 
 	<modules>
-		<module>wte-core</module>
-		<module>wte-admin</module>
-		<module>wte-demo</module>
+		<module>wte4j-core</module>
+		<module>wte4j-admin</module>
+<!-- 		<module>wte4j-demo</module> -->
 	</modules>
 
 	<properties>
@@ -84,6 +84,7 @@
 					<excludes>						
 						<exclude>src/test/resources/**</exclude>
 						<exclude>src/main/resources/**</exclude>
+						<exclude>**/wte4j-demo/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>

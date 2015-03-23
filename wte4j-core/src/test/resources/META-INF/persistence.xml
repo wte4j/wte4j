@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="wte4j-templates" transaction-type="RESOURCE_LOCAL">		
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+<!-- 			<property name="openjpa.DynamicEnhancementAgent" value="true"/> -->
+<!-- 			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/> -->
+		</properties>
+	</persistence-unit>
+</persistence> 

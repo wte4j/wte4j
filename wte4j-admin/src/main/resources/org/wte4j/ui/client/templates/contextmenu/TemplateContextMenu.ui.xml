@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:org.wte4j.ui.client.templates.contextmenu">
+	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />
+	<ui:with field='res' type='org.wte4j.ui.client.WteResources' />
+	<g:SimplePanel ui:field="menuContainer">
+		<g:MenuBar ui:field="contextMenu" vertical="true">
+			<my:MyMenuItem ui:field="downloadAction" text="{labels.downloadTemplate}" res="{res.downloadAction}" />
+			<my:MyMenuItem ui:field="updateAction" text="{labels.updateTemplate}" res="{res.updateAction}" />
+
+			<my:MyMenuItem ui:field="lockAction" text="{labels.lockTemplate}" res="{res.lockAction}" />
+			<my:MyMenuItem ui:field="unlockAction" text="{labels.unlockTemplate}" res="{res.unlockAction}" />
+
+			<my:MyMenuItem ui:field="deleteAction" text="{labels.deleteTemplate}" res="{res.deleteAction}" />
+		</g:MenuBar>
+	</g:SimplePanel>
+</ui:UiBinder> 
