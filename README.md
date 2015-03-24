@@ -15,4 +15,4 @@ The wte4j consists of three modules:
 TODO
 
 
-For a more detailed documentation visit the projects wiki here: https://github.com/ofreivogel/wte4j/wiki
+For a more detailed documentation visit the projects wiki here: https://github.com/wte4j/wte4j/wiki
