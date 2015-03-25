@@ -15,11 +15,20 @@
  */
 package org.wte4j.ui.server.config;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.BeanCreationException;
+import org.hsqldb.persist.HsqlProperties;
+import org.hsqldb.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,12 +44,16 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class StandaloneJPAConfig {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
-	Environment env;
+	private Environment env;
 
 	@Autowired(required = false)
 	@Qualifier("wte4j")
 	private DataSource externalDataSource;
+
+	private Server server;
 
 	@Bean
 	@Qualifier("wte4j")
@@ -49,15 +62,27 @@ public class StandaloneJPAConfig {
 		emfFactoryBean.setDataSource(lookUpDataSource());
 		emfFactoryBean.setJpaVendorAdapter(new OpenJpaVendorAdapter());
 		emfFactoryBean.setPersistenceUnitName("wte4j-templates");
+		emfFactoryBean.setJpaPropertyMap(createJpaPropertyMap());
 		return emfFactoryBean;
+	}
+
+	private Map<String, ?> createJpaPropertyMap() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("openjpa.jdbc.SynchronizeMappings", "buildSchema(ForeignKeys=true)");
+		return map;
 	}
 
 	private DataSource lookUpDataSource() {
 		if (env.containsProperty("wte4j.jdbc.jndi") || env.containsProperty("wte4j.jdbc.url")) {
 			return wteInternalDataSource();
 		}
-		else {
+		else if (externalDataSource != null) {
 			return externalDataSource;
+		}
+		else {
+			logger.info("no database configured");
+			startHsqlServer();
+			return emdeddedDatabase();
 		}
 
 	}
@@ -80,8 +105,19 @@ public class StandaloneJPAConfig {
 			return dataSource;
 
 		} else {
-			throw new BeanCreationException("NO Datasource defined");
+			return null;
 		}
+
+	}
+
+	@Bean
+	@Lazy
+	public DataSource emdeddedDatabase() {
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setUrl("jdbc:hsqldb:hsql://localhost/wte4j");
+		dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+		dataSource.setUsername("sa");
+		return dataSource;
 
 	}
 
@@ -91,5 +127,33 @@ public class StandaloneJPAConfig {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(emf);
 		return transactionManager;
+	}
+
+	private void startHsqlServer() {
+		try {
+			logger.info("try to start hsql database");
+			Path path = Paths.get(env.getProperty("java.io.tmpdir"), "hsql", "wte4j");
+			String pathAsString = path.toAbsolutePath().toString();
+			logger.info("dblocation: {}", pathAsString);
+			HsqlProperties p = new HsqlProperties();
+			p.setProperty("server.database.0", "file:" + pathAsString);
+			p.setProperty("server.dbname.0", "wte4j");
+
+			Server newServer = new Server();
+			newServer.setProperties(p);
+			newServer.start();
+			server = newServer;
+			logger.info("hsql server started");
+		} catch (Exception e) {
+			logger.error("error start hsql db", e);
+		}
+
+	}
+
+	@PreDestroy
+	public void stopHsqlServer() {
+		if (server != null) {
+			server.stop();
+		}
 	}
 }
