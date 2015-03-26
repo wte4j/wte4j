@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:my="urn:import:org.wte4j.ui.client.templates.contextmenu">
 	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />
-	<ui:with field='res' type='org.wte4j.ui.client.WteResources' />
+	<ui:with field='res' type='org.wte4j.ui.client.Wte4jResources' />
 	<g:SimplePanel ui:field="menuContainer">
 		<g:MenuBar ui:field="contextMenu" vertical="true">
 			<my:MyMenuItem ui:field="downloadAction" text="{labels.downloadTemplate}" res="{res.downloadAction}" />

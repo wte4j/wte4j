@@ -13,18 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.ui.client;
+package org.wte4j.ui.auth.client;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.RootPanel;
 
-public final class Application {
+/**
+ * Entry point classes define <code>onModuleLoad()</code>.
+ */
+public class Wte4jAuth implements EntryPoint {
 
-	public static final Wte4jResources RESOURCES = GWT.create(Wte4jResources.class);
-	public static Labels LABELS = GWT.create(Labels.class);
+	/**
+	 * This is the entry point method.
+	 */
+	public void onModuleLoad() {		
+		
+		LoginPage loginPage = new LoginPage();
+		
+		RootPanel root= RootPanel.get();
+		root.add(loginPage);
 
-	public static final String REST_SERVICE_BASE_URL = GWT.getModuleBaseURL() + "rest/";
-
-	private Application() {
+		loginPage.show();
+		
 	}
-
 }
