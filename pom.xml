@@ -56,7 +56,6 @@
 	<modules>
 		<module>wte4j-core</module>
 		<module>wte4j-admin</module>
-<!-- 		<module>wte4j-demo</module> -->
 	</modules>
 
 	<properties>
