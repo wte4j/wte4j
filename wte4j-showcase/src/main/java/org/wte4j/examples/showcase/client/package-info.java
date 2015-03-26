@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Classes compiled by GWT to javascricpt
+ *  Root package for classes used on client side and compiled to javascript
  */
 package org.wte4j.examples.showcase.client;
 

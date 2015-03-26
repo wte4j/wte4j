@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
- * Classes used on client side or server side like dto...
+ * Root package for classes used on client side and compiled to javascript or server side like data transfer objects or service interfaces
  */
 package org.wte4j.examples.showcase.shared;
 

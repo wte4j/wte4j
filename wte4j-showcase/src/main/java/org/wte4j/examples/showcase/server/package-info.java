@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Server side classes
+ * Root package for server side classes
  */
 package org.wte4j.examples.showcase.server;
 
