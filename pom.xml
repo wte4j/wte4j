@@ -56,11 +56,14 @@
 	<modules>
 		<module>wte4j-core</module>
 		<module>wte4j-admin</module>
-	    <module>wte4j-admin-auth</module>
-	    <module>wte4j-admin-war</module>
+		<module>wte4j-admin-auth</module>
+		<module>wte4j-admin-war</module>
+		<module>wte4j-showcase</module>
 	</modules>
-
 	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Framework Versions -->
