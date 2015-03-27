@@ -42,19 +42,32 @@
 		</dependency>
 
 		<!-- JPA Provider -->
-		
+
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>
-			<artifactId>openjpa</artifactId>			
-		</dependency>
+			<artifactId>openjpa</artifactId>
+		</dependency>		
 
 		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.1.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -91,7 +104,7 @@
 				<version>${openJPA.version}</version>
 				<configuration>
 					<classes>${project.build.outputDirectory}</classes>
-					<includes>org/wte4j/impl/PersistentTemplate.java</includes>					
+					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
 				</configuration>
 				<executions>
 					<execution>
@@ -106,11 +119,11 @@
 					<dependency>
 						<groupId>org.apache.openjpa</groupId>
 						<artifactId>openjpa</artifactId>
-						<version>${openJPA.version}</version>						
+						<version>${openJPA.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
