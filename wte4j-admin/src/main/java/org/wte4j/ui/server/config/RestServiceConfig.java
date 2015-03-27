@@ -15,23 +15,26 @@
  */
 package org.wte4j.ui.server.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.wte4j.ui.server.services.RestExceptionHandler;
 import org.wte4j.ui.server.services.TemplateRestService;
 
 @Configuration
-@Import(PropertiesConfig.class)
-public class RestServiceConfig extends WebMvcConfigurationSupport {
+@EnableWebMvc
+public class RestServiceConfig {
+
+	@Autowired
+	private Environment env;
 
 	@Bean
-	@Value("${wte4j.fileupload.maxsizeinbytes}")
-	public MultipartResolver multipartResolver(long maxUploadSize) {
+	public MultipartResolver multipartResolver() {
+		Long maxUploadSize = env.getProperty("wte4j.fileupload.maxsizeinbytes", Long.class, 50000l);
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		multipartResolver.setMaxUploadSize(maxUploadSize);
 		return multipartResolver;

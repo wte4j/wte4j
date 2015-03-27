@@ -15,15 +15,11 @@
  */
 package org.wte4j.ui.server.config;
 
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wte4j.ui.server.services.FileUploadResponseFactory;
 import org.wte4j.ui.server.services.FileUploadResponseFactoryImpl;
 import org.wte4j.ui.server.services.MessageFactory;
@@ -32,21 +28,13 @@ import org.wte4j.ui.server.services.ServiceContext;
 import org.wte4j.ui.server.services.SimpleServiceContext;
 
 @Configuration
-@EnableTransactionManagement
-@Import({ StandaloneJPAConfig.class, PropertiesConfig.class })
-@ImportResource({ "WEB-INF/wte4j-model-service-config.xml", "classpath:wte4j-core-application-context.xml" })
-public class CoreApplicationConfig {
-
-	@Bean
-	public MessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("org.wte4j.ui.shared.Messages");
-		return messageSource;
-	}
+public class Wte4jAdminConfig {
 
 	@Bean
 	public MessageFactory messageFactory() {
-		return new MessageFactoryImpl();
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("org.wte4j.ui.shared.Messages");
+		return new MessageFactoryImpl(messageSource, serviceContext());
 	}
 
 	@Bean

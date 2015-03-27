@@ -15,17 +15,18 @@
  */
 package org.wte4j.ui.server.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 
-@Component
 public class MessageFactoryImpl implements MessageFactory {
 
-	@Autowired
+	public MessageFactoryImpl(MessageSource messageSource, ServiceContext serviceContext) {
+		super();
+		this.messageSource = messageSource;
+		this.serviceContext = serviceContext;
+	}
+
 	private MessageSource messageSource;
 
-	@Autowired
 	private ServiceContext serviceContext;
 
 	@Override
