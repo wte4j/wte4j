@@ -31,6 +31,8 @@ import org.wte4j.ui.server.services.ServiceContext;
 
 public class SessionContextFilter implements Filter {
 
+	private static final String ANONYMOUS_USER = "anonymous";
+
 	private ServiceContext serviceContext;
 
 	@Override
@@ -44,13 +46,14 @@ public class SessionContextFilter implements Filter {
 
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			serviceContext.setLocale(httpRequest.getLocale());
 
 			if (httpRequest.getUserPrincipal() != null) {
 				String userName = httpRequest.getUserPrincipal().getName();
-				if (userName != null) {
-					serviceContext.setUser(new User(userName, userName));
-				}
-				serviceContext.setLocale(httpRequest.getLocale());
+				serviceContext.setUser(new User(userName, userName));
+			}
+			else {
+				serviceContext.setUser(new User(ANONYMOUS_USER, ANONYMOUS_USER));
 			}
 
 		}
