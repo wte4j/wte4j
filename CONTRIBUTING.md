@@ -3,32 +3,12 @@
 wte4j is a large community project with many different developers contributing at all levels to the project. We're **actively** looking for more contributors right now.  (March 2015)
 
 ## Casual Involvement
-* Improve the wte4j site ([tickets](https://github.com/XXXyyyZZZ/XXXyyyZZZ.github.io/issues))
-* Move forward [XXXyyyZZZ.io redesign](https://github.com/XXXyyyZZZ/XXXyyyZZZ.github.io/issues/7)
-* Attend team meetings
-* Comment on issues and drive to resolution
+* Improve the wte4j [wiki](https://github.com/wte4j/wte4j/wiki)
+* Comment on issues and drive to resolution in the projects [mailinglist](https://groups.google.com/forum/#!forum/wte4j): (wte4j@googlegroups.com) 
 
 ## High-impact Involvement
 
-* Maintaining the XXXyyyZZZ client. 
-* [Authoring client tests](https://github.com/XXXyyyZZZ/XXXyyyZZZ/issues/801)
-* Read [Architecture doc](https://github.com/XXXyyyZZZ/XXXyyyZZZ/wiki/Rewrite-architecture)
-* Triage, close, fix and resolve [issues](https://github.com/XXXyyyZZZ/XXXyyyZZZ/issues)
-* Developing the [new registry server](https://github.com/XXXyyyZZZ/registry/tree/node_rewrite)
-* Hooking in to Elastic Search rather than the in-memory search
-* Getting XXXyyyZZZ/registry-client to talk to the new server without breaking backwards compatibility
-* DevOps for the server
-
-## Team Meetings
-
-We meet on Monday at 1:00pm PST, 9:00pm UTC in #XXXyyyZZZ on Freenode. [The meeting notes](http://goo.gl/NJZ1o2).
-
-<hr>
-
-Following these guidelines helps to communicate that you respect the time of
-the developers managing and developing this open source project. In return,
-they should reciprocate that respect in addressing your issue, assessing
-changes, and helping you finalize your pull requests.
+* Fork wte4j and add your improvements to a related issue or bug (see "Using the issue tracker")
 
 
 ## Using the issue tracker
@@ -37,11 +17,8 @@ The issue tracker is the preferred channel for [bug reports](#bugs),
 [features requests](#features) and [submitting pull
 requests](#pull-requests), but please respect the following restrictions:
 
-* Please **do not** use the issue tracker for personal support requests. Use
-  [Stack Overflow](http://stackoverflow.com/questions/tagged/XXXyyyZZZ), our
-  [Mailing List](http://groups.google.com/group/twitter-XXXyyyZZZ)
-  (twitter-XXXyyyZZZ@googlegroups.com), or
-  [#XXXyyyZZZ](http://webchat.freenode.net/?channels=XXXyyyZZZ) on Freenode.
+* Please **do not** use the issue tracker for personal support requests. Use our
+  [mailinglist](https://groups.google.com/forum/#!forum/wte4j): (wte4j@googlegroups.com) instead.
 
 * Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
@@ -121,11 +98,11 @@ included in the project:
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/XXXyyyZZZ
+   git clone https://github.com/<your-username>/wte4j
    # Navigate to the newly cloned directory
-   cd XXXyyyZZZ
+   cd wte4j
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/XXXyyyZZZ/XXXyyyZZZ
+   git remote add upstream https://github.com/wte4j/wte4j
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:
