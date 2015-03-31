@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "ch.born.wte.ui.auth.server" }, scopedProxy = ScopedProxyMode.INTERFACES)
+@ComponentScan(basePackages = { "org.wte4j.ui.auth.server" }, scopedProxy = ScopedProxyMode.INTERFACES)
 public class AuthApplicationConfig {
 
 }
