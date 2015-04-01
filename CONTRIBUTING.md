@@ -120,7 +120,7 @@ included in the project:
    ```
 
 4. Make sure to update, or add to the tests when appropriate. Patches and
-   features will not be accepted without tests. Run `npm test` to check that
+   features will not be accepted without tests. Run `mvn test` to check that
    all tests pass after you've made changes.
 
 5. Commit your changes in logical chunks. Please adhere to these [git commit
