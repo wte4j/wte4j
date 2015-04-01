@@ -32,7 +32,7 @@ public class ShowCaseDbInitializer {
 					Files.copy(source.toPath(), filePath);
 				}
 			} catch (IOException e) {
-				throw new IllegalArgumentException("can not copy database file", e);
+				throw new IllegalArgumentException("can not copy database files", e);
 			}
 		}
 		return new HsqlServerBean(dataBaseLocation, "wte4j-showcase");
