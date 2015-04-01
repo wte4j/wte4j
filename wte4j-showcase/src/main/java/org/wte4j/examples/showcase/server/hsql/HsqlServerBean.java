@@ -68,9 +68,9 @@ public class HsqlServerBean {
 		p.setProperty("server.database.0", "file:" + databaseFile.toAbsolutePath().toString());
 		p.setProperty("server.dbname.0", databaseName);
 		try {
-			hsqlServer = new Server();
-			hsqlServer.setProperties(p);
-			return hsqlServer;
+			Server newServer = new Server();
+			newServer.setProperties(p);
+			return newServer;
 
 		} catch (Exception e) {
 			throw new IllegalArgumentException("unable to setup hsql server", e);
