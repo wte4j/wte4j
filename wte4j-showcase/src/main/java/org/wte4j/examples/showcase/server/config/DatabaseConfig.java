@@ -32,7 +32,6 @@ import org.wte4j.examples.showcase.server.hsql.ShowCaseDbInitializer;
 public class DatabaseConfig {
 
 	public static final Path DATABASE_DIRECTORY = Paths.get(System.getProperty("java.io.tmpdir"), "hsql");
-	public static final String DATABASE_NAME = "wte4j-showcase";
 
 	@Autowired
 	private ResourcePatternResolver resourceloader;
