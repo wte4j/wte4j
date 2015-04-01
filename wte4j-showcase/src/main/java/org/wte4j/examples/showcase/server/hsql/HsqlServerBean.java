@@ -34,84 +34,75 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HsqlServerBean {
+    private static final Logger logger = LoggerFactory.getLogger(HsqlServerBean.class);
+    private final Path databaseDirectory;
+    private final String databaseName;
+    private Server hsqlServer;
 
-	private static final Logger logger = LoggerFactory.getLogger(HsqlServerBean.class);
+    public HsqlServerBean(Path directory, String databaseName) {
+        this.databaseDirectory = directory;
+        this.databaseName = databaseName;
+    }
 
-	private final Path databaseDirectory;
-	private final String databaseName;
+    @PostConstruct
+    public synchronized void startDatabase() {
+        logger.info("try to start hsql server");
+        if (hsqlServer == null) {
+            hsqlServer = createServer();
+            hsqlServer.start();
+            logger.info("hsql server startet wiht database {} stored at {}", databaseName, databaseDirectory.toAbsolutePath().toString());
+        }
+        else {
+            logger.warn("server is allready running");
+        }
+    }
 
-	private Server hsqlServer;
-	private BasicDataSource dataSource;
+    private Server createServer() {
+        HsqlProperties p = new HsqlProperties();
+        Path databaseFile = databaseDirectory.resolve(databaseName);
+        p.setProperty("server.database.0", "file:" + databaseFile.toAbsolutePath().toString());
+        p.setProperty("server.dbname.0", databaseName);
+        try {
+            Server newServer = new Server();
+            newServer.setProperties(p);
+            return newServer;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("unable to setup hsql server", e);
+        }
+    }
 
-	public HsqlServerBean(Path directory, String databaseName) {
-		this.databaseDirectory = directory;
-		this.databaseName = databaseName;
+    @PreDestroy
+    public synchronized void stopDatabase() {
+        logger.info("stopping hsql server");
+        if (hsqlServer != null) {
+            hsqlServer.shutdownCatalogs(Database.CLOSEMODE_NORMAL);
+            hsqlServer = null;
+            logger.info("hsql server stopped");
+        } else {
+            logger.warn("hsql server is not running");
+        }
+    }
 
-	}
+    /**
+     * create a new connection source as {@link DataSource} for this server
+     * 
+     * @return a new {@link DataSource} object for this server with pooled
+     *         connections
+     * 
+     */
+    public synchronized DataSource createDataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:hsqldb:hsql://localhost/" + databaseName);
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        dataSource.setUsername("sa");
+        return dataSource;
+    }
 
-	@PostConstruct
-	public synchronized void startDatabase() {
-		logger.info("try to start hsql server");
-		if (hsqlServer == null) {
-			hsqlServer = createServer();
-			hsqlServer.start();
-			logger.info("hsql server startet wiht database {} stored at {}", databaseName, databaseDirectory.toAbsolutePath().toString());
-		}
-		else {
-			logger.warn("server is allready running");
-		}
-	}
+    public String getDatabaseName() {
+        return databaseName;
+    }
 
-	private Server createServer() {
-		HsqlProperties p = new HsqlProperties();
-		Path databaseFile = databaseDirectory.resolve(databaseName);
-		p.setProperty("server.database.0", "file:" + databaseFile.toAbsolutePath().toString());
-		p.setProperty("server.dbname.0", databaseName);
-		try {
-			Server newServer = new Server();
-			newServer.setProperties(p);
-			return newServer;
-
-		} catch (Exception e) {
-			throw new IllegalArgumentException("unable to setup hsql server", e);
-		}
-	}
-
-	@PreDestroy
-	public synchronized void stopDatabase() {
-		logger.info("stopping hsql server");
-		if (hsqlServer != null) {
-			hsqlServer.shutdownCatalogs(Database.CLOSEMODE_NORMAL);
-			hsqlServer = null;
-			logger.info("hsql server stopped");
-		} else {
-			logger.warn("hsql server is not running");
-		}
-	}
-
-	/**
-	 * returns a datasource for this server
-	 * 
-	 * @return a {@link DataSource} object for this server with pooled
-	 *         connection
-	 * 
-	 */
-	public synchronized DataSource getDataSource() {
-		if (dataSource == null) {
-			dataSource = new BasicDataSource();
-			dataSource.setUrl("jdbc:hsqldb:hsql://localhost/" + databaseName);
-			dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
-			dataSource.setUsername("sa");
-		}
-		return dataSource;
-	}
-
-	public String getDatabaseName() {
-		return databaseName;
-	}
-
-	public Path getDatabaseDirectory() {
-		return databaseDirectory;
-	}
-
+    public Path getDatabaseDirectory() {
+        return databaseDirectory;
+    }
 }

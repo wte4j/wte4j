@@ -40,7 +40,7 @@ public class DatabaseConfig {
 	@Bean
 	@Qualifier("wte4j")
 	public DataSource dataSource() {
-		return hsqlServer().getDataSource();
+		return hsqlServer().createDataSource();
 	}
 
 	@Bean
