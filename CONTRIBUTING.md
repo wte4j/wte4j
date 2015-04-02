@@ -8,9 +8,9 @@ wte4j is a large community project with many different developers contributing a
 
 ## High-impact Involvement
 
-* Fork wte4j and add your improvements to a related issue or bug (see "Using the issue tracker")
+* Fork wte4j and add your improvements to a related issue or bug (see [Using the issue tracker](#using_the_issue_tracker)
 
-
+<a name="using_the_issue_tracker"></a>
 ## Using the issue tracker
 
 The issue tracker is the preferred channel for [bug reports](#bugs),
