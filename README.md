@@ -18,6 +18,6 @@ You can find the latest release of the wte4j repo as .zip and .tar.gz files in t
 
 https://github.com/wte4j/wte4j/releases
 
-Download a .zip or .tar.gz release, unarchive it, then following instructions in the wte4j-showcase README file.
+Download a .zip or .tar.gz release, unarchive it, then follow the instructions in the wte4j-showcase/README.md file.
 
-For a more detailed documentation visit the projects wiki here: https://github.com/wte4j/wte4j/wiki
+For a more detailed documentation visit this project's wiki here: https://github.com/wte4j/wte4j/wiki
