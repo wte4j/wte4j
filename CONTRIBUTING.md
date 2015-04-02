@@ -190,4 +190,3 @@ If you have commit access, please follow this process for merging patches and cu
 3. The commit message must be of `v0.0.0` format.
 4. Create an annotated tag for the version: `git tag -m "v0.0.0" v0.0.0`.
 5. Push the changes and tags to GitHub: `git push --tags origin master`.
-6. Publish the new version to npm: `npm publish`.
