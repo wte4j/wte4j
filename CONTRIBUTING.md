@@ -1,10 +1,11 @@
 # Contributing to wte4j
 
-wte4j is a large community project with many different developers contributing at all levels to the project. We're **actively** looking for more contributors right now.  (March 2015)
+Wte4j is a community project with different developers contributing at all levels to the project. We're **actively** looking for more contributors right now.  (April 2015)
 
 ## Casual Involvement
-* Improve the wte4j [wiki](https://github.com/wte4j/wte4j/wiki)
-* Comment on issues and drive to resolution in the projects [mailinglist](https://groups.google.com/forum/#!forum/wte4j): (wte4j@googlegroups.com) 
+
+* Improve the [wte4j wiki](https://github.com/wte4j/wte4j/wiki)
+* Comment on issues and drive to resolution in the project's [mailinglist](https://groups.google.com/forum/#!forum/wte4j): (wte4j@googlegroups.com) 
 
 ## High-impact Involvement
 
@@ -22,7 +23,6 @@ requests](#pull-requests), but please respect the following restrictions:
 
 * Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
-
 
 <a name="bugs"></a>
 ## Bug reports
@@ -73,7 +73,6 @@ Feature requests are welcome. But take a moment to find out whether your idea
 fits with the scope and aims of the project. It's up to *you* to make a strong
 case to convince the project's developers of the merits of this feature. Please
 provide as much detail and context as possible.
-
 
 <a name="pull-requests"></a>
 ## Pull requests
@@ -151,7 +150,6 @@ included in the project:
 
 **IMPORTANT**: By submitting a patch, you agree to license your work under the
 same license as that used by the project.
-
 
 <a name="maintainers"></a>
 ## Maintainers
