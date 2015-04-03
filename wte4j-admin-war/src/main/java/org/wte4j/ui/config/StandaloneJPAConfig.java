@@ -24,7 +24,7 @@ import javax.annotation.PreDestroy;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hsqldb.persist.HsqlProperties;
 import org.hsqldb.server.Server;
 import org.slf4j.Logger;
