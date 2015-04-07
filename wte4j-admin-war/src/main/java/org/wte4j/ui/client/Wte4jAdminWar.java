@@ -15,26 +15,13 @@
  */
 package org.wte4j.ui.client;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.EntryPoint;
 
-public final class Application {
+public class Wte4jAdminWar implements EntryPoint {
 
-	public static final Wte4jResources RESOURCES = GWT.create(Wte4jResources.class);
-	public static Labels LABELS = GWT.create(Labels.class);
-
-	public static final String BASE_PATH;
-	public static final String REST_SERVICE_BASE_URL;
-	
-	static {
-		String baseUrl = GWT.getModuleBaseURL();
-		baseUrl = baseUrl.substring(0, baseUrl.length() -1);
-		baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
+	@Override
+	public void onModuleLoad() {
 		
-		BASE_PATH = baseUrl + "/Wte4jAdmin/";
-		REST_SERVICE_BASE_URL = BASE_PATH + "rest/";
-	}
-	
-	private Application() {
 	}
 
 }

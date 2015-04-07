@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -55,6 +56,7 @@ public class TemplateListPresenter {
 	private ListDataProvider<TemplateDto> dataProvider;
 
 	public TemplateListPresenter() {
+		((ServiceDefTarget)templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
 		selectionModel = new NoSelectionModel<TemplateDto>();
 		selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override

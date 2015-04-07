@@ -15,12 +15,18 @@
     limitations under the License.
 
 -->
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
 <!doctype html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<title>WTE Admin GUI</title>
-<script type="text/javascript" src="Wte4jAdmin/Wte4jAdmin.nocache.js"></script>
+	<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>WTE Admin GUI</title>
+	<script type="text/javascript" src="Wte4jAdminWar/Wte4jAdminWar.nocache.js"></script>
 </head>
 <body>
 	<div id="wte4j-admin">
