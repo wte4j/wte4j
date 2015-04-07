@@ -49,22 +49,6 @@
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 
-
-
-	<security-role>
-		<role-name>wte4j-admin</role-name>
-	</security-role>
-
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Wte Protected</web-resource-name>
-			<url-pattern>/Wte4jAdmin/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>wte4j-admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-
 	<servlet>
 		<servlet-name>templateService</servlet-name>
 		<servlet-class>org.wte4j.ui.server.services.TemplateRepositoryGWTAdapter</servlet-class>
