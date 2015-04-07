@@ -63,6 +63,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+			<version>0.9</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Spring -->
 
 		<dependency>
