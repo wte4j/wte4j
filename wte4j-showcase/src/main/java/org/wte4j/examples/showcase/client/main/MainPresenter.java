@@ -39,13 +39,15 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		display.setContent(new Label("Manage Templates"));
+		display.setMainContent(new Label("Manage templates"));
+		display.setRightContent(new Label("Helptext manage templates"));
 		display.setGenerateDocumentActive(false);
 		display.setManageTemplatesActive(true);
 	}
 
 	public void displayGenerateDocumentContent() {
-		display.setContent(new Label("generate documents"));
+		display.setMainContent(new Label("Generate documents"));
+		display.setRightContent(new Label("Helptext generate documents"));
 		display.setGenerateDocumentActive(true);
 		display.setManageTemplatesActive(false);
 

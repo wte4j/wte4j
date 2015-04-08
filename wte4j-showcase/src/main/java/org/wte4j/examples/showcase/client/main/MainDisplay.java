@@ -4,5 +4,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface MainDisplay extends MenuDisplay {
 
-	public void setContent(IsWidget conent);
+	public void setMainContent(IsWidget conent);
+
+	public void setRightContent(IsWidget content);
 }

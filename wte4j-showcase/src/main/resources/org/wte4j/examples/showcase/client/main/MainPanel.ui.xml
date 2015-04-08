@@ -15,9 +15,17 @@
 					<b:AnchorListItem ui:field="manageTemplatesAction">Manage Templates</b:AnchorListItem>
 				</b:NavbarNav>
 			</b:NavbarCollapse>
-		</b:Navbar>				
-		<b.g:FlowPanel ui:field="contentBody" />				
-	
+		</b:Navbar>
+		<b:Container>
+			<b:Row>
+				<b:Column size="MD_8,LG_6">
+					<b.g:FlowPanel ui:field="mainContent" />
+				</b:Column>
+				<b:Column size="MD_4, LG_3">
+					<b.g:FlowPanel ui:field="rightContent"/>
+				</b:Column>			
+			</b:Row>		
+		</b:Container>	
 
 	</b:Container>
 </ui:UiBinder>

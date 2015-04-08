@@ -22,7 +22,10 @@ public class MainPanel extends Composite implements MainDisplay {
 	AnchorListItem manageTemplatesAction;
 
 	@UiField
-	FlowPanel contentBody;
+	FlowPanel mainContent;
+
+	@UiField
+	FlowPanel rightContent;
 
 	public MainPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -50,10 +53,16 @@ public class MainPanel extends Composite implements MainDisplay {
 	}
 
 	@Override
-	public void setContent(IsWidget conent) {
-		contentBody.clear();
-		contentBody.add(conent);
+	public void setMainContent(IsWidget conent) {
+		mainContent.clear();
+		mainContent.add(conent);
 
+	}
+
+	@Override
+	public void setRightContent(IsWidget content) {
+		rightContent.clear();
+		rightContent.add(content);
 	}
 
 	interface MainPanelUiBinder extends UiBinder<Widget, MainPanel> {
