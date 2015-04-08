@@ -2,32 +2,51 @@ package org.wte4j.examples.showcase.client.generation;
 
 import java.util.Date;
 
+import org.gwtbootstrap3.client.ui.Modal;
 import org.gwtbootstrap3.client.ui.gwt.CellTable;
-import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
+import org.gwtbootstrap3.client.ui.gwt.DataGrid;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
+import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 public class GenerateDocumentPanel extends Composite implements GenerateDocumentDisplay {
 	private static DateTimeFormat dateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 	private static NumberFormat numberFormat = NumberFormat.getCurrencyFormat("GBP");
+	private static GenerateDocumentPanelUiBinder uiBinder = GWT.create(GenerateDocumentPanelUiBinder.class);
 
-	private FlowPanel panel;
-	private CellTable<OrderDataDto> orderTable;
+	@UiField
+	CellTable<OrderDataDto> orderTable;
+
+	@UiField
+	Modal dialog;
+
+	@UiField
+	DataGrid<TemplateDto> templateList;
 
 	public GenerateDocumentPanel() {
-		orderTable = new CellTable<OrderDataDto>();
+		this.initWidget(uiBinder.createAndBindUi(this));
+		initOrderTable();
+		initTemplateList();
+
+	}
+
+	private void initOrderTable() {
 		orderTable.addColumn(createNameColumn(), "Name");
 		orderTable.addColumn(createAddressColumn(), "Address");
 		orderTable.addColumn(createZipColumn(), "Zip");
@@ -36,10 +55,6 @@ public class GenerateDocumentPanel extends Composite implements GenerateDocument
 		orderTable.addColumn(createOrderDateColumn(), "Ordered at");
 		orderTable.addColumn(createDeliveryDateColumn(), "Delivered at");
 		orderTable.addColumn(createAmountColumn(), "amount");
-
-		panel = new FlowPanel();
-		panel.add(orderTable);
-		this.initWidget(panel);
 	}
 
 	private Column<OrderDataDto, Number> createAmountColumn() {
@@ -124,8 +139,35 @@ public class GenerateDocumentPanel extends Composite implements GenerateDocument
 		};
 	}
 
+	private void initTemplateList() {
+		templateList.addColumn(new TextColumn<TemplateDto>() {
+
+			@Override
+			public String getValue(TemplateDto template) {
+				return template.getDocumentName();
+			}
+		});
+	}
+
 	@Override
-	public HasData<OrderDataDto> getDataContainer() {
+	public HasData<OrderDataDto> getOrderContainer() {
 		return orderTable;
 	}
+
+	@Override
+	public HasData<TemplateDto> getTemplateContainer() {
+		return templateList;
+	}
+
+	public void showTemplateList() {
+		dialog.show();
+	}
+
+	public void hideTemplateList() {
+		dialog.hide();
+	}
+
+	interface GenerateDocumentPanelUiBinder extends UiBinder<Widget, GenerateDocumentPanel> {
+	}
+
 }
