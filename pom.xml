@@ -16,7 +16,8 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wte4j</groupId>
 	<artifactId>wte4j-parent</artifactId>
@@ -63,7 +64,7 @@
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-	
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Framework Versions -->
@@ -74,7 +75,7 @@
 
 	<build>
 		<plugins>
-		
+
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
@@ -83,9 +84,9 @@
 					<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
 					<properties>
 						<owner>Born Informatik AG</owner>
-						<email>www.born.ch</email>						
+						<email>www.born.ch</email>
 					</properties>
-					<excludes>						
+					<excludes>
 						<exclude>src/test/resources/**</exclude>
 						<exclude>src/main/resources/**</exclude>
 						<exclude>**/wte4j-demo/**</exclude>
@@ -99,7 +100,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 
 		<pluginManagement>
@@ -193,6 +194,12 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-dbcp2</artifactId>
 				<version>2.1</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>	
 
 			<!-- logging -->
@@ -211,7 +218,7 @@
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
+				<artifactId>slf4j-jdk14</artifactId>
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
@@ -234,6 +241,14 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>	
+		
 
 		<!-- ===== Testing ===== -->
 		<!-- testing jsf components -->
