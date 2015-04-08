@@ -30,7 +30,7 @@ public class ShowCaseDbInitializerTest {
 
 		try {
 			serverBean.startDatabase();
-			DataSource dataSource = serverBean.getDataSource();
+			DataSource dataSource = serverBean.createDataSource();
 			assertConent(dataSource);
 		} finally {
 			serverBean.stopDatabase();
