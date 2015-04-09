@@ -1,7 +1,8 @@
 package org.wte4j.examples.showcase.client.generation;
 
+import java.util.List;
+
 import org.wte4j.examples.showcase.shared.OrderDataDto;
-import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.HasData;
@@ -10,9 +11,10 @@ public interface GenerateDocumentDisplay extends IsWidget {
 
 	HasData<OrderDataDto> getOrderContainer();
 
-	HasData<TemplateDto> getTemplateContainer();
+	public void setTemplateListItems(List<TemplateItem> templateItems);
 
 	void showTemplateList();
 
 	void hideTemplateList();
+
 }

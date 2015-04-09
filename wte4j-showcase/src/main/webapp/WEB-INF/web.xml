@@ -17,7 +17,7 @@
 
 -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
+	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="wte4j-showcase" version="3.0">
 
@@ -37,6 +37,14 @@
 	</listener>	
 
 	<!-- Servlets -->
+	<servlet>
+		<servlet-name>gwtRemoteOrderService</servlet-name>
+		<servlet-class>org.wte4j.examples.showcase.server.services.GwtOrderServiceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>gwtRemoteOrderService</servlet-name>
+		<url-pattern>/Showcase/orderService/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

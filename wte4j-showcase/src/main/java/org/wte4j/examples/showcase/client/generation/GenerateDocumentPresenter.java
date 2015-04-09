@@ -1,23 +1,29 @@
 package org.wte4j.examples.showcase.client.generation;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.wte4j.examples.showcase.shared.OrderDataDto;
-import org.wte4j.ui.shared.TemplateDto;
+import org.wte4j.examples.showcase.shared.service.OrderServiceAsync;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 public class GenerateDocumentPresenter {
 
+	private OrderServiceAsync orderService = OrderServiceAsync.Util.getInstance();
 	private GenerateDocumentDisplay display;
 	private NoSelectionModel<OrderDataDto> orderSelectionModel;
-	private NoSelectionModel<TemplateDto> templateSelectionModel;
 
-	OrderDataDto selected;
+	private OrderDataDto selectedOrder;
+	private String selectedTemplate;
 
 	public void bind(GenerateDocumentDisplay aDisplay) {
 		if (display != null) {
@@ -25,8 +31,7 @@ public class GenerateDocumentPresenter {
 		}
 		display = aDisplay;
 		bindOrderContainer();
-		bindTemplateContainer();
-		initDataContainer();
+		initOrderContainer();
 	}
 
 	private void bindOrderContainer() {
@@ -42,51 +47,86 @@ public class GenerateDocumentPresenter {
 
 	}
 
-	private void bindTemplateContainer() {
-		templateSelectionModel = new NoSelectionModel<TemplateDto>();
-		templateSelectionModel.addSelectionChangeHandler(new Handler() {
+	public void initOrderContainer() {
+		orderService.listOrderData(new AsyncCallback<List<OrderDataDto>>() {
+
 			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				generateDocument();
+			public void onSuccess(List<OrderDataDto> list) {
+				display.getOrderContainer().setRowData(0, list);
+
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
 			}
 
 		});
-		display.getTemplateContainer().setSelectionModel(templateSelectionModel);
-
-	}
-
-	public void initDataContainer() {
-		OrderDataDto dto = new OrderDataDto();
-		dto.setFirstName("Hans");
-		dto.setLastName("Wurst");
-		dto.setAddress("Morgenstrasse 129");
-		dto.setCity("Bern");
-		dto.setZip("3018");
-		dto.setOrderDate(new Date());
-		dto.setDeliveryDate(new Date());
-		dto.setAmount(6.50);
-
-		List<OrderDataDto> list = new ArrayList<OrderDataDto>();
-		list.add(dto);
-		display.getOrderContainer().setRowData(0, list);
 
 	}
 
 	public void displayTemplatesForSelection() {
-		selected = orderSelectionModel.getLastSelectedObject();
-		TemplateDto templateDto = new TemplateDto();
-		templateDto.setDocumentName("Template");
+		selectedOrder = orderSelectionModel.getLastSelectedObject();
+		orderService.listOrderTemplates(new AsyncCallback<List<String>>() {
 
-		List<TemplateDto> templateList = new ArrayList<TemplateDto>();
-		templateList.add(templateDto);
-		display.getTemplateContainer().setRowData(0, templateList);
-		display.showTemplateList();
+			@Override
+			public void onSuccess(List<String> templates) {
+				List<TemplateItem> templateItems = new ArrayList<TemplateItem>();
+				for (String templateName : templates) {
+					templateItems.add(createTemplateItem(templateName));
+				}
+				display.setTemplateListItems(templateItems);
+				display.showTemplateList();
+
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+		});
+
 	}
 
-	public void generateDocument() {
-		TemplateDto template = templateSelectionModel.getLastSelectedObject();
-		display.getTemplateContainer().setRowData(0, new ArrayList<TemplateDto>());
+	TemplateItem createTemplateItem(String templateName) {
+		TemplateItem templateItem = new TemplateItem();
+		templateItem.setText(templateName);
+		templateItem.setClickHandler(new TemplateClickHandler(templateName));
+		return templateItem;
+	}
+
+	public void createAndDownlaodDocument() {
 		display.hideTemplateList();
+		orderService.createDocument(selectedOrder, selectedTemplate,
+				new AsyncCallback<String>() {
+					@Override
+					public void onSuccess(String result) {
+						String url = GWT.getModuleBaseURL() + "orderService?file=" + result.toString();
+						url = URL.decode(url);
+						Window.open(url, "parent", "");
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(caught.getMessage());
+					}
+				});
+
+	}
+
+	private class TemplateClickHandler implements ClickHandler {
+
+		private String template;
+
+		public TemplateClickHandler(String template) {
+			this.template = template;
+		}
+
+		@Override
+		public void onClick(ClickEvent event) {
+			selectedTemplate = template;
+			createAndDownlaodDocument();
+		}
 	}
 
 }

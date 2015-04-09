@@ -15,15 +15,18 @@
  */
 package org.wte4j.examples.showcase.server.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.wte4j.examples.showcase.server.services.SpringServices;
 
 @Configuration
 @EnableTransactionManagement
 @ImportResource({ "classpath:wte4j-core-application-context.xml" })
 @Import({ DatabaseConfig.class, Wte4jConfiguration.class })
+@ComponentScan(basePackageClasses = { SpringServices.class })
 public class RootApplicationConfig {
 
 }

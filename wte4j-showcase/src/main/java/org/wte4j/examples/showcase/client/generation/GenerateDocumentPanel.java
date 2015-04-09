@@ -1,12 +1,13 @@
 package org.wte4j.examples.showcase.client.generation;
 
 import java.util.Date;
+import java.util.List;
 
+import org.gwtbootstrap3.client.ui.LinkedGroup;
+import org.gwtbootstrap3.client.ui.LinkedGroupItem;
 import org.gwtbootstrap3.client.ui.Modal;
 import org.gwtbootstrap3.client.ui.gwt.CellTable;
-import org.gwtbootstrap3.client.ui.gwt.DataGrid;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
-import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.NumberCell;
@@ -37,13 +38,11 @@ public class GenerateDocumentPanel extends Composite implements GenerateDocument
 	Modal dialog;
 
 	@UiField
-	DataGrid<TemplateDto> templateList;
+	LinkedGroup templateList;
 
 	public GenerateDocumentPanel() {
 		this.initWidget(uiBinder.createAndBindUi(this));
 		initOrderTable();
-		initTemplateList();
-
 	}
 
 	private void initOrderTable() {
@@ -139,24 +138,20 @@ public class GenerateDocumentPanel extends Composite implements GenerateDocument
 		};
 	}
 
-	private void initTemplateList() {
-		templateList.addColumn(new TextColumn<TemplateDto>() {
-
-			@Override
-			public String getValue(TemplateDto template) {
-				return template.getDocumentName();
-			}
-		});
-	}
-
 	@Override
 	public HasData<OrderDataDto> getOrderContainer() {
 		return orderTable;
 	}
 
 	@Override
-	public HasData<TemplateDto> getTemplateContainer() {
-		return templateList;
+	public void setTemplateListItems(List<TemplateItem> templateItems) {
+		templateList.clear();
+		for (TemplateItem item : templateItems) {
+			LinkedGroupItem groupItem = new LinkedGroupItem();
+			groupItem.setText(item.getText());
+			groupItem.addClickHandler(item.getClickHandler());
+			templateList.add(groupItem);
+		}
 	}
 
 	public void showTemplateList() {

@@ -9,8 +9,7 @@
 		<b:Modal ui:field="dialog" title="Select Template">
 			<b:ModalBody>
 				<b.gwt:FlowPanel>
-					<b.gwt:DataGrid ui:field="templateList" condensed="true"
-						striped="false" hover="true" height="300px" width="100%"/>
+					<b:LinkedGroup ui:field="templateList"/> 
 				</b.gwt:FlowPanel>
 			</b:ModalBody>
 		</b:Modal>

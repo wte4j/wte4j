@@ -3,8 +3,9 @@ package org.wte4j.examples.showcase.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-public class OrderDataDto implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
 
+public class OrderDataDto implements Serializable, IsSerializable {
 	private long orderId;
 	private String firstName;
 	private String lastName;
@@ -16,6 +17,9 @@ public class OrderDataDto implements Serializable {
 	private double amount;
 	private Date orderDate;
 	private Date deliveryDate;
+
+	public OrderDataDto() {
+	}
 
 	public long getOrderId() {
 		return orderId;
