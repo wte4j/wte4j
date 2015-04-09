@@ -6,7 +6,7 @@
 		<b.gwt:CellTable ui:field="orderTable" bordered="false"
 			condensed="true" striped="true" hover="true" />
 
-		<b:Modal ui:field="dialog" title="Select Template">
+		<b:Modal ui:field="dialog" title="Select document to generate:">
 			<b:ModalBody>
 				<b.gwt:FlowPanel>
 					<b:LinkedGroup ui:field="templateList"/> 
