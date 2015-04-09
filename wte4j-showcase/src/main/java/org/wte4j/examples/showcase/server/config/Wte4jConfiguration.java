@@ -11,7 +11,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.wte4j.WteModelService;
-import org.wte4j.impl.service.SimpleDbViewModelService;
+import org.wte4j.impl.service.FlatBeanModelService;
 
 public class Wte4jConfiguration {
 
@@ -38,7 +38,7 @@ public class Wte4jConfiguration {
 
 	@Bean
 	WteModelService wteModelService() {
-		return new SimpleDbViewModelService(dataSource);
+		return new FlatBeanModelService();
 	}
 
 }
