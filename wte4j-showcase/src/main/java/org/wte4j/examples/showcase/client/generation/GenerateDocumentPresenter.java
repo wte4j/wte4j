@@ -34,9 +34,10 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 public class GenerateDocumentPresenter {
 
 	private OrderServiceAsync orderService = OrderServiceAsync.Util.getInstance();
-	private GenerateDocumentDisplay display;
-	private NoSelectionModel<OrderDataDto> orderSelectionModel;
 
+	private GenerateDocumentDisplay display;
+
+	private NoSelectionModel<OrderDataDto> orderSelectionModel;
 	private OrderDataDto selectedOrder;
 	private String selectedTemplate;
 
@@ -111,11 +112,12 @@ public class GenerateDocumentPresenter {
 	}
 
 	public void createAndDownlaodDocument() {
-		display.hideTemplateList();
 		orderService.createDocument(selectedOrder, selectedTemplate,
 				new AsyncCallback<String>() {
 					@Override
 					public void onSuccess(String result) {
+						display.hideTemplateList();
+
 						String url = GWT.getModuleBaseURL() + "orderService?file=" + result.toString();
 						url = URL.decode(url);
 						Window.open(url, "parent", "");
@@ -123,6 +125,7 @@ public class GenerateDocumentPresenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						display.hideTemplateList();
 						Window.alert(caught.getMessage());
 					}
 				});

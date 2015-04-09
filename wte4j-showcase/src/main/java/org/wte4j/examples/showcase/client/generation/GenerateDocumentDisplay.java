@@ -26,7 +26,7 @@ public interface GenerateDocumentDisplay extends IsWidget {
 
 	HasData<OrderDataDto> getOrderContainer();
 
-	public void setTemplateListItems(List<TemplateItem> templateItems);
+	void setTemplateListItems(List<TemplateItem> templateItems);
 
 	void showTemplateList();
 

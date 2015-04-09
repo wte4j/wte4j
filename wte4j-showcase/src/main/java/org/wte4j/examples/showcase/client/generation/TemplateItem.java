@@ -18,6 +18,7 @@ package org.wte4j.examples.showcase.client.generation;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 public class TemplateItem {
+
 	private String text;
 	private ClickHandler clickHandler;
 

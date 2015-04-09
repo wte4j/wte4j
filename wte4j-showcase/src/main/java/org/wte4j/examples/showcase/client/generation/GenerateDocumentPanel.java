@@ -42,9 +42,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 public class GenerateDocumentPanel extends Composite implements GenerateDocumentDisplay {
+
+	private static GenerateDocumentPanelUiBinder uiBinder = GWT.create(GenerateDocumentPanelUiBinder.class);
+
 	private static DateTimeFormat dateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 	private static NumberFormat numberFormat = NumberFormat.getCurrencyFormat("GBP");
-	private static GenerateDocumentPanelUiBinder uiBinder = GWT.create(GenerateDocumentPanelUiBinder.class);
 
 	@UiField
 	CellTable<OrderDataDto> orderTable;
