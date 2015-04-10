@@ -16,6 +16,7 @@
 package org.wte4j.examples.showcase.server.hsql;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -23,12 +24,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ShowCaseDbInitializerTest {
@@ -41,23 +50,71 @@ public class ShowCaseDbInitializerTest {
 		Path directory = Files.createTempDirectory("database");
 
 		ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
-		HsqlServerBean serverBean = showCaseDbInitializer.createDatabase(directory);
+		HsqlServerBean serverBean = showCaseDbInitializer.createDatabase(directory, false);
 
 		try {
 			serverBean.startDatabase();
 			DataSource dataSource = serverBean.createDataSource();
-			assertConent(dataSource);
+			assertTables(dataSource);
 		} finally {
 			serverBean.stopDatabase();
 			deleteDirectory(directory);
 		}
 	}
 
-	private void assertConent(DataSource dataSource) {
+	@Test
+	public void initializeDatabaseWithOveride() throws IOException, SQLException {
+		ApplicationContext context = new StaticApplicationContext();
+		Path directory = Files.createTempDirectory("database");
+
+		ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
+		HsqlServerBean serverBean = showCaseDbInitializer.createDatabase(directory, false);
+
+		try {
+			serverBean.startDatabase();
+			DataSource dataSource = serverBean.createDataSource();
+			JdbcTemplate template = new JdbcTemplate(dataSource);
+			template.execute("drop table PURCHASE_ORDER");
+			serverBean.stopDatabase();
+			BasicDataSource basicDataSource = (BasicDataSource) dataSource;
+			basicDataSource.close();
+
+			serverBean = showCaseDbInitializer.createDatabase(directory, true);
+			serverBean.startDatabase();
+			dataSource = serverBean.createDataSource();
+			assertTables(dataSource);
+		} finally {
+			serverBean.stopDatabase();
+			deleteDirectory(directory);
+		}
+	}
+
+	private void assertTables(DataSource dataSource) {
 
 		JdbcTemplate template = new JdbcTemplate(dataSource);
-		long personCount = template.queryForObject("select count(id) from person", Long.class);
-		assertEquals(2L, personCount);
+		Set<String> wte4jTables = template.execute(new ConnectionCallback<Set<String>>() {
+
+			@Override
+			public Set<String> doInConnection(Connection con) throws SQLException, DataAccessException {
+				Set<String> tableNames = new HashSet<String>();
+				ResultSet tableRs = con.getMetaData().getTables(null, null, null, new String[] { "TABLE" });
+				try {
+					while (tableRs.next()) {
+						tableNames.add(tableRs.getString("TABLE_NAME").toLowerCase());
+					}
+				}
+				finally {
+					tableRs.close();
+				}
+				return tableNames;
+			}
+		});
+		assertEquals(5, wte4jTables.size());
+		assertTrue(wte4jTables.contains("person"));
+		assertTrue(wte4jTables.contains("purchase_order"));
+		assertTrue(wte4jTables.contains("wte4j_template"));
+		assertTrue(wte4jTables.contains("wte4j_template_properties"));
+		assertTrue(wte4jTables.contains("wte4j_gen"));
 	}
 
 	private void deleteDirectory(Path path) throws IOException {

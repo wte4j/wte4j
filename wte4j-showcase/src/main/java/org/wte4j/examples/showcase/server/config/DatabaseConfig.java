@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.wte4j.examples.showcase.server.hsql.HsqlServerBean;
 import org.wte4j.examples.showcase.server.hsql.ShowCaseDbInitializer;
@@ -31,10 +32,14 @@ import org.wte4j.examples.showcase.server.hsql.ShowCaseDbInitializer;
 @Configuration
 public class DatabaseConfig {
 
+	public static final String RESET_DATABSE_ENV_PROPERTY = "org.wte4j.examples.showcase.RESET_DATABSE";
 	public static final Path DATABASE_DIRECTORY = Paths.get(System.getProperty("java.io.tmpdir"), "hsql");
 
 	@Autowired
 	private ResourcePatternResolver resourceloader;
+
+	@Autowired
+	private Environment env;
 
 	@Bean
 	@Qualifier("wte4j")
@@ -44,7 +49,8 @@ public class DatabaseConfig {
 
 	@Bean
 	public HsqlServerBean hsqlServer() {
+		boolean overide = env.getProperty(RESET_DATABSE_ENV_PROPERTY, Boolean.class, Boolean.FALSE);
 		ShowCaseDbInitializer dbInitializer = new ShowCaseDbInitializer(resourceloader);
-		return dbInitializer.createDatabase(DATABASE_DIRECTORY);
+		return dbInitializer.createDatabase(DATABASE_DIRECTORY, overide);
 	}
 }
