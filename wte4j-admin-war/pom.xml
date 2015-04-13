@@ -42,23 +42,16 @@
 				<version>2.10</version>
 				<executions>
 					<execution>
-						<id>unpack</id>
-						<phase>process-classes</phase>
+						<id>upack-dependencies</id>
 						<goals>
-							<goal>unpack</goal>
+							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
+							<includeArtifactIds>wte4j-core</includeArtifactIds>
 							<includes>**/PersistentTemplate.class, **/User.class</includes>
-							<artifactItems>
-								<artifactItem>
-									<groupId> ${project.parent.groupId}</groupId>
-									<artifactId>wte4j-core</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-								</artifactItem>
-							</artifactItems>
+							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteReleases>true</overWriteReleases>							
 						</configuration>
 					</execution>
 				</executions>
