@@ -15,13 +15,25 @@
  */
 package org.wte4j.examples.showcase.client;
 
+import org.wte4j.examples.showcase.client.main.MainDisplay;
+import org.wte4j.examples.showcase.client.main.MainPanel;
+import org.wte4j.examples.showcase.client.main.MainPresenter;
+
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class Showcase implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
+		RootPanel root = RootPanel.get();
 
+		MainPresenter mainPresenter = new MainPresenter();
+		MainDisplay mainDisplay = new MainPanel();
+		mainPresenter.bind(mainDisplay);
+		mainPresenter.displayGenerateDocumentContent();
+
+		root.add(mainDisplay);
 	}
 
 }

@@ -15,7 +15,7 @@
  */
 package org.wte4j.examples.showcase.server.config;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.nio.file.Paths;
 
 import javax.sql.DataSource;
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.wte4j.examples.showcase.server.hsql.HsqlServerBean;
 import org.wte4j.examples.showcase.server.hsql.ShowCaseDbInitializer;
@@ -31,10 +32,15 @@ import org.wte4j.examples.showcase.server.hsql.ShowCaseDbInitializer;
 @Configuration
 public class DatabaseConfig {
 
-	public static final Path DATABASE_DIRECTORY = Paths.get(System.getProperty("java.io.tmpdir"), "hsql");
+	public static final String RESET_DATABSE_ENV_PROPERTY = "org.wte4j.examples.showcase.RESET_DATABSE";
+	public static final String DATABASE_DIRECTORY_ENV_PROPERTY = "org.wte4j.examples.showcase.DATABASE_DIRECTORY";
+	private static final File DEFAULT_DATABASE_DIRECTORY = Paths.get(System.getProperty("java.io.tmpdir"), "hsql").toFile();
 
 	@Autowired
 	private ResourcePatternResolver resourceloader;
+
+	@Autowired
+	private Environment env;
 
 	@Bean
 	@Qualifier("wte4j")
@@ -44,7 +50,9 @@ public class DatabaseConfig {
 
 	@Bean
 	public HsqlServerBean hsqlServer() {
+		boolean overide = env.getProperty(RESET_DATABSE_ENV_PROPERTY, Boolean.class, Boolean.FALSE);
+		File directory = env.getProperty(DATABASE_DIRECTORY_ENV_PROPERTY, File.class, DEFAULT_DATABASE_DIRECTORY);
 		ShowCaseDbInitializer dbInitializer = new ShowCaseDbInitializer(resourceloader);
-		return dbInitializer.createDatabase(DATABASE_DIRECTORY);
+		return dbInitializer.createDatabase(directory.toPath(), overide);
 	}
 }

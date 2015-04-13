@@ -47,6 +47,16 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- wte4j -->
+
+		<dependency>
+			<groupId> ${project.parent.groupId}</groupId>
+			<artifactId>wte4j-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+	
+		<!-- gwt -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
@@ -63,6 +73,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+			<version>0.9</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Spring -->
 
 		<dependency>
@@ -72,17 +89,12 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
 		</dependency>
 
 		<dependency>
@@ -92,15 +104,24 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<artifactId>spring-orm</artifactId>
 		</dependency>
-		
 
-		<!-- database -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>		
+
+		<!--JPA Provider and database -->
 
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
+		</dependency>	
+
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa</artifactId>
 		</dependency>
 
 		<dependency>
@@ -113,13 +134,67 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-
-
-
+		
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!-- open JPA entity enhancement -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<includes>**/PersistentTemplate.class, **/User.class</includes>
+							<artifactItems>
+								<artifactItem>
+									<groupId> ${project.parent.groupId}</groupId>
+									<artifactId>wte4j-core</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openJPA.version}</version>
+				<configuration>
+					<classes>${project.build.outputDirectory}</classes>
+					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>enhancer</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>enhance</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.openjpa</groupId>
+						<artifactId>openjpa</artifactId>
+						<version>${openJPA.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		
+		
 			<!-- GWT Maven Plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -128,9 +203,9 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>compile</goal>
-							<goal>test</goal>
 							<goal>generateAsync</goal>
+							<goal>compile</goal>
+							<goal>test</goal>							
 						</goals>
 					</execution>
 				</executions>
@@ -157,6 +232,60 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>
+											[2.10,)
+										</versionRange>
+										<goals>
+											<goal>unpack</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.openjpa
+										</groupId>
+										<artifactId>
+											openjpa-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.3.0,)
+										</versionRange>
+										<goals>
+											<goal>enhance</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

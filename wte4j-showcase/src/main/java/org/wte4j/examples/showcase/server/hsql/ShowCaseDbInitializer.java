@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.core.io.Resource;
@@ -33,9 +34,20 @@ public class ShowCaseDbInitializer {
 		this.resourceLoader = resourceLoader;
 	}
 
-	public HsqlServerBean createDatabase(Path dataBaseLocation) {
+	/**
+	 * Initialize Hslq Database with name wte4-showcase
+	 * 
+	 * @param dataBaseLocation
+	 *            - path in the file system where the hsql database file shall
+	 *            be stored
+	 * @param overide
+	 *            - if true and the database file exists the files will be
+	 *            replaced
+	 * @return
+	 */
+	public HsqlServerBean createDatabase(Path dataBaseLocation, boolean overide) {
 		Path hsqlScript = dataBaseLocation.resolve("wte4j-showcase.script");
-		if (!Files.exists(hsqlScript)) {
+		if (overide || !Files.exists(hsqlScript)) {
 			try {
 				if (!Files.exists(dataBaseLocation)) {
 					Files.createDirectory(dataBaseLocation);
@@ -44,7 +56,7 @@ public class ShowCaseDbInitializer {
 				for (Resource resource : resources) {
 					Path filePath = dataBaseLocation.resolve(resource.getFilename());
 					File source = resource.getFile();
-					Files.copy(source.toPath(), filePath);
+					Files.copy(source.toPath(), filePath, StandardCopyOption.REPLACE_EXISTING);
 				}
 			} catch (IOException e) {
 				throw new IllegalArgumentException("can not copy database files", e);
@@ -55,7 +67,11 @@ public class ShowCaseDbInitializer {
 
 	public static void main(String... args) {
 		ShowCaseDbInitializer initializer = new ShowCaseDbInitializer(new StaticApplicationContext());
-		HsqlServerBean hsqlServerBean = initializer.createDatabase(Paths.get(args[0]));
+		boolean overide = false;
+		if (args.length == 2) {
+			overide = Boolean.parseBoolean(args[1]);
+		}
+		HsqlServerBean hsqlServerBean = initializer.createDatabase(Paths.get(args[0]), overide);
 		hsqlServerBean.startDatabase();
 	}
 

@@ -30,7 +30,6 @@ import org.wte4j.TemplateRepository;
 import org.wte4j.WteException;
 import org.wte4j.WteModelService;
 
-
 @Service("wordTemplateEngine")
 public class SpringTemplateEngine implements TemplateEngine {
 
@@ -68,7 +67,7 @@ public class SpringTemplateEngine implements TemplateEngine {
 	}
 
 	File createFile(Template<Object> template, Object data) throws IOException {
-		File tempFile = File.createTempFile(template.getDocumentName(), "docx");
+		File tempFile = File.createTempFile(template.getDocumentName(), ".docx");
 		template.toDocument(data, tempFile);
 		return tempFile;
 	}
