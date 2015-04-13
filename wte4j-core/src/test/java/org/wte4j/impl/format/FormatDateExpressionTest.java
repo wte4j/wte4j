@@ -22,7 +22,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +46,8 @@ import org.wte4j.impl.expression.ValueResolverFactory;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { FormatDateExpressionTest.Config.class })
 public class FormatDateExpressionTest {
-
+	private static final TimeZone STARTUP_TIMEZONE = TimeZone.getDefault();
+	private static final TimeZone MEZ = TimeZone.getTimeZone("CET");
 	private static final Locale LOCALE = Locale.GERMAN;
 
 	private static final Map<String, Class<?>> ELEMENTS = Collections
@@ -54,6 +58,16 @@ public class FormatDateExpressionTest {
 
 	public ValueResolverFactory templateContext() {
 		return new ResolverFactoryImpl(LOCALE, formatterRegistry, ELEMENTS);
+	}
+
+	@BeforeClass
+	public static void setMEZAsDefaultTimeZone() {
+		TimeZone.setDefault(MEZ);
+	}
+
+	@AfterClass
+	public static void resetDefaulTimeZone() {
+		TimeZone.setDefault(STARTUP_TIMEZONE);
 	}
 
 	@Test()
