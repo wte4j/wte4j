@@ -31,6 +31,7 @@
 	<properties>
 		<!-- Convenience property to set the GWT version -->
 		<gwtVersion>2.7.0</gwtVersion>
+		<skip.enhanceJPA>false</skip.enhanceJPA>
 	</properties>
 
 	<build>
@@ -43,6 +44,7 @@
 				<executions>
 					<execution>
 						<id>upack-dependencies</id>
+						<phase>process-classes</phase>
 						<goals>
 							<goal>unpack-dependencies</goal>
 						</goals>
@@ -51,7 +53,8 @@
 							<includes>**/PersistentTemplate.class, **/User.class</includes>
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteReleases>true</overWriteReleases>							
+							<overWriteReleases>true</overWriteReleases>
+							<skip>${skip.enhanceJPA}</skip>							
 						</configuration>
 					</execution>
 				</executions>
@@ -72,6 +75,9 @@
 						<goals>
 							<goal>enhance</goal>
 						</goals>
+						<configuration>
+							<skip>${skip.enhanceJPA}</skip>
+						</configuration>
 					</execution>
 				</executions>
 				<dependencies>
