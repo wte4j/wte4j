@@ -55,7 +55,7 @@ public class ShowCaseDbInitializer {
 		if (overide || !Files.exists(hsqlScript)) {
 			try {
 				if (!Files.exists(dataBaseLocation)) {
-					Files.createDirectory(dataBaseLocation);
+					Files.createDirectories(dataBaseLocation);
 				}
 				Resource[] resources = resourceLoader.getResources("classpath:/db/*");
 				for (Resource resource : resources) {
