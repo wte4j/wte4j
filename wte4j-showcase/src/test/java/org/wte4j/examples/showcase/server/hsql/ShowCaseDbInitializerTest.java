@@ -19,102 +19,97 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ConnectionCallback;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ShowCaseDbInitializerTest {
 
 	ApplicationContext context;
 
 	@Test
-	public void initializeDatabase() throws IOException {
+	public void createDatabaseFiles() throws IOException {
 		ApplicationContext context = new StaticApplicationContext();
 		Path directory = Files.createTempDirectory("database");
-
-		ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
-		HsqlServerBean serverBean = showCaseDbInitializer.createDatabase(directory, false);
-
 		try {
-			serverBean.startDatabase();
-			DataSource dataSource = serverBean.createDataSource();
-			assertTables(dataSource);
+			ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
+			showCaseDbInitializer.createDateBaseFiles(directory, false);
+
+			Set<String> fileNamesInDirectory = listFiles(directory);
+
+			Set<String> expectedFileNames = new HashSet<String>();
+			expectedFileNames.add("wte4j-showcase.lobs");
+			expectedFileNames.add("wte4j-showcase.properties");
+			expectedFileNames.add("wte4j-showcase.script");
+			assertEquals(expectedFileNames, fileNamesInDirectory);
 		} finally {
-			serverBean.stopDatabase();
 			deleteDirectory(directory);
 		}
 	}
 
 	@Test
-	public void initializeDatabaseWithOveride() throws IOException, SQLException {
+	public void createDatabaseFilesWithoutOveride() throws IOException, SQLException {
 		ApplicationContext context = new StaticApplicationContext();
 		Path directory = Files.createTempDirectory("database");
-
-		ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
-		HsqlServerBean serverBean = showCaseDbInitializer.createDatabase(directory, false);
-
+		Path dummyFile = directory.resolve("wte4j-showcase.script");
+		Files.createFile(dummyFile);
 		try {
-			serverBean.startDatabase();
-			DataSource dataSource = serverBean.createDataSource();
-			JdbcTemplate template = new JdbcTemplate(dataSource);
-			template.execute("drop table PURCHASE_ORDER");
-			serverBean.stopDatabase();
-			BasicDataSource basicDataSource = (BasicDataSource) dataSource;
-			basicDataSource.close();
+			ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
+			showCaseDbInitializer.createDateBaseFiles(directory, false);
 
-			serverBean = showCaseDbInitializer.createDatabase(directory, true);
-			serverBean.startDatabase();
-			dataSource = serverBean.createDataSource();
-			assertTables(dataSource);
+			Set<String> fileNamesInDirectory = listFiles(directory);
+			Set<String> expectedFileNames = new HashSet<String>();
+			expectedFileNames.add("wte4j-showcase.script");
+			assertEquals(expectedFileNames, fileNamesInDirectory);
+			assertEquals(0, Files.size(dummyFile));
 		} finally {
-			serverBean.stopDatabase();
 			deleteDirectory(directory);
 		}
 	}
 
-	private void assertTables(DataSource dataSource) {
+	@Test
+	public void createDatabaseFilesWithOveride() throws IOException, SQLException {
+		ApplicationContext context = new StaticApplicationContext();
+		Path directory = Files.createTempDirectory("database");
+		Path dummyFile = directory.resolve("wte4j-showcase.script");
+		Files.createFile(dummyFile);
 
-		JdbcTemplate template = new JdbcTemplate(dataSource);
-		Set<String> wte4jTables = template.execute(new ConnectionCallback<Set<String>>() {
+		try {
 
-			@Override
-			public Set<String> doInConnection(Connection con) throws SQLException, DataAccessException {
-				Set<String> tableNames = new HashSet<String>();
-				ResultSet tableRs = con.getMetaData().getTables(null, null, null, new String[] { "TABLE" });
-				try {
-					while (tableRs.next()) {
-						tableNames.add(tableRs.getString("TABLE_NAME").toLowerCase());
-					}
-				}
-				finally {
-					tableRs.close();
-				}
-				return tableNames;
+			ShowCaseDbInitializer showCaseDbInitializer = new ShowCaseDbInitializer(context);
+			showCaseDbInitializer.createDateBaseFiles(directory, true);
+
+			Set<String> fileNamesInDirectory = listFiles(directory);
+			Set<String> expectedFileNames = new HashSet<String>();
+			expectedFileNames.add("wte4j-showcase.lobs");
+			expectedFileNames.add("wte4j-showcase.properties");
+			expectedFileNames.add("wte4j-showcase.script");
+			assertEquals(expectedFileNames, fileNamesInDirectory);
+			assertTrue(Files.size(dummyFile) > 0);
+
+		} finally {
+			deleteDirectory(directory);
+		}
+	}
+
+	private Set<String> listFiles(Path directory) throws IOException {
+		Set<String> fileNamesInDirectory = new HashSet<String>();
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
+			for (Path path : directoryStream) {
+				fileNamesInDirectory.add(path.getFileName().toString());
 			}
-		});
-		assertEquals(5, wte4jTables.size());
-		assertTrue(wte4jTables.contains("person"));
-		assertTrue(wte4jTables.contains("purchase_order"));
-		assertTrue(wte4jTables.contains("wte4j_template"));
-		assertTrue(wte4jTables.contains("wte4j_template_properties"));
-		assertTrue(wte4jTables.contains("wte4j_gen"));
+		}
+		return fileNamesInDirectory;
 	}
 
 	private void deleteDirectory(Path path) throws IOException {

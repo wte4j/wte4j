@@ -46,6 +46,11 @@ public class ShowCaseDbInitializer {
 	 * @return
 	 */
 	public HsqlServerBean createDatabase(Path dataBaseLocation, boolean overide) {
+		createDateBaseFiles(dataBaseLocation, overide);
+		return new HsqlServerBean(dataBaseLocation, "wte4j-showcase");
+	}
+
+	void createDateBaseFiles(Path dataBaseLocation, boolean overide) {
 		Path hsqlScript = dataBaseLocation.resolve("wte4j-showcase.script");
 		if (overide || !Files.exists(hsqlScript)) {
 			try {
@@ -62,7 +67,6 @@ public class ShowCaseDbInitializer {
 				throw new IllegalArgumentException("can not copy database files", e);
 			}
 		}
-		return new HsqlServerBean(dataBaseLocation, "wte4j-showcase");
 	}
 
 	public static void main(String... args) {
