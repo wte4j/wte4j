@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.wte4j.FormatterFactory;
 import org.wte4j.Template;
 import org.wte4j.TemplateBuildException;

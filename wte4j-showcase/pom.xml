@@ -121,7 +121,7 @@
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-		</dependency>	
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>
@@ -129,8 +129,20 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jpa_2.0_spec</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
+		</dependency>
+
+		<!-- other -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
 		<!-- logging -->
@@ -161,7 +173,7 @@
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteReleases>true</overWriteReleases>
-							<skip>${skip.enhanceJPA}</skip>							
+							<skip>${skip.enhanceJPA}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -207,7 +219,7 @@
 						<goals>
 							<goal>generateAsync</goal>
 							<goal>compile</goal>
-							<goal>test</goal>							
+							<goal>test</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -236,8 +248,7 @@
 		</plugins>
 		<pluginManagement>
 
-
-		<plugins>
+			<plugins>
 			<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 			<plugin>
 				<groupId>org.eclipse.m2e</groupId>
