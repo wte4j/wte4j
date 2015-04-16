@@ -29,18 +29,20 @@ public class Wte4jAdmin implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() {		
-		TemplateListPanel display=new TemplateListPanel();	
-		
-		TemplateListPresenter presenter=new TemplateListPresenter();
-		presenter.bindTo(display);		
-		
-		MainPanel mainPanel=new MainPanel();
-		mainPanel.setContent(display);
-
+	public void onModuleLoad() {
 		RootPanel root = RootPanel.get("wte4j-admin");
-		root.add(mainPanel);
-		
-		presenter.loadData();
+		if (root != null) {
+			TemplateListPanel display = new TemplateListPanel();
+
+			TemplateListPresenter presenter = new TemplateListPresenter();
+			presenter.bindTo(display);
+
+			MainPanel mainPanel = new MainPanel();
+			mainPanel.setContent(display);
+
+			root.add(mainPanel);
+
+			presenter.loadData();
+		}
 	}
 }

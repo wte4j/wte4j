@@ -21,6 +21,9 @@
 	<inherits name='com.google.gwt.user.User' />
 
 	<!-- Other module inherits -->
+	<inherits name="org.wte4j.ui.Wte4jAdmin"/>
+	
+	<!-- Other module inherits -->
 	<inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 
 	<!-- Specify the app entry point class. -->

@@ -18,6 +18,8 @@ package org.wte4j.examples.showcase.client.main;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentDisplay;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPresenter;
+import org.wte4j.ui.client.templates.TemplateListPanel;
+import org.wte4j.ui.client.templates.TemplateListPresenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -58,7 +60,11 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		mainDisplay.setMainContent(new Label("Manage templates"));
+		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();	
+		TemplateListPresenter displayTemplatesPresenter=new TemplateListPresenter();
+		displayTemplatesPresenter.bindTo(displayTemplatesPanel);
+		
+		mainDisplay.setMainContent(displayTemplatesPanel);
 		mainDisplay.setRightContent(new Label("Helptext manage templates"));
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
