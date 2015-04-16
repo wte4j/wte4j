@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wte4j/wte4j.svg?branch=master)](https://travis-ci.org/wte4j/wte4j)
+
 # wte4j - word template engine for java
 
 ## What is wte4j?
