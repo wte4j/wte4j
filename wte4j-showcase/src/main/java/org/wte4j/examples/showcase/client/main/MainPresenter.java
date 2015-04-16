@@ -68,6 +68,8 @@ public class MainPresenter {
 		mainDisplay.setRightContent(new Label("Helptext manage templates"));
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
+		
+		displayTemplatesPresenter.loadData();
 	}
 
 	public void displayGenerateDocumentContent() {
