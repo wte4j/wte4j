@@ -15,9 +15,14 @@
  */
 package org.wte4j.examples.showcase.client.main;
 
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentDisplay;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPresenter;
+import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListDisplay;
+import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListPanel;
+import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListPresenter;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
 
@@ -60,16 +65,14 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();	
-		TemplateListPresenter displayTemplatesPresenter=new TemplateListPresenter();
-		displayTemplatesPresenter.bindTo(displayTemplatesPanel);
+		TemplateAdminListDisplay contentDisplay = new TemplateAdminListPanel();
+		TemplateAdminListPresenter contentPresenter = new TemplateAdminListPresenter();
+		contentPresenter.bind(contentDisplay);
 		
-		mainDisplay.setMainContent(displayTemplatesPanel);
+		mainDisplay.setMainContent(contentDisplay);
 		mainDisplay.setRightContent(new Label("Helptext manage templates"));
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
-		
-		displayTemplatesPresenter.loadData();
 	}
 
 	public void displayGenerateDocumentContent() {
