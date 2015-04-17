@@ -40,13 +40,13 @@ public class ShowCaseDbInitializer {
 	 * @param dataBaseLocation
 	 *            - path in the file system where the hsql database file shall
 	 *            be stored
-	 * @param overide
+	 * @param overwrite
 	 *            - if true and the database file exists the files will be
 	 *            replaced
 	 * @return
 	 */
-	public HsqlServerBean createDatabase(Path dataBaseLocation, boolean overide) {
-		createDateBaseFiles(dataBaseLocation, overide);
+	public HsqlServerBean createDatabase(Path dataBaseLocation, boolean overwrite) {
+		createDateBaseFiles(dataBaseLocation, overwrite);
 		return new HsqlServerBean(dataBaseLocation, "wte4j-showcase");
 	}
 
