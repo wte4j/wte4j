@@ -54,7 +54,7 @@
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteReleases>true</overWriteReleases>
-							<skip>${skip.enhanceJPA}</skip>							
+							<skip>${skip.enhanceJPA}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -162,6 +162,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId> ${project.parent.groupId}</groupId>
 			<artifactId>wte4j-admin</artifactId>
 			<version>${project.version}</version>
@@ -174,18 +179,18 @@
 		</dependency>
 
 		<!-- JSP -->
-		
+
 		<dependency>
-		  <groupId>javax.servlet.jsp</groupId>
-		  <artifactId>jsp-api</artifactId>
-		  <version>2.2</version>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
-		  <groupId>jstl</groupId>
-		  <artifactId>jstl</artifactId>
-		  <version>1.2</version>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 		<!-- JPA Provider -->
