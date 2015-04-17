@@ -79,9 +79,7 @@
 
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
-			<artifactId>gwtbootstrap3</artifactId>
-			<version>0.9</version>
-			<scope>provided</scope>
+			<artifactId>gwtbootstrap3</artifactId>			
 		</dependency>
 
 		<!-- Spring -->
