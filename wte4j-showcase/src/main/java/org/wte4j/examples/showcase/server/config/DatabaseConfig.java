@@ -50,9 +50,9 @@ public class DatabaseConfig {
 
 	@Bean
 	public HsqlServerBean hsqlServer() {
-		boolean overide = env.getProperty(RESET_DATABSE_ENV_PROPERTY, Boolean.class, Boolean.FALSE);
+		boolean overwrite = env.getProperty(RESET_DATABSE_ENV_PROPERTY, Boolean.class, Boolean.FALSE);
 		File directory = env.getProperty(DATABASE_DIRECTORY_ENV_PROPERTY, File.class, DEFAULT_DATABASE_DIRECTORY);
 		ShowCaseDbInitializer dbInitializer = new ShowCaseDbInitializer(resourceloader);
-		return dbInitializer.createDatabase(directory.toPath(), overide);
+		return dbInitializer.createDatabase(directory.toPath(), overwrite);
 	}
 }
