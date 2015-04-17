@@ -86,6 +86,7 @@ public class TemplateRestService {
 
 		try (InputStream in = file.getInputStream()) {
 			template.update(in, serviceContext.getUser());
+			templateRepository.persist(template);
 			return fileUploadResponseFactory.createJsonSuccessResponse(MessageKey.TEMPLATE_UPLOADED);
 		} catch(IOException e) {
 			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
