@@ -18,6 +18,8 @@ package org.wte4j.ui.client.templates;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
 import org.wte4j.ui.client.Application;
 import org.wte4j.ui.client.MessageDialog;
 import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
@@ -216,21 +218,20 @@ public class TemplateListPresenter {
 
 	void updateTemplate() {
 
-		PopupPanel updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
+		Modal updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
 		updateTemplatePopupPanel.show();
 	}
 
-	private PopupPanel getUpdateTemplatePopupPanel() {
-		final PopupPanel updateTemplatePopupPanel = new PopupPanel();
-
-		updateTemplatePopupPanel.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
-		updateTemplatePopupPanel.setGlassEnabled(true);
-		updateTemplatePopupPanel.center();
-
+	private Modal getUpdateTemplatePopupPanel() {
+		final Modal updateTemplatePopupPanel = new Modal();
+		updateTemplatePopupPanel.setTitle("Update Template " + current.getDocumentName());
+		ModalBody body = new ModalBody();
+		body.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
+		updateTemplatePopupPanel.add(body);
 		return updateTemplatePopupPanel;
 	}
 
-	private TemplateUploadDisplay getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
+	private TemplateUploadDisplay getUpdateTemplateFormPanel(Modal updateTemplatePopupPanel) {
 		TemplateUploadDisplay updateTemplateFormPanel = new TemplateUploadFormPanel();
 		TemplateUploadPresenter templateListPresenter = new TemplateUploadPresenter(current, getTemplateFileRestURL());
 		templateListPresenter.bindTo(updateTemplateFormPanel);
@@ -242,7 +243,7 @@ public class TemplateListPresenter {
 	}
 
 	private FileUploadedHandler getFileUploadedHandler(
-			final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+			final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new FileUploadedHandler() {
 
 			@Override
@@ -261,7 +262,7 @@ public class TemplateListPresenter {
 		};
 	}
 
-	private ClickHandler getSubmitButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private ClickHandler getSubmitButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
 
 			@Override
@@ -280,7 +281,7 @@ public class TemplateListPresenter {
 		return uploadingPanel;
 	}
 
-	private ClickHandler getCancelButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private ClickHandler getCancelButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
