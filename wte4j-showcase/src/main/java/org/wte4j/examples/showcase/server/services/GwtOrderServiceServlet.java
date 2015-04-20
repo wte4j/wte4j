@@ -66,7 +66,7 @@ public class GwtOrderServiceServlet extends RemoteServiceServlet implements Orde
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String fileParameter = req.getParameter("file");
-		if (StringUtils.isNoneEmpty(fileParameter)) {
+		if (StringUtils.isNotEmpty(fileParameter)) {
 			File file = new File(fileParameter);
 			sendDocument(file, resp);
 			file.delete();

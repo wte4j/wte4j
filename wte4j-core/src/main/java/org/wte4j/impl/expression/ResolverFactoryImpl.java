@@ -18,7 +18,7 @@ package org.wte4j.impl.expression;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.wte4j.ExpressionError;
 import org.wte4j.Formatter;
 import org.wte4j.FormatterFactory;

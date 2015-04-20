@@ -18,7 +18,7 @@ package org.wte4j;
 import javax.annotation.Generated;
 import javax.persistence.Embeddable;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Embeddable
 /**
