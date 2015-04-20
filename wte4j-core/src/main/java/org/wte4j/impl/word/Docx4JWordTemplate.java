@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.util.IOUtils;
 import org.docx4j.XmlUtils;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;

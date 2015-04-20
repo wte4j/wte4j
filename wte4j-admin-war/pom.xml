@@ -54,7 +54,7 @@
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteReleases>true</overWriteReleases>
-							<skip>${skip.enhanceJPA}</skip>							
+							<skip>${skip.enhanceJPA}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -141,6 +141,19 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- JSP -->
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+	
 		<!-- GWT -->
 
 		<dependency>
@@ -171,29 +184,51 @@
 			<groupId> ${project.parent.groupId}</groupId>
 			<artifactId>wte4j-admin-auth</artifactId>
 			<version>${project.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
-		<!-- JSP -->
-		
 		<dependency>
-		  <groupId>javax.servlet.jsp</groupId>
-		  <artifactId>jsp-api</artifactId>
-		  <version>2.2</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
-		
-		
+
 		<dependency>
-		  <groupId>jstl</groupId>
-		  <artifactId>jstl</artifactId>
-		  <version>1.2</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>	
 
 		<!-- JPA Provider -->
 
 		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa</artifactId>
-		</dependency>		
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jpa_2.0_spec</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+		</dependency>
 
 		<!-- logging -->
 		<dependency>
@@ -204,13 +239,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
