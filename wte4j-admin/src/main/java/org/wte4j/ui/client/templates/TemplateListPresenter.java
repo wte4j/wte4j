@@ -29,7 +29,6 @@ import org.wte4j.ui.shared.TemplateService;
 import org.wte4j.ui.shared.TemplateServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -56,7 +55,7 @@ public class TemplateListPresenter {
 	private ListDataProvider<TemplateDto> dataProvider;
 
 	public TemplateListPresenter() {
-		((ServiceDefTarget)templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
+		((ServiceDefTarget) templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
 		selectionModel = new NoSelectionModel<TemplateDto>();
 		selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override
@@ -82,42 +81,43 @@ public class TemplateListPresenter {
 		display.getDataContainer().setSelectionModel(selectionModel);
 		dataProvider.addDataDisplay(display.getDataContainer());
 
-		display.setDowndLoadCommand(new ScheduledCommand() {
+		display.setDowndLoadCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				downLoadTemplate();
+
 			}
 		});
 
-		display.setLockCommand(new ScheduledCommand() {
+		display.setLockCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				lockTemplate();
 
 			}
 		});
 
-		display.setUnlockCommand(new ScheduledCommand() {
+		display.setUnlockCommand(new ClickHandler() {
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				unlockTemplate();
 
 			}
 		});
-		display.setDeleteCommand(new ScheduledCommand() {
+		display.setDeleteCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				deleteTemplate();
 
 			}
 		});
-		display.setUpdateCommand(new ScheduledCommand() {
+		display.setUpdateCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				updateTemplate();
 
 			}
@@ -149,9 +149,9 @@ public class TemplateListPresenter {
 		final TemplateDto toRemove = current;
 		String documentName = toRemove.getDocumentName();
 		MessageDialog deleteConfirmationDialog = new MessageDialog(
-				documentName, 
-				Application.LABELS.deleteConfirmation(documentName), 
-				MessageDialog.QUESTION, 
+				documentName,
+				Application.LABELS.deleteConfirmation(documentName),
+				MessageDialog.QUESTION,
 				getDeleteTemplateConfirmationOkHandler(toRemove));
 		deleteConfirmationDialog.show();
 	}

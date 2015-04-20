@@ -15,12 +15,12 @@
  */
 package org.wte4j.ui.client.templates.contextmenu;
 
+import org.gwtbootstrap3.client.ui.LinkedGroupItem;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TemplateContextMenu extends Composite {
@@ -29,55 +29,43 @@ public class TemplateContextMenu extends Composite {
 			.create(TemplateContextMenuUiBinder.class);
 
 	@UiField
-	MenuBar contextMenu;
+	LinkedGroupItem downloadAction;
 
 	@UiField
-	MenuItem downloadAction;
+	LinkedGroupItem updateAction;
 
 	@UiField
-	MenuItem updateAction;
+	LinkedGroupItem lockAction;
 
 	@UiField
-	MenuItem lockAction;
+	LinkedGroupItem unlockAction;
 
 	@UiField
-	MenuItem unlockAction;
-
-	@UiField
-	MenuItem deleteAction;
+	LinkedGroupItem deleteAction;
 
 	public TemplateContextMenu() {
-		initWidget(uiBinder.createAndBindUi(this));		
-
-		int lockIndex = contextMenu.getItemIndex(lockAction);
-		contextMenu.insertSeparator(lockIndex);
-
-		int deleteIndex = contextMenu.getItemIndex(deleteAction);
-		contextMenu.insertSeparator(deleteIndex);
-
+		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public MenuItem getDownloadAction() {
+	public LinkedGroupItem getDownloadAction() {
 		return downloadAction;
 	}
 
-	public MenuItem getUpdateAction() {
+	public LinkedGroupItem getUpdateAction() {
 		return updateAction;
 	}
 
-	public MenuItem getLockAction() {
+	public LinkedGroupItem getLockAction() {
 		return lockAction;
 	}
 
-	public MenuItem getUnlockAction() {
+	public LinkedGroupItem getUnlockAction() {
 		return unlockAction;
 	}
 
-	public MenuItem getDeleteAction() {
+	public LinkedGroupItem getDeleteAction() {
 		return deleteAction;
 	}
-
-
 
 	interface TemplateContextMenuUiBinder extends
 			UiBinder<Widget, TemplateContextMenu> {

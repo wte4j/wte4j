@@ -62,6 +62,9 @@ public class TemplateListPanel extends Composite implements
 	@UiField
 	CellTable<TemplateDto> templateTable;
 
+	@UiField
+	PopupPanel contextPanel;
+
 	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
 	private Column<TemplateDto, String> editorColumn;
@@ -75,7 +78,6 @@ public class TemplateListPanel extends Composite implements
 	private DateTimeFormat timeStampFormat = DateTimeFormat
 			.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 
-	private PopupPanel contextPanel;
 	private TemplateContextMenu templateContextMenu;
 
 	private TextColumn<TemplateDto> statusColumn;
@@ -88,13 +90,9 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	private void initContextMenu() {
-
 		templateContextMenu = new TemplateContextMenu();
-		contextPanel = new PopupPanel(true);
 		contextPanel.add(templateContextMenu);
-
 		ClickHandler clickHandler = new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				contextPanel.hide();
@@ -220,36 +218,31 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	@Override
-	public void setDowndLoadCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getDownloadAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setDowndLoadCommand(final ClickHandler command) {
+		templateContextMenu.getDownloadAction().addClickHandler(wrapClickHandler(command));
 	}
 
 	@Override
-	public void setUpdateCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUpdateAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
-
-	}
-
-	@Override
-	public void setUnlockCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUnlockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setUpdateCommand(ClickHandler command) {
+		templateContextMenu.getUpdateAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
 	@Override
-	public void setLockCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getLockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setUnlockCommand(ClickHandler command) {
+		templateContextMenu.getUnlockAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
 	@Override
-	public void setDeleteCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setLockCommand(ClickHandler command) {
+		templateContextMenu.getLockAction().addClickHandler(wrapClickHandler(command));
+
+	}
+
+	@Override
+	public void setDeleteCommand(ClickHandler command) {
+		templateContextMenu.getDeleteAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
@@ -274,8 +267,18 @@ public class TemplateListPanel extends Composite implements
 		};
 	}
 
-	interface TemplateTablePanelUiBInder extends
-			UiBinder<Widget, TemplateListPanel> {
+	private ClickHandler wrapClickHandler(final ClickHandler toWrap) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				contextPanel.hide();
+				toWrap.onClick(event);
+
+			}
+		};
+	}
+
+	interface TemplateTablePanelUiBInder extends UiBinder<Widget, TemplateListPanel> {
 	}
 
 }

@@ -1,18 +1,39 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:my="urn:import:org.wte4j.ui.client.templates.contextmenu">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:org.wte4j.ui.client.templates.contextmenu"
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui" xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt"
+	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />
 	<ui:with field='res' type='org.wte4j.ui.client.Wte4jResources' />
-	<g:SimplePanel ui:field="menuContainer">
-		<g:MenuBar ui:field="contextMenu" vertical="true">
-			<my:MyMenuItem ui:field="downloadAction" text="{labels.downloadTemplate}" res="{res.downloadAction}" />
-			<my:MyMenuItem ui:field="updateAction" text="{labels.updateTemplate}" res="{res.updateAction}" />
+	<b.gwt:FlowPanel>
+		<b:LinkedGroup marginBottom="0" marginTop="0" marginLeft="0" marginRight="0" paddingBottom="0" paddingTop="0" paddingLeft="0" paddingRight="0">
 
-			<my:MyMenuItem ui:field="lockAction" text="{labels.lockTemplate}" res="{res.lockAction}" />
-			<my:MyMenuItem ui:field="unlockAction" text="{labels.unlockTemplate}" res="{res.unlockAction}" />
+			<b:LinkedGroupItem ui:field="downloadAction">
+				<b:Image resource="{res.downloadAction}" />
+				<b.html:Text text="{labels.downloadTemplate}" />
+			</b:LinkedGroupItem>
 
-			<my:MyMenuItem ui:field="deleteAction" text="{labels.deleteTemplate}" res="{res.deleteAction}" />
-		</g:MenuBar>
-	</g:SimplePanel>
+			<b:LinkedGroupItem ui:field="updateAction">
+				<b:Image resource="{res.updateAction}" />
+				<b.html:Text text="{labels.updateTemplate}" />
+			</b:LinkedGroupItem>
+
+			<b:LinkedGroupItem ui:field="lockAction">
+				<b:Image resource="{res.lockAction}" />
+				<b.html:Text text="{labels.lockTemplate}" />
+			</b:LinkedGroupItem>
+
+			<b:LinkedGroupItem ui:field="unlockAction">
+				<b:Image resource="{res.unlockAction}" />
+				<b.html:Text text="{labels.unlockTemplate}" />
+			</b:LinkedGroupItem>
+			
+			<b:LinkedGroupItem ui:field="deleteAction">
+				<b:Image resource="{res.deleteAction}" />
+				<b.html:Text text="{labels.deleteTemplate}" />
+			</b:LinkedGroupItem>
+			
+		</b:LinkedGroup>
+
+	</b.gwt:FlowPanel>
 </ui:UiBinder> 
