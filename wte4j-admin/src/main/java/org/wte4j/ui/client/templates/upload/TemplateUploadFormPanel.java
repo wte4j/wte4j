@@ -15,22 +15,22 @@
  */
 package org.wte4j.ui.client.templates.upload;
 
-import org.wte4j.ui.shared.TemplateDto;
 import static org.wte4j.ui.client.Application.LABELS;
+
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.SubmitButton;
+import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.Hidden;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TemplateUploadFormPanel extends Composite implements
@@ -40,27 +40,23 @@ public class TemplateUploadFormPanel extends Composite implements
 	FormPanel formPanel;
 
 	@UiField
-	Label formTitle;
+	SubmitButton submitButton;
 
 	@UiField
-	SubmitButton submitButton;
-	
-	@UiField
 	Button cancelButton;
-	
+
 	@UiField
 	FileUpload fileUpload;
-	
+
 	@UiField
 	Hidden templateName;
-	
+
 	@UiField
 	Hidden templateLanguage;
-	
-	
+
 	private static TemplateUploadFormPanelUiBInder uiBinder = GWT
 			.create(TemplateUploadFormPanelUiBInder.class);
-	
+
 	private TemplateUploadPresenter templateUploadPresenter;
 	private TemplateDto currentTemplate;
 	private String templateUploadRestURL;
@@ -82,19 +78,19 @@ public class TemplateUploadFormPanel extends Composite implements
 		this.templateUploadRestURL = templateUploadRestURL;
 		dataChanged();
 	}
-	
+
 	@UiHandler("submitButton")
 	void onSubmitButtonClicked(ClickEvent clickEvent) {
 		if (templateUploadPresenter != null)
 			templateUploadPresenter.onSubmitButtonClick(clickEvent);
 	}
-	
+
 	@UiHandler("cancelButton")
 	void onCancelButtonClicked(ClickEvent clickEvent) {
 		if (templateUploadPresenter != null)
 			templateUploadPresenter.onCancelButtonClick(clickEvent);
 	}
-	
+
 	@UiHandler("formPanel")
 	void onSubmitComplete(SubmitCompleteEvent submitCompleteEvent) {
 		if (templateUploadPresenter != null)
@@ -119,17 +115,12 @@ public class TemplateUploadFormPanel extends Composite implements
 	}
 
 	private void setVisibleContent() {
-		setFormTitle();
 		setFileUploadInput();
 	}
 
 	private void setHiddenContent() {
 		setNameTextBox();
 		setLanguageTextBox();
-	}
-
-	private void setFormTitle() {
-		formTitle.setText(LABELS.updateTemplate());
 	}
 
 	private void setFileUploadInput() {
@@ -145,7 +136,7 @@ public class TemplateUploadFormPanel extends Composite implements
 		templateLanguage.setName("language");
 		templateLanguage.setValue(currentTemplate.getLanguage());
 	}
-	
+
 	interface TemplateUploadFormPanelUiBInder extends
 			UiBinder<Widget, TemplateUploadFormPanel> {
 	}
