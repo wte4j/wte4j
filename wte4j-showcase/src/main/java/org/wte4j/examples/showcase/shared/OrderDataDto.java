@@ -21,6 +21,8 @@ import java.util.Date;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class OrderDataDto implements Serializable, IsSerializable {
+	private static final long serialVersionUID = 1L;
+	
 	private long orderId;
 	private String firstName;
 	private String lastName;

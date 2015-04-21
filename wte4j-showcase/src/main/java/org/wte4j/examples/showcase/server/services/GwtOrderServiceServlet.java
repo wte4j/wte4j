@@ -33,6 +33,7 @@ import com.google.common.io.Files;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class GwtOrderServiceServlet extends RemoteServiceServlet implements OrderService {
+	private static final long serialVersionUID = 1L;
 
 	private static final String DOCUMENT_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
