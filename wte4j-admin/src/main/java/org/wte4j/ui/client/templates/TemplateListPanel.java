@@ -33,6 +33,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -255,6 +256,11 @@ public class TemplateListPanel extends Composite implements
 	@Override
 	public void setLockCommandVisible(boolean visible) {
 		templateContextMenu.getLockAction().setVisible(visible);
+	}
+
+	@Override
+	public void setContextCloseHandler(CloseHandler<PopupPanel> handler) {
+		contextPanel.addCloseHandler(handler);
 	}
 
 	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {

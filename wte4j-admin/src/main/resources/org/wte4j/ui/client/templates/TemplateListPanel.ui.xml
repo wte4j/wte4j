@@ -14,6 +14,6 @@
 	<b.gwt:FlowPanel ui:field="tablePanel">		
 		<b.gwt:CellTable ui:field="templateTable" bordered="false"	condensed="true" striped="true" hover="true" pageSize="10"  />
 		<b:Pagination ui:field="templateTablePagination" paginationSize="SMALL" />
-		<g:PopupPanel ui:field="contextPanel" visible="false" addStyleNames='{style.wte4jAdminContextMenu}' modal="true" autoHideEnabled="true"/>	
+		<g:PopupPanel ui:field="contextPanel" visible="false" addStyleNames='{style.wte4jAdminContextMenu}' modal="true" autoHideEnabled="true" />	
 	</b.gwt:FlowPanel>
 </ui:UiBinder> 

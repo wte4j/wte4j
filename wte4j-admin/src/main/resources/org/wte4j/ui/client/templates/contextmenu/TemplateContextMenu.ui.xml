@@ -5,6 +5,9 @@
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />	
 	<ui:style>
+		.noWrap{
+			white-space: nowrap;
+		}
 		.icon{
 			padding-right: 1em;
 		}
@@ -12,27 +15,27 @@
 	<b.gwt:FlowPanel>
 		<b:LinkedGroup marginBottom="0" marginTop="0" marginLeft="0" marginRight="0" paddingBottom="0" paddingTop="0" paddingLeft="0" paddingRight="0">
 
-			<b:LinkedGroupItem ui:field="downloadAction" >
-				<b:Icon type="DOWNLOAD" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}" />
+			<b:LinkedGroupItem ui:field="downloadAction" addStyleNames="{style.noWrap}">
+				<b:Icon type="DOWNLOAD" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.downloadTemplate}" />
 			</b:LinkedGroupItem>
 
-			<b:LinkedGroupItem ui:field="updateAction">
+			<b:LinkedGroupItem ui:field="updateAction" addStyleNames="{style.noWrap}">
 				<b:Icon type="UPLOAD" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.updateTemplate}" />
 			</b:LinkedGroupItem>
 
-			<b:LinkedGroupItem ui:field="lockAction">
+			<b:LinkedGroupItem ui:field="lockAction" addStyleNames="{style.noWrap}">
 				<b:Icon type="LOCK" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.lockTemplate}" />
 			</b:LinkedGroupItem>
 
-			<b:LinkedGroupItem ui:field="unlockAction">
+			<b:LinkedGroupItem ui:field="unlockAction" addStyleNames="{style.noWrap}">
 				<b:Icon type="UNLOCK" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.unlockTemplate}" />
 			</b:LinkedGroupItem>
 			
-			<b:LinkedGroupItem ui:field="deleteAction">
+			<b:LinkedGroupItem ui:field="deleteAction" addStyleNames="{style.noWrap}">
 				<b:Icon type="REMOVE" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.deleteTemplate}" />
 			</b:LinkedGroupItem>

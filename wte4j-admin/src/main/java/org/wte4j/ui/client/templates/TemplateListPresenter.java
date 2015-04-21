@@ -34,15 +34,17 @@ import org.wte4j.ui.shared.TemplateServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 public class TemplateListPresenter {
 
@@ -54,20 +56,22 @@ public class TemplateListPresenter {
 	private TemplateListDisplay display;
 	private TemplateDto current;
 
-	private NoSelectionModel<TemplateDto> selectionModel;
+	private SingleSelectionModel<TemplateDto> selectionModel;
 	private ListDataProvider<TemplateDto> dataProvider;
 
 	public TemplateListPresenter() {
 		((ServiceDefTarget) templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
-		selectionModel = new NoSelectionModel<TemplateDto>();
+		selectionModel = new SingleSelectionModel<TemplateDto>();
 		selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				current = selectionModel.getLastSelectedObject();
-				boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
-				logger.fine("current template locking status = " + isCurrentTemplateLocked);
-				display.setLockCommandVisible(!isCurrentTemplateLocked);
-				display.setUnLockCommandVisible(isCurrentTemplateLocked);
+				current = selectionModel.getSelectedObject();
+				if (current != null) {
+					boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
+					logger.fine("current template locking status = " + isCurrentTemplateLocked);
+					display.setLockCommandVisible(!isCurrentTemplateLocked);
+					display.setUnLockCommandVisible(isCurrentTemplateLocked);
+				}
 			}
 		});
 		dataProvider = new ListDataProvider<TemplateDto>();
@@ -123,6 +127,13 @@ public class TemplateListPresenter {
 			public void onClick(ClickEvent event) {
 				updateTemplate();
 
+			}
+		});
+
+		display.setContextCloseHandler(new CloseHandler<PopupPanel>() {
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				selectionModel.clear();
 			}
 		});
 

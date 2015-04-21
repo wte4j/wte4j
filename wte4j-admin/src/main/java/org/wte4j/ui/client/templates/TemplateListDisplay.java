@@ -18,7 +18,9 @@ package org.wte4j.ui.client.templates;
 import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.HasData;
 
 public interface TemplateListDisplay extends IsWidget {
@@ -38,5 +40,7 @@ public interface TemplateListDisplay extends IsWidget {
 	void setLockCommand(ClickHandler command);
 
 	void setDeleteCommand(ClickHandler command);
+
+	void setContextCloseHandler(CloseHandler<PopupPanel> handler);
 
 }
