@@ -19,13 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.wte4j.Template;
 import org.wte4j.TemplateBuilder;
 import org.wte4j.TemplateEngine;
+import org.wte4j.TemplateExistException;
 import org.wte4j.TemplateRepository;
+import org.wte4j.examples.showcase.client.MessageKey;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
+import org.wte4j.examples.showcase.shared.TemplateServiceException;
 import org.wte4j.examples.showcase.shared.service.TemplateService;
+import org.wte4j.ui.server.services.MessageFactory;
 import org.wte4j.ui.server.services.ServiceContext;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -40,6 +45,10 @@ public class TemplateServiceImpl extends RemoteServiceServlet implements
 
 	@Autowired
 	private ServiceContext serviceContext;
+	
+	@Autowired
+	@Qualifier("wte4j-showcase")
+	private MessageFactory messageFactory;
 
 	public void init() {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
@@ -49,11 +58,12 @@ public class TemplateServiceImpl extends RemoteServiceServlet implements
 	public List<String> listDataModel() {
 		List<String> dataModels = new ArrayList<String>();
 		dataModels.add(OrderDataDto.class.getCanonicalName());
+		dataModels.add(String.class.getCanonicalName());
 		return dataModels;
 	}
 
 	@Override
-	public void createTemplate(String className) {
+	public void createTemplate(String className, String templateName) throws TemplateServiceException {
 		Class<?> clazz;
 		try {
 			clazz = Class.forName(className);
@@ -64,14 +74,20 @@ public class TemplateServiceImpl extends RemoteServiceServlet implements
 					.getTemplateRepository();
 
 			templateBuilder.setAuthor(serviceContext.getUser());
-			templateBuilder.setDocumentName("New Document");
+			templateBuilder.setDocumentName(templateName);
 			templateBuilder.setLanguage("en");
 			Template<?> template = templateBuilder.build();
 
 			templateRepository.persist(template);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new TemplateServiceException(getMessage(MessageKey.DATA_MODEL_NOT_FOUND), e);
+		} catch (TemplateExistException e) {
+			throw new TemplateServiceException(getMessage(MessageKey.TEMPLATE_EXISTS_ALREADY), e);
 		}
+	}
+	
+	private String getMessage(MessageKey messageKey) {
+		return messageFactory.createMessage(messageKey.getValue());
 	}
 
 }

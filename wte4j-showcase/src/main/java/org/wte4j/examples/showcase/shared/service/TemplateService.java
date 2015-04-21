@@ -17,6 +17,8 @@ package org.wte4j.examples.showcase.shared.service;
 
 import java.util.List;
 
+import org.wte4j.examples.showcase.shared.TemplateServiceException;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -24,5 +26,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface TemplateService extends RemoteService {
 
 	List<String> listDataModel();
-	void createTemplate(String className);
+	void createTemplate(String className, String templateName) throws TemplateServiceException;
 }

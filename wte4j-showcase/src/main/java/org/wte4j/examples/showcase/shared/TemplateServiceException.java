@@ -13,38 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client.templatelist;
+package org.wte4j.examples.showcase.shared;
 
-import com.google.gwt.event.dom.client.ClickHandler;
+import java.io.Serializable;
 
-public class DataModelItem {
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-	private String text;
-	private ClickHandler clickHandler;
-	private boolean active;
-
-	public String getText() {
-		return text;
+public class TemplateServiceException extends RuntimeException implements Serializable, IsSerializable {
+	private static final long serialVersionUID = 1L;
+	
+	public TemplateServiceException() {
+	}
+	
+	public TemplateServiceException(String message) {
+		super(message);
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public TemplateServiceException(String message, Throwable cause) {
+		super(message, cause);
 	}
-
-	public ClickHandler getClickHandler() {
-		return clickHandler;
-	}
-
-	public void setClickHandler(ClickHandler clickHandler) {
-		this.clickHandler = clickHandler;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 }

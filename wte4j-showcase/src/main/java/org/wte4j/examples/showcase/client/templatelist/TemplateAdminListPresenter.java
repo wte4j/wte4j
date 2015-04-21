@@ -18,7 +18,6 @@ package org.wte4j.examples.showcase.client.templatelist;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
 import org.wte4j.examples.showcase.shared.service.TemplateServiceAsync;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
@@ -34,36 +33,51 @@ public class TemplateAdminListPresenter {
 
 	private TemplateAdminListDisplay display;
 
-	private String selectedDataModel;
-
 	private TemplateListPresenter displayTemplatesPresenter;
 
 	public void bind(TemplateAdminListDisplay aDisplay) {
 		if (display != null) {
-			throw new IllegalStateException("presenter is allready bound");
+			throw new IllegalStateException("presenter is already bound");
 		}
 		display = aDisplay;
 		bindTemplateList();
 		initAddTemplateButton();
+		initDialogButtons();
+	}
+
+	private void initDialogButtons() {
+		display.addCloseDialogClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				display.hideDataModelList();
+			}
+		});
+		
+		display.addCreateTemplateClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				createTemplate();
+			}
+		});
 	}
 
 	private void bindTemplateList() {
-		HTMLPanel panel = display.getTemplateListPanel();
 		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();	
 		displayTemplatesPresenter = new TemplateListPresenter();
 		displayTemplatesPresenter.bindTo(displayTemplatesPanel);
-		panel.add(displayTemplatesPanel);
+		display.setTemplateListPanel(displayTemplatesPanel);
 		displayTemplatesPresenter.loadData();
 	}
 
 	private void initAddTemplateButton() {
-		display.getAddTemplateButton().addClickHandler(new ClickHandler() {
+		display.addAddTemplateClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent clickEvent) {
 				displayDataModelListForSelection();
 			}
 		});
-		display.getAddTemplateButton().setText("Add Template");
 	}
 
 	public void displayDataModelListForSelection() {
@@ -77,7 +91,6 @@ public class TemplateAdminListPresenter {
 				}
 				display.setDataModelListItems(dataModelItems);
 				display.showDataModelList();
-
 			}
 
 			@Override
@@ -91,36 +104,45 @@ public class TemplateAdminListPresenter {
 	DataModelItem createDataModelItem(String dataModel) {
 		DataModelItem dataModelItem = new DataModelItem();
 		dataModelItem.setText(dataModel);
-		dataModelItem.setClickHandler(new DataModelClickHandler(dataModel));
+		dataModelItem.setClickHandler(new DataModelClickHandler(dataModelItem));
 		return dataModelItem;
 	}
 
 	private class DataModelClickHandler implements ClickHandler {
 
-		private String className;
+		private DataModelItem dataModel;
 
-		public DataModelClickHandler(String className) {
-			this.className = className;
+		public DataModelClickHandler(DataModelItem dataModelItem) {
+			this.dataModel = dataModelItem;
 		}
 
 		@Override
 		public void onClick(ClickEvent event) {
-			selectedDataModel = className;
-			createTemplate();
+			display.removeActiveDataModel();
+			dataModel.setActive(true);
+			display.activeDataModelItemChanged();
 		}
-
 	}
+	
+	
+	
 	private void createTemplate() {
-		templateService.createTemplate(selectedDataModel, new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void arg0) {
-				display.hideDataModelList();
-				displayTemplatesPresenter.loadData();
-			}
-			@Override
-			public void onFailure(Throwable arg0) {
-			}
-		});
+		if (display.validate()) {
+			display.showModalLoading();
+			templateService.createTemplate(display.getActiveDataModel(), display.getTemplateName(), new AsyncCallback<Void>() {
+				@Override
+				public void onSuccess(Void nothing) {
+					display.hideModalLoading();
+					display.hideDataModelList();
+					displayTemplatesPresenter.loadData();
+				}
+				@Override
+				public void onFailure(Throwable e) {
+					display.hideModalLoading();
+					display.displayError(e.getMessage());
+				}
+			});
+		}
 	}
 
 }

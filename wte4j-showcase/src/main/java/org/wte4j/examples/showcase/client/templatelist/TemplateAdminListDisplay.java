@@ -17,9 +17,9 @@ package org.wte4j.examples.showcase.client.templatelist;
 
 import java.util.List;
 
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
+import org.wte4j.ui.client.templates.TemplateListPanel;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface TemplateAdminListDisplay extends IsWidget {
@@ -30,7 +30,27 @@ public interface TemplateAdminListDisplay extends IsWidget {
 
 	void setDataModelListItems(List<DataModelItem> dataModelItems);
 
-	Button getAddTemplateButton();
+	void addAddTemplateClickHandler(ClickHandler clickHandler);
 
-	HTMLPanel getTemplateListPanel();
+	String getTemplateName();
+
+	void addCloseDialogClickHandler(ClickHandler clickHandler);
+
+	void addCreateTemplateClickHandler(ClickHandler clickHandler);
+
+	void activeDataModelItemChanged();
+
+	String getActiveDataModel();
+
+	void removeActiveDataModel();
+
+	boolean validate();
+
+	void showModalLoading();
+
+	void hideModalLoading();
+
+	void displayError(String message);
+
+	void setTemplateListPanel(TemplateListPanel displayTemplatesPanel);
 }
