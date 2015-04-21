@@ -125,6 +125,7 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 	@Override
 	public void setDataModelListItems(List<DataModelItem> dataModelItems) {
 		dataModelList.clear();
+		dataModelNameToItem.clear();
 		boolean first = true;
 		for (DataModelItem item : dataModelItems) {
 			LinkedGroupItem groupItem = new LinkedGroupItem();
@@ -145,6 +146,7 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 	@Override
 	public void showDataModelList() {
 		templateName.clear();
+		alertBox.clear();
 		dialog.show();
 	}
 
