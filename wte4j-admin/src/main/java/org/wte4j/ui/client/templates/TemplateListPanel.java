@@ -16,24 +16,25 @@
 package org.wte4j.ui.client.templates;
 
 import static org.wte4j.ui.client.Application.LABELS;
-import static org.wte4j.ui.client.Application.RESOURCES;
 
 import java.util.Date;
 
 import org.gwtbootstrap3.client.ui.Pagination;
+import org.gwtbootstrap3.client.ui.constants.ButtonSize;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
+import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.wte4j.ui.client.cell.PopupCell;
 import org.wte4j.ui.client.templates.contextmenu.TemplateContextMenu;
 import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -176,15 +177,14 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	private void initActionColumn() {
-
-		ImageResourceCell imageResourceCell = new ImageResourceCell();
-		PopupCell<ImageResource> popupCell = new PopupCell<ImageResource>(
-				contextPanel, imageResourceCell);
-		actionColumn = new Column<TemplateDto, ImageResource>(
+		ButtonCell buttonCell = new ButtonCell(IconType.COG, ButtonType.LINK, ButtonSize.DEFAULT);
+		PopupCell<String> popupCell = new PopupCell<String>(
+				contextPanel, buttonCell);
+		actionColumn = new Column<TemplateDto, String>(
 				popupCell) {
 			@Override
-			public ImageResource getValue(TemplateDto object) {
-				return RESOURCES.contextMenuIcon();
+			public String getValue(TemplateDto object) {
+				return "";
 			}
 		};
 		actionColumn.setCellStyleNames("templates-action-cell");
