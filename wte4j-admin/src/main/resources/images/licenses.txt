@@ -1,5 +1,0 @@
-loader.gif:
-http://commons.wikimedia.org/wiki/File:Ajax-loader.gif
-
-small icons:
-famfamfam_silk_icons_v013 (creative commons 2.5)
