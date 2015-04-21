@@ -21,7 +21,8 @@ import java.util.logging.Logger;
 import org.gwtbootstrap3.client.ui.Modal;
 import org.gwtbootstrap3.client.ui.ModalBody;
 import org.wte4j.ui.client.Application;
-import org.wte4j.ui.client.MessageDialog;
+import org.wte4j.ui.client.dialog.DialogType;
+import org.wte4j.ui.client.dialog.MessageDialog;
 import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
 import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter;
@@ -140,9 +141,7 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				MessageDialog dialog = new MessageDialog("", caught
-						.getMessage(), MessageDialog.ERROR);
-				dialog.show();
+				showError("", caught.getMessage());
 			}
 		});
 	}
@@ -153,7 +152,7 @@ public class TemplateListPresenter {
 		MessageDialog deleteConfirmationDialog = new MessageDialog(
 				documentName,
 				Application.LABELS.deleteConfirmation(documentName),
-				MessageDialog.QUESTION,
+				DialogType.QUESTION,
 				getDeleteTemplateConfirmationOkHandler(toRemove));
 		deleteConfirmationDialog.show();
 	}
@@ -303,14 +302,14 @@ public class TemplateListPresenter {
 	}
 
 	void showError(String title, String message) {
-		showDialog(title, message, MessageDialog.ERROR);
+		showDialog(title, message, DialogType.ERROR);
 	}
 
 	void showInfo(String title, String message) {
-		showDialog(title, message, MessageDialog.INFO);
+		showDialog(title, message, DialogType.INFO);
 	}
 
-	void showDialog(String title, String message, int dialogType) {
+	void showDialog(String title, String message, DialogType dialogType) {
 		new MessageDialog(title, message, dialogType).show();
 	}
 }
