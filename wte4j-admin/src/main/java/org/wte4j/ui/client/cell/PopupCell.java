@@ -35,15 +35,15 @@ public class PopupCell<T> implements Cell<T> {
 	private Set<String> consumedEvents;
 
 	public PopupCell(PopupPanel popupPanel, Cell<T> contentCell) {
-		this.contentCell=contentCell;
+		this.contentCell = contentCell;
 		this.popupPanel = popupPanel;
-		
+
 		consumedEvents = new HashSet<String>();
-		if(contentCell.getConsumedEvents() != null){
-			consumedEvents.addAll(contentCell.getConsumedEvents() );
-		}		
+		if (contentCell.getConsumedEvents() != null) {
+			consumedEvents.addAll(contentCell.getConsumedEvents());
+		}
 		consumedEvents.add(BrowserEvents.CLICK);
-		
+
 	}
 
 	@Override
@@ -60,12 +60,12 @@ public class PopupCell<T> implements Cell<T> {
 			return;
 		}
 		final Element domElement = Element.as(eventTarget);
-		popupPanel.setPopupPositionAndShow(new PositionCallback() {			
+		popupPanel.setPopupPositionAndShow(new PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
 				popupPanel.setPopupPosition(domElement.getAbsoluteLeft(), domElement.getAbsoluteTop());
 			}
-		});		
+		});
 	}
 
 	public boolean dependsOnSelection() {

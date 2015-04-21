@@ -3,33 +3,37 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:org.wte4j.ui.client.templates.contextmenu"
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui" xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt"
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
-	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />
-	<ui:with field='res' type='org.wte4j.ui.client.Wte4jResources' />
+	<ui:with field='labels' type="org.wte4j.ui.client.Labels" />	
+	<ui:style>
+		.icon{
+			padding-right: 1em;
+		}
+	</ui:style>
 	<b.gwt:FlowPanel>
 		<b:LinkedGroup marginBottom="0" marginTop="0" marginLeft="0" marginRight="0" paddingBottom="0" paddingTop="0" paddingLeft="0" paddingRight="0">
 
-			<b:LinkedGroupItem ui:field="downloadAction">
-				<b:Image resource="{res.downloadAction}" />
+			<b:LinkedGroupItem ui:field="downloadAction" >
+				<b:Icon type="DOWNLOAD" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}" />
 				<b.html:Text text="{labels.downloadTemplate}" />
 			</b:LinkedGroupItem>
 
 			<b:LinkedGroupItem ui:field="updateAction">
-				<b:Image resource="{res.updateAction}" />
+				<b:Icon type="UPLOAD" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.updateTemplate}" />
 			</b:LinkedGroupItem>
 
 			<b:LinkedGroupItem ui:field="lockAction">
-				<b:Image resource="{res.lockAction}" />
+				<b:Icon type="LOCK" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.lockTemplate}" />
 			</b:LinkedGroupItem>
 
 			<b:LinkedGroupItem ui:field="unlockAction">
-				<b:Image resource="{res.unlockAction}" />
+				<b:Icon type="UNLOCK" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.unlockTemplate}" />
 			</b:LinkedGroupItem>
 			
 			<b:LinkedGroupItem ui:field="deleteAction">
-				<b:Image resource="{res.deleteAction}" />
+				<b:Icon type="REMOVE" size="LARGE" fixedWidth="true" addStyleNames="{style.icon}"/>
 				<b.html:Text text="{labels.deleteTemplate}" />
 			</b:LinkedGroupItem>
 			
