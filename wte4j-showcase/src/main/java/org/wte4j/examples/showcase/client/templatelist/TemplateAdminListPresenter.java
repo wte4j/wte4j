@@ -18,6 +18,8 @@ package org.wte4j.examples.showcase.client.templatelist;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wte4j.examples.showcase.client.Application;
+import org.wte4j.examples.showcase.client.GrowlFactory;
 import org.wte4j.examples.showcase.shared.service.TemplateServiceAsync;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
@@ -29,7 +31,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TemplateAdminListPresenter {
 
-	private TemplateServiceAsync templateService = TemplateServiceAsync.Util.getInstance();
+	private TemplateServiceAsync templateService = TemplateServiceAsync.Util
+			.getInstance();
 
 	private TemplateAdminListDisplay display;
 
@@ -47,15 +50,15 @@ public class TemplateAdminListPresenter {
 
 	private void initDialogButtons() {
 		display.addCloseDialogClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent arg0) {
 				display.hideDataModelList();
 			}
 		});
-		
+
 		display.addCreateTemplateClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent arg0) {
 				createTemplate();
@@ -64,7 +67,7 @@ public class TemplateAdminListPresenter {
 	}
 
 	private void bindTemplateList() {
-		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();	
+		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();
 		displayTemplatesPresenter = new TemplateListPresenter();
 		displayTemplatesPresenter.bindTo(displayTemplatesPanel);
 		display.setTemplateListPanel(displayTemplatesPanel);
@@ -123,25 +126,27 @@ public class TemplateAdminListPresenter {
 			display.activeDataModelItemChanged();
 		}
 	}
-	
-	
-	
+
 	private void createTemplate() {
 		if (display.validate()) {
 			display.showModalLoading();
-			templateService.createTemplate(display.getActiveDataModel(), display.getTemplateName(), new AsyncCallback<Void>() {
-				@Override
-				public void onSuccess(Void nothing) {
-					display.hideModalLoading();
-					display.hideDataModelList();
-					displayTemplatesPresenter.loadData();
-				}
-				@Override
-				public void onFailure(Throwable e) {
-					display.hideModalLoading();
-					display.displayError(e.getMessage());
-				}
-			});
+			final String templateName = display.getTemplateName();
+			templateService.createTemplate(display.getActiveDataModel(),
+					templateName, new AsyncCallback<Void>() {
+						@Override
+						public void onSuccess(Void nothing) {
+							display.hideModalLoading();
+							display.hideDataModelList();
+							GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
+							displayTemplatesPresenter.loadData();
+						}
+
+						@Override
+						public void onFailure(Throwable e) {
+							display.hideModalLoading();
+							display.displayError(e.getMessage());
+						}
+					});
 		}
 	}
 
