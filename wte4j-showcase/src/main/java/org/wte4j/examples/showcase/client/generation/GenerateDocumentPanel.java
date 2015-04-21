@@ -22,6 +22,7 @@ import org.gwtbootstrap3.client.ui.LinkedGroup;
 import org.gwtbootstrap3.client.ui.LinkedGroupItem;
 import org.gwtbootstrap3.client.ui.Modal;
 import org.gwtbootstrap3.client.ui.gwt.CellTable;
+import org.wte4j.examples.showcase.client.Application;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
 
 import com.google.gwt.cell.client.DateCell;
@@ -63,14 +64,14 @@ public class GenerateDocumentPanel extends Composite implements GenerateDocument
 	}
 
 	private void initOrderTable() {
-		orderTable.addColumn(createNameColumn(), "Name");
-		orderTable.addColumn(createAddressColumn(), "Address");
-		orderTable.addColumn(createZipColumn(), "Zip");
-		orderTable.addColumn(createCityColumn(), "City");
-		orderTable.addColumn(createCountryColumn(), "Country");
-		orderTable.addColumn(createOrderDateColumn(), "Ordered at");
-		orderTable.addColumn(createDeliveryDateColumn(), "Delivered at");
-		orderTable.addColumn(createAmountColumn(), "amount");
+		orderTable.addColumn(createNameColumn(), Application.LABELS.name());
+		orderTable.addColumn(createAddressColumn(), Application.LABELS.address());
+		orderTable.addColumn(createZipColumn(), Application.LABELS.zip());
+		orderTable.addColumn(createCityColumn(), Application.LABELS.city());
+		orderTable.addColumn(createCountryColumn(), Application.LABELS.country());
+		orderTable.addColumn(createOrderDateColumn(), Application.LABELS.orderedAt());
+		orderTable.addColumn(createDeliveryDateColumn(), Application.LABELS.deliveredAt());
+		orderTable.addColumn(createAmountColumn(), Application.LABELS.amount());
 	}
 
 	private Column<OrderDataDto, Number> createAmountColumn() {
