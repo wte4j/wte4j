@@ -34,7 +34,7 @@ public class Wte4jAdminConfig {
 	public MessageFactory messageFactory() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("org.wte4j.ui.shared.Messages");
-		return new MessageFactoryImpl(messageSource, serviceContext());
+		return new MessageFactoryImpl(messageSource);
 	}
 
 	@Bean

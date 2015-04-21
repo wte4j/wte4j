@@ -19,6 +19,7 @@
 <module rename-to='Showcase'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
 
 	<!-- Other module inherits -->
 	<inherits name="org.wte4j.ui.Wte4jAdmin"/>
