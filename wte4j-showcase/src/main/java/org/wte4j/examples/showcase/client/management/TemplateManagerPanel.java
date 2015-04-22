@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client.templatelist;
+package org.wte4j.examples.showcase.client.management;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,6 @@ import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Form;
 import org.gwtbootstrap3.client.ui.FormGroup;
 import org.gwtbootstrap3.client.ui.Image;
-import org.gwtbootstrap3.client.ui.Label;
 import org.gwtbootstrap3.client.ui.LinkedGroup;
 import org.gwtbootstrap3.client.ui.LinkedGroupItem;
 import org.gwtbootstrap3.client.ui.Modal;
@@ -36,6 +35,7 @@ import org.gwtbootstrap3.client.ui.form.error.BasicEditorError;
 import org.gwtbootstrap3.client.ui.form.validator.Validator;
 import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
 import org.wte4j.examples.showcase.client.Application;
+import org.wte4j.ui.client.templates.TemplateListDisplay;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 
 import com.google.gwt.core.shared.GWT;
@@ -47,7 +47,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TemplateAdminListPanel extends Composite implements TemplateAdminListDisplay {
+public class TemplateManagerPanel extends Composite implements TemplateManagerDisplay {
 
 	private static TemplateAdminListPanelUiBinder uiBinder = GWT.create(TemplateAdminListPanelUiBinder.class);
 
@@ -81,13 +81,21 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 	@UiField
 	Image loadingSpinner;
 
-	private Map<DataModelItem, LinkedGroupItem> dataModelNameToItem = new HashMap<DataModelItem, LinkedGroupItem>();
+	private Map<String, LinkedGroupItem> dataModelNameToItem = new HashMap<String, LinkedGroupItem>();
 
-	public TemplateAdminListPanel() {
+	private TemplateListDisplay templateListDisplay;
+
+	public TemplateManagerPanel() {
 		this.initWidget(uiBinder.createAndBindUi(this));
 		initTemplateName();
 		initModal();
 		initSpinner();
+		initTemplateList();
+	}
+
+	private void initTemplateList() {
+		templateListDisplay = new TemplateListPanel();
+		templateList.add(templateListDisplay);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,15 +140,14 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 			groupItem.setText(item.getText());
 			groupItem.addClickHandler(item.getClickHandler());
 			if (first) {
-				item.setActive(true);
+				groupItem.setActive(true);
 			} else {
-				item.setActive(false);
+				groupItem.setActive(false);
 			}
 			first = false;
-			dataModelNameToItem.put(item, groupItem);
+			dataModelNameToItem.put(item.getText(), groupItem);
 			dataModelList.add(groupItem);
 		}
-		activeDataModelItemChanged();
 	}
 
 	@Override
@@ -182,7 +189,8 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 
 	private boolean isOneDataModelActive() {
 		boolean oneDataModel = false;
-		for (DataModelItem item : dataModelNameToItem.keySet()) {
+		for (String dataModel : dataModelNameToItem.keySet()) {
+			LinkedGroupItem item = dataModelNameToItem.get(dataModel); 
 			if (!oneDataModel && item.isActive()) {
 				oneDataModel = true;
 			} else if (oneDataModel && item.isActive()) {
@@ -194,27 +202,24 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 			displayError(Application.MESSAGES.wte4j_message_one_data_model_selected());
 		return oneDataModel;
 	}
-
-	@Override
-	public void activeDataModelItemChanged() {
-		for (DataModelItem item : dataModelNameToItem.keySet()) {
-			dataModelNameToItem.get(item).setActive(item.isActive());
-		}
-	}
 	
 	@Override
-	public String getActiveDataModel() {
-		for (DataModelItem item : dataModelNameToItem.keySet()) {
+	public String getSelectedDataModel() {
+		for (String dataModel : dataModelNameToItem.keySet()) {
+			LinkedGroupItem item = dataModelNameToItem.get(dataModel);
 			if (item.isActive())
-				return item.getText();
+				return dataModel;
 		}
 		return "";
 	}
 	
 	@Override
-	public void removeActiveDataModel() {
-		for (DataModelItem item : dataModelNameToItem.keySet()) {
-			if (item.isActive())
+	public void setSelectedDataModel(String selectedDataModel) {
+		for (String dataModel : dataModelNameToItem.keySet()) {
+			LinkedGroupItem item = dataModelNameToItem.get(dataModel);
+			if (dataModel.equals(selectedDataModel))
+				item.setActive(true);
+			else
 				item.setActive(false);
 		}
 	}
@@ -245,7 +250,12 @@ public class TemplateAdminListPanel extends Composite implements TemplateAdminLi
 		templateList.clear();
 		templateList.add(displayTemplatesPanel);
 	}
+	
+	@Override
+	public TemplateListDisplay getTemplateListDisplay() {
+		return templateListDisplay;
+	}
 
-	interface TemplateAdminListPanelUiBinder extends UiBinder<Widget, TemplateAdminListPanel> {
+	interface TemplateAdminListPanelUiBinder extends UiBinder<Widget, TemplateManagerPanel> {
 	}
 }

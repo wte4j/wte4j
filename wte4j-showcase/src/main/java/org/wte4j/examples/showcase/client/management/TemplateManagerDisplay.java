@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client.templatelist;
+package org.wte4j.examples.showcase.client.management;
 
 import java.util.List;
 
+import org.wte4j.ui.client.templates.TemplateListDisplay;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface TemplateAdminListDisplay extends IsWidget {
+public interface TemplateManagerDisplay extends IsWidget {
 
 	void showDataModelList();
 
@@ -38,11 +39,7 @@ public interface TemplateAdminListDisplay extends IsWidget {
 
 	void addCreateTemplateClickHandler(ClickHandler clickHandler);
 
-	void activeDataModelItemChanged();
-
-	String getActiveDataModel();
-
-	void removeActiveDataModel();
+	String getSelectedDataModel();
 
 	boolean validate();
 
@@ -53,4 +50,8 @@ public interface TemplateAdminListDisplay extends IsWidget {
 	void displayError(String message);
 
 	void setTemplateListPanel(TemplateListPanel displayTemplatesPanel);
+
+	void setSelectedDataModel(String dataModel);
+
+	TemplateListDisplay getTemplateListDisplay();
 }

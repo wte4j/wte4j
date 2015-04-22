@@ -19,17 +19,17 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class TemplateServiceException extends RuntimeException implements Serializable, IsSerializable {
+public class TemplateManagerServiceException extends RuntimeException implements Serializable, IsSerializable {
 	private static final long serialVersionUID = 1L;
 	
-	public TemplateServiceException() {
+	public TemplateManagerServiceException() {
 	}
 	
-	public TemplateServiceException(String message) {
+	public TemplateManagerServiceException(String message) {
 		super(message);
 	}
 
-	public TemplateServiceException(String message, Throwable cause) {
+	public TemplateManagerServiceException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

@@ -47,12 +47,12 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>templateAdminService</servlet-name>
-		<servlet-class>org.wte4j.examples.showcase.server.services.TemplateServiceImpl</servlet-class>
+		<servlet-name>templateManager</servlet-name>
+		<servlet-class>org.wte4j.examples.showcase.server.services.TemplateManagerServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>templateAdminService</servlet-name>
-		<url-pattern>/Showcase/templateAdminService/*</url-pattern>
+		<servlet-name>templateManager</servlet-name>
+		<url-pattern>/Showcase/templateManager/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

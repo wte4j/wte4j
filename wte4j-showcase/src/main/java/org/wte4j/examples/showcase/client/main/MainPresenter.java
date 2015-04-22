@@ -20,9 +20,9 @@ import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentDisplay;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPresenter;
-import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListDisplay;
-import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListPanel;
-import org.wte4j.examples.showcase.client.templatelist.TemplateAdminListPresenter;
+import org.wte4j.examples.showcase.client.management.TemplateManagerDisplay;
+import org.wte4j.examples.showcase.client.management.TemplateManagerPanel;
+import org.wte4j.examples.showcase.client.management.TemplateManagerPresenter;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
 
@@ -65,8 +65,8 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		TemplateAdminListDisplay contentDisplay = new TemplateAdminListPanel();
-		TemplateAdminListPresenter contentPresenter = new TemplateAdminListPresenter();
+		TemplateManagerDisplay contentDisplay = new TemplateManagerPanel();
+		TemplateManagerPresenter contentPresenter = new TemplateManagerPresenter();
 		contentPresenter.bind(contentDisplay);
 		
 		mainDisplay.setMainContent(contentDisplay);

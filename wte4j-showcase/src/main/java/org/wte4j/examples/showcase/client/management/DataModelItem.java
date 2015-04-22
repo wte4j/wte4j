@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client.templatelist;
+package org.wte4j.examples.showcase.client.management;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -21,7 +21,6 @@ public class DataModelItem {
 
 	private String text;
 	private ClickHandler clickHandler;
-	private boolean active;
 
 	public String getText() {
 		return text;
@@ -38,13 +37,4 @@ public class DataModelItem {
 	public void setClickHandler(ClickHandler clickHandler) {
 		this.clickHandler = clickHandler;
 	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 }

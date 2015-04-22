@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client.templatelist;
+package org.wte4j.examples.showcase.client.management;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.wte4j.examples.showcase.client.Application;
 import org.wte4j.examples.showcase.client.GrowlFactory;
-import org.wte4j.examples.showcase.shared.service.TemplateServiceAsync;
-import org.wte4j.ui.client.templates.TemplateListPanel;
+import org.wte4j.examples.showcase.shared.service.TemplateManagerServiceAsync;
+import org.wte4j.ui.client.templates.TemplateListDisplay;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,16 +29,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class TemplateAdminListPresenter {
+public class TemplateManagerPresenter {
 
-	private TemplateServiceAsync templateService = TemplateServiceAsync.Util
+	private TemplateManagerServiceAsync templateService = TemplateManagerServiceAsync.Util
 			.getInstance();
 
-	private TemplateAdminListDisplay display;
+	private TemplateManagerDisplay display;
 
 	private TemplateListPresenter displayTemplatesPresenter;
 
-	public void bind(TemplateAdminListDisplay aDisplay) {
+	public void bind(TemplateManagerDisplay aDisplay) {
 		if (display != null) {
 			throw new IllegalStateException("presenter is already bound");
 		}
@@ -67,10 +67,9 @@ public class TemplateAdminListPresenter {
 	}
 
 	private void bindTemplateList() {
-		TemplateListPanel displayTemplatesPanel = new TemplateListPanel();
+		TemplateListDisplay displayTemplatesDisplay = display.getTemplateListDisplay();
 		displayTemplatesPresenter = new TemplateListPresenter();
-		displayTemplatesPresenter.bindTo(displayTemplatesPanel);
-		display.setTemplateListPanel(displayTemplatesPanel);
+		displayTemplatesPresenter.bindTo(displayTemplatesDisplay);
 		displayTemplatesPresenter.loadData();
 	}
 
@@ -107,47 +106,50 @@ public class TemplateAdminListPresenter {
 	DataModelItem createDataModelItem(String dataModel) {
 		DataModelItem dataModelItem = new DataModelItem();
 		dataModelItem.setText(dataModel);
-		dataModelItem.setClickHandler(new DataModelClickHandler(dataModelItem));
+		dataModelItem.setClickHandler(new DataModelClickHandler(dataModel));
 		return dataModelItem;
 	}
 
 	private class DataModelClickHandler implements ClickHandler {
 
-		private DataModelItem dataModel;
+		private String dataModel;
 
-		public DataModelClickHandler(DataModelItem dataModelItem) {
-			this.dataModel = dataModelItem;
+		public DataModelClickHandler(String dataModel) {
+			this.dataModel = dataModel;
 		}
 
 		@Override
 		public void onClick(ClickEvent event) {
-			display.removeActiveDataModel();
-			dataModel.setActive(true);
-			display.activeDataModelItemChanged();
+			display.setSelectedDataModel(dataModel);
 		}
 	}
 
 	private void createTemplate() {
 		if (display.validate()) {
 			display.showModalLoading();
+			final String dataModel = display.getSelectedDataModel();
 			final String templateName = display.getTemplateName();
-			templateService.createTemplate(display.getActiveDataModel(),
-					templateName, new AsyncCallback<Void>() {
-						@Override
-						public void onSuccess(Void nothing) {
-							display.hideModalLoading();
-							display.hideDataModelList();
-							GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
-							displayTemplatesPresenter.loadData();
-						}
-
-						@Override
-						public void onFailure(Throwable e) {
-							display.hideModalLoading();
-							display.displayError(e.getMessage());
-						}
-					});
+			createTemplate(dataModel, templateName);
 		}
+	}
+
+	private void createTemplate(String dataModel, final String templateName) {
+		templateService.createTemplate(dataModel,
+				templateName, new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void nothing) {
+						display.hideModalLoading();
+						display.hideDataModelList();
+						GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
+						displayTemplatesPresenter.loadData();
+					}
+
+					@Override
+					public void onFailure(Throwable e) {
+						display.hideModalLoading();
+						display.displayError(e.getMessage());
+					}
+				});
 	}
 
 }
