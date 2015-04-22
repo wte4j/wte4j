@@ -33,6 +33,7 @@ import org.wte4j.impl.service.FlatBeanModelService;
 import org.wte4j.ui.server.config.Wte4jAdminConfig;
 import org.wte4j.ui.server.services.MessageFactory;
 import org.wte4j.ui.server.services.MessageFactoryImpl;
+import org.wte4j.ui.server.services.ServiceContext;
 
 @Configuration
 @Import(Wte4jAdminConfig.class)
@@ -41,6 +42,10 @@ public class Wte4jConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
+	
+	@Autowired
+	private ServiceContext serviceContext;
+	
 	@Bean
 	@Qualifier("wte4j")
 	public LocalContainerEntityManagerFactoryBean wteEntityManagerFactory() {
@@ -55,8 +60,8 @@ public class Wte4jConfiguration {
 	@Qualifier("wte4j-showcase")
 	public MessageFactory messageFactory() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("org.wte4j.example.showcase.shared.Messages");
-		return new MessageFactoryImpl(messageSource);
+		messageSource.setBasename("org.wte4j.examples.showcase.shared.Messages");
+		return new MessageFactoryImpl(messageSource, serviceContext);
 	}
 
 	@Bean

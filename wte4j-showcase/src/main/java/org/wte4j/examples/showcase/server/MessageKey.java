@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client;
+package org.wte4j.examples.showcase.server;
 
 public enum MessageKey {
 	TEMPLATE_NAME_NOT_EMPTY,

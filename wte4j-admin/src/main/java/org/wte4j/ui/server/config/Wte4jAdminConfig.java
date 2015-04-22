@@ -15,6 +15,7 @@
  */
 package org.wte4j.ui.server.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -31,10 +32,11 @@ import org.wte4j.ui.server.services.SimpleServiceContext;
 public class Wte4jAdminConfig {
 
 	@Bean
-	public MessageFactory messageFactory() {
+	@Autowired
+	public MessageFactory messageFactory(ServiceContext serviceContext) {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("org.wte4j.ui.shared.Messages");
-		return new MessageFactoryImpl(messageSource);
+		return new MessageFactoryImpl(messageSource, serviceContext);
 	}
 
 	@Bean
