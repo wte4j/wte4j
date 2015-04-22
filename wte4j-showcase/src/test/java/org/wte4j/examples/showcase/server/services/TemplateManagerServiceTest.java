@@ -11,13 +11,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.wte4j.Template;
 import org.wte4j.TemplateRepository;
 import org.wte4j.examples.showcase.IntegrationTestApplicationConfig;
 import org.wte4j.examples.showcase.server.MessageKey;
+import org.wte4j.examples.showcase.server.config.WebContextTestExecutionListener;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
 import org.wte4j.examples.showcase.shared.TemplateManagerServiceException;
 import org.wte4j.examples.showcase.shared.service.TemplateManagerService;
@@ -25,10 +28,11 @@ import org.wte4j.ui.server.services.MessageFactory;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@Transactional
 @ContextConfiguration(classes = { IntegrationTestApplicationConfig.class })
-public class TemplateManagerServiceTest {
+@TestExecutionListeners({WebContextTestExecutionListener.class,
+    DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class})
+public class TemplateManagerServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Autowired
 	private TemplateManagerService templateManagerService;
