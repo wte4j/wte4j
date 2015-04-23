@@ -26,10 +26,8 @@ public class FileUploadResponseFactoryImpl implements FileUploadResponseFactory 
 	MessageFactory messageFactory;
 	
 	@Override
-	public FileUploadResponseDto createErrorResponse(MessageKey messageKey) {
-		FileUploadResponseDto response = createResponse(messageKey);
-		response.setDone(false);
-		return response;
+	public String createJsonSuccessResponse(MessageKey messageKey) {
+		return createSuccessResponse(messageKey).toJson();
 	}
 	
 	@Override
@@ -39,20 +37,22 @@ public class FileUploadResponseFactoryImpl implements FileUploadResponseFactory 
 		return response;
 	}
 	
+	@Override
+	public String createJsonErrorResponse(MessageKey messageKey) {
+		return createErrorResponse(messageKey).toJson();
+	}
+	
+	@Override
+	public FileUploadResponseDto createErrorResponse(MessageKey messageKey) {
+		FileUploadResponseDto response = createResponse(messageKey);
+		response.setDone(false);
+		return response;
+	}
+	
 	private FileUploadResponseDto createResponse(MessageKey messageKey) {
 		FileUploadResponseDto response = new FileUploadResponseDto();
 		String message = messageFactory.createMessage(messageKey.getValue());
 		response.setMessage(message);
 		return response;
-	}
-
-	@Override
-	public String createJsonSuccessResponse(MessageKey messageKey) {
-		return createSuccessResponse(messageKey).toJson();
-	}
-	
-	@Override
-	public String createJsonErrorResponse(MessageKey messageKey) {
-		return createErrorResponse(messageKey).toJson();
 	}
 }
