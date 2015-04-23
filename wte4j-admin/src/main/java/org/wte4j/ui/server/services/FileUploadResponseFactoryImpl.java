@@ -16,11 +16,13 @@
 package org.wte4j.ui.server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.wte4j.ui.shared.FileUploadResponseDto;
 
 public class FileUploadResponseFactoryImpl implements FileUploadResponseFactory {
 
 	@Autowired
+	@Qualifier("wte4j-admin")
 	MessageFactory messageFactory;
 	
 	@Override

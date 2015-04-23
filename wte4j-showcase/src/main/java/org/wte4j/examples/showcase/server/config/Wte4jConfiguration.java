@@ -42,7 +42,6 @@ public class Wte4jConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
-	
 	@Autowired
 	private ServiceContext serviceContext;
 	
@@ -58,7 +57,7 @@ public class Wte4jConfiguration {
 	
 	@Bean
 	@Qualifier("wte4j-showcase")
-	public MessageFactory messageFactory() {
+	public MessageFactory messageFactoryShowcase() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("org.wte4j.examples.showcase.shared.Messages");
 		return new MessageFactoryImpl(messageSource, serviceContext);
