@@ -41,6 +41,6 @@ public interface TemplateListDisplay extends IsWidget {
 
 	void setDeleteCommand(ClickHandler command);
 
-	void setContextCloseHandler(CloseHandler<PopupPanel> handler);
+	void addContextMenuCloseHandler(CloseHandler<PopupPanel> handler);
 
 }

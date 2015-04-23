@@ -130,7 +130,7 @@ public class TemplateListPresenter {
 			}
 		});
 
-		display.setContextCloseHandler(new CloseHandler<PopupPanel>() {
+		display.addContextMenuCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
 				selectionModel.clear();
