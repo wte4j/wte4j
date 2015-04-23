@@ -18,18 +18,18 @@ package org.wte4j.ui.client.templates.upload;
 import static org.wte4j.ui.client.Application.LABELS;
 
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.SubmitButton;
 import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -54,21 +54,18 @@ public class TemplateUploadFormPanel extends Composite implements
 	@UiField
 	Hidden templateLanguage;
 
+	@UiField
+	Image loadingSpinner;
+
 	private static TemplateUploadFormPanelUiBInder uiBinder = GWT
 			.create(TemplateUploadFormPanelUiBInder.class);
 
-	private TemplateUploadPresenter templateUploadPresenter;
 	private TemplateDto currentTemplate;
 	private String templateUploadRestURL;
 
 	public TemplateUploadFormPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initButtons();
-	}
-
-	@Override
-	public void setPresenter(TemplateUploadPresenter templateUploadPresenter) {
-		this.templateUploadPresenter = templateUploadPresenter;
 	}
 
 	@Override
@@ -79,22 +76,30 @@ public class TemplateUploadFormPanel extends Composite implements
 		dataChanged();
 	}
 
-	@UiHandler("submitButton")
-	void onSubmitButtonClicked(ClickEvent clickEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onSubmitButtonClick(clickEvent);
+	@Override
+	public void setSpinnerVisible(boolean value) {
+		loadingSpinner.setVisible(value);
 	}
 
-	@UiHandler("cancelButton")
-	void onCancelButtonClicked(ClickEvent clickEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onCancelButtonClick(clickEvent);
+	@Override
+	public void setSubmitButtonEnabled(boolean enabled) {
+		submitButton.setEnabled(enabled);
 	}
 
-	@UiHandler("formPanel")
-	void onSubmitComplete(SubmitCompleteEvent submitCompleteEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onSubmitComplete(submitCompleteEvent);
+	@Override
+	public void addSubmitButtonClickHandler(ClickHandler clickHandler) {
+		submitButton.addClickHandler(clickHandler);
+
+	}
+
+	@Override
+	public void addCancelButtonClickHandler(ClickHandler clickHandler) {
+		cancelButton.addClickHandler(clickHandler);
+	}
+
+	@Override
+	public void addSubmitCompleteHandler(SubmitCompleteHandler handler) {
+		formPanel.addSubmitCompleteHandler(handler);
 	}
 
 	private void initButtons() {

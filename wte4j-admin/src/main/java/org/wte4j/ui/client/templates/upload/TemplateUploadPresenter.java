@@ -27,12 +27,11 @@ import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 
 public class TemplateUploadPresenter {
 	private TemplateUploadDisplay templateUploadDisplay;
 	private List<FileUploadedHandler> fileUploadedHandlers;
-	private List<ClickHandler> submitClickHandlers;
-	private List<ClickHandler> cancelClickHandlers;
 	private TemplateDto currentTemplate;
 	private String templateUploadRestURL;
 
@@ -43,48 +42,43 @@ public class TemplateUploadPresenter {
 		initHandlers();
 	}
 
-	public void addSubmitButtonClickHandler(ClickHandler clickHandler) {
-		submitClickHandlers.add(clickHandler);
-	}
-
-	public void addCancelButtonClickHandler(ClickHandler clickHandler) {
-		cancelClickHandlers.add(clickHandler);
-	}
-
 	public void addFileUploadedHandler(FileUploadedHandler fileUploadedHandler) {
 		fileUploadedHandlers.add(fileUploadedHandler);
 	}
 
-	public void bindTo(TemplateUploadDisplay templateUploadDisplay) {
-		this.templateUploadDisplay = templateUploadDisplay;
+	public void bindTo(TemplateUploadDisplay aTemplateUploadDisplay) {
+		this.templateUploadDisplay = aTemplateUploadDisplay;
 		this.templateUploadDisplay.setData(currentTemplate,
 				templateUploadRestURL);
-		this.templateUploadDisplay.setPresenter(this);
-	}
 
-	public void onSubmitButtonClick(ClickEvent clickEvent) {
-		for (ClickHandler clickHandler : submitClickHandlers)
-			clickHandler.onClick(clickEvent);
-	}
+		templateUploadDisplay.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				onFileUploaded(event);
+			}
+		});
 
-	public void onCancelButtonClick(ClickEvent clickEvent) {
-		for (ClickHandler clickHandler : cancelClickHandlers)
-			clickHandler.onClick(clickEvent);
-	}
+		templateUploadDisplay.addCancelButtonClickHandler(new ClickHandler() {
 
-	public void onSubmitComplete(SubmitCompleteEvent submitCompleteEvent) {
-		FileUploadResponse response = parseResponse(submitCompleteEvent.getResults());
-		if (response.getDone()) {
-			fireSuccessfulFileUpload(response.getMessage());
-		}
-		else {
-			fireFailedFileUpload(response.getMessage());
-		}
+			@Override
+			public void onClick(ClickEvent event) {
+				templateUploadDisplay.setSpinnerVisible(false);
+
+			}
+		});
+
+		templateUploadDisplay.addSubmitButtonClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				templateUploadDisplay.setSubmitButtonEnabled(false);
+				templateUploadDisplay.setSpinnerVisible(true);
+
+			}
+		});
 	}
 
 	private void initHandlers() {
-		submitClickHandlers = new ArrayList<ClickHandler>();
-		cancelClickHandlers = new ArrayList<ClickHandler>();
 		fileUploadedHandlers = new ArrayList<FileUploadedHandler>();
 	}
 
@@ -98,6 +92,18 @@ public class TemplateUploadPresenter {
 
 		}
 		return new FileUploadResponseDto(false, results);
+	}
+
+	private void onFileUploaded(SubmitCompleteEvent event) {
+		templateUploadDisplay.setSpinnerVisible(false);
+		templateUploadDisplay.setSubmitButtonEnabled(true);
+		FileUploadResponse response = parseResponse(event.getResults());
+		if (response.getDone()) {
+			fireSuccessfulFileUpload(response.getMessage());
+		}
+		else {
+			fireFailedFileUpload(response.getMessage());
+		}
 	}
 
 	private void fireFailedFileUpload(String errorMessage) {
@@ -123,12 +129,12 @@ public class TemplateUploadPresenter {
 		}
 
 		public final native boolean getDone()/*-{
-			return this.done;
-		}-*/;
+												return this.done;
+												}-*/;
 
 		public final native String getMessage() /*-{
-			return this.message;
-		}-*/;
+												return this.message;
+												}-*/;
 
 	}
 }
