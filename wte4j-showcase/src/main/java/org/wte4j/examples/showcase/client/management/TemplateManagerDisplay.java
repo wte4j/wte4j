@@ -18,40 +18,37 @@ package org.wte4j.examples.showcase.client.management;
 import java.util.List;
 
 import org.wte4j.ui.client.templates.TemplateListDisplay;
-import org.wte4j.ui.client.templates.TemplateListPanel;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface TemplateManagerDisplay extends IsWidget {
-
-	void showDataModelList();
-
-	void hideDataModelList();
-
+	
+	void addAddTemplateClickHandler(ClickHandler clickHandler);
+	
 	void setDataModelListItems(List<DataModelItem> dataModelItems);
 
-	void addAddTemplateClickHandler(ClickHandler clickHandler);
+	void showAddTemplateDialog();
 
+	void hideAddTemplateDialog();
+	
 	String getTemplateName();
-
-	void addCloseDialogClickHandler(ClickHandler clickHandler);
-
-	void addCreateTemplateClickHandler(ClickHandler clickHandler);
-
+	
 	String getSelectedDataModel();
-
-	boolean validate();
-
-	void showSpinner();
-
-	void hideSpinner();
-
-	void displayError(String message);
-
-	void setTemplateListPanel(TemplateListPanel displayTemplatesPanel);
-
+	
 	void setSelectedDataModel(String dataModel);
+	
+	boolean validateAddTemplateForm();
+	
+	void showSpinner();
+	
+	void hideSpinner();
+	
+	void displayAddTemplateError(String message);
+	
+	void addCloseDialogClickHandler(ClickHandler clickHandler);
+	
+	void addCreateTemplateClickHandler(ClickHandler clickHandler);
 
 	TemplateListDisplay getTemplateListDisplay();
 }

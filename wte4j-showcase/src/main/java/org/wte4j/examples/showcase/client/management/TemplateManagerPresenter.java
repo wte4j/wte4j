@@ -53,7 +53,7 @@ public class TemplateManagerPresenter {
 
 			@Override
 			public void onClick(ClickEvent arg0) {
-				display.hideDataModelList();
+				display.hideAddTemplateDialog();
 			}
 		});
 
@@ -92,7 +92,7 @@ public class TemplateManagerPresenter {
 					dataModelItems.add(createDataModelItem(dataModel));
 				}
 				display.setDataModelListItems(dataModelItems);
-				display.showDataModelList();
+				display.showAddTemplateDialog();
 			}
 
 			@Override
@@ -125,7 +125,7 @@ public class TemplateManagerPresenter {
 	}
 
 	private void createTemplate() {
-		if (display.validate()) {
+		if (display.validateAddTemplateForm()) {
 			display.showSpinner();
 			final String dataModel = display.getSelectedDataModel();
 			final String templateName = display.getTemplateName();
@@ -139,7 +139,7 @@ public class TemplateManagerPresenter {
 					@Override
 					public void onSuccess(Void nothing) {
 						display.hideSpinner();
-						display.hideDataModelList();
+						display.hideAddTemplateDialog();
 						GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
 						displayTemplatesPresenter.loadData();
 					}
@@ -147,7 +147,7 @@ public class TemplateManagerPresenter {
 					@Override
 					public void onFailure(Throwable e) {
 						display.hideSpinner();
-						display.displayError(e.getMessage());
+						display.displayAddTemplateError(e.getMessage());
 					}
 				});
 	}

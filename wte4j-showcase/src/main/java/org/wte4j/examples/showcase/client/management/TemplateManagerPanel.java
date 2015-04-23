@@ -95,6 +95,7 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 
 	private void initTemplateList() {
 		templateListDisplay = new TemplateListPanel();
+		templateList.clear();
 		templateList.add(templateListDisplay);
 	}
 
@@ -151,14 +152,14 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 	}
 
 	@Override
-	public void showDataModelList() {
+	public void showAddTemplateDialog() {
 		templateName.clear();
 		alertBox.clear();
 		dialog.show();
 	}
 
 	@Override
-	public void hideDataModelList() {
+	public void hideAddTemplateDialog() {
 		dialog.hide();
 	}
 	
@@ -169,7 +170,7 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 
 	@Override
 	public void addAddTemplateClickHandler(ClickHandler clickHandler) {
-		addTemplate.addClickHandler(clickHandler);;
+		addTemplate.addClickHandler(clickHandler);
 	}
 	
 	@Override
@@ -183,7 +184,7 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 	}
 	
 	@Override
-	public boolean validate() {
+	public boolean validateAddTemplateForm() {
 		return createTemplateForm.validate() && isOneDataModelActive();
 	}
 
@@ -199,7 +200,7 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 			}
 		}
 		if (!oneDataModel)
-			displayError(Application.MESSAGES.wte4j_message_one_data_model_selected());
+			displayAddTemplateError(Application.MESSAGES.wte4j_message_one_data_model_selected());
 		return oneDataModel;
 	}
 	
@@ -239,16 +240,10 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 	}
 	
 	@Override
-	public void displayError(String message) {
+	public void displayAddTemplateError(String message) {
 		Alert infoAlert = new Alert(message, AlertType.DANGER);
 		infoAlert.setDismissable(true);
 		alertBox.add(infoAlert);
-	}
-	
-	@Override
-	public void setTemplateListPanel(TemplateListPanel displayTemplatesPanel) {
-		templateList.clear();
-		templateList.add(displayTemplatesPanel);
 	}
 	
 	@Override
