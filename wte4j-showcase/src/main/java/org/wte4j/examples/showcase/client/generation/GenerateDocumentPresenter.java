@@ -43,7 +43,7 @@ public class GenerateDocumentPresenter {
 
 	public void bind(GenerateDocumentDisplay aDisplay) {
 		if (display != null) {
-			throw new IllegalStateException("presenter is allready bound");
+			throw new IllegalStateException("presenter is already bound");
 		}
 		display = aDisplay;
 		bindOrderContainer();

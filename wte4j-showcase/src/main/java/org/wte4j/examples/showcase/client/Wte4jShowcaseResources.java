@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *  Root package for classes used on client side and compiled to javascript
- */
 package org.wte4j.examples.showcase.client;
 
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
+
+public interface Wte4jShowcaseResources extends ClientBundle {
+	@Source("images/loading-spinner.gif")
+	ImageResource loadingSpinner();
+}

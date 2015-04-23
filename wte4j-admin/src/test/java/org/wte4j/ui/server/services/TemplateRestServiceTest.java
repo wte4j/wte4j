@@ -16,7 +16,6 @@
 package org.wte4j.ui.server.services;
 
 import static org.junit.Assert.assertTrue;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +26,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -110,6 +110,7 @@ public class TemplateRestServiceTest {
 		}
 
 		@Bean
+		@Qualifier("wte4j-admin")
 		public MessageFactory messageFactory() {
 			MessageFactory messageFactory = Mockito.mock(MessageFactory.class);
 			when(messageFactory.createMessage(anyString())).then(new Answer<String>() {

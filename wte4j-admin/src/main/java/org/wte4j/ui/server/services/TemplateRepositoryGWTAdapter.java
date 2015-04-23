@@ -22,6 +22,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.wte4j.LockingException;
 import org.wte4j.Template;
@@ -42,6 +43,7 @@ public class TemplateRepositoryGWTAdapter extends RemoteServiceServlet implement
 	private ServiceContext serviceContext;
 
 	@Autowired
+	@Qualifier("wte4j-admin")
 	private MessageFactory messageFactory;
 
 	@Autowired

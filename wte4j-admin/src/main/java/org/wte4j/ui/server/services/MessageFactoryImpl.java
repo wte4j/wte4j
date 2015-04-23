@@ -19,15 +19,14 @@ import org.springframework.context.MessageSource;
 
 public class MessageFactoryImpl implements MessageFactory {
 
-	public MessageFactoryImpl(MessageSource messageSource, ServiceContext serviceContext) {
-		super();
-		this.messageSource = messageSource;
-		this.serviceContext = serviceContext;
-	}
-
 	private MessageSource messageSource;
 
 	private ServiceContext serviceContext;
+	
+	public MessageFactoryImpl(MessageSource messageSource, ServiceContext serviceContext) {
+		this.messageSource = messageSource;
+		this.serviceContext = serviceContext;
+	}
 
 	@Override
 	public String createMessage(String key) {

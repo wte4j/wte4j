@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter;
@@ -30,6 +31,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.wte4j.WteModelService;
 import org.wte4j.impl.service.FlatBeanModelService;
 import org.wte4j.ui.server.config.Wte4jAdminConfig;
+import org.wte4j.ui.server.services.MessageFactory;
+import org.wte4j.ui.server.services.MessageFactoryImpl;
+import org.wte4j.ui.server.services.ServiceContext;
 
 @Configuration
 @Import(Wte4jAdminConfig.class)
@@ -38,6 +42,9 @@ public class Wte4jConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private ServiceContext serviceContext;
+	
 	@Bean
 	@Qualifier("wte4j")
 	public LocalContainerEntityManagerFactoryBean wteEntityManagerFactory() {
@@ -46,6 +53,14 @@ public class Wte4jConfiguration {
 		emfFactoryBean.setJpaVendorAdapter(new OpenJpaVendorAdapter());
 		emfFactoryBean.setPersistenceUnitName("wte4j-templates");
 		return emfFactoryBean;
+	}
+	
+	@Bean
+	@Qualifier("wte4j-showcase")
+	public MessageFactory messageFactoryShowcase() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("org.wte4j.examples.showcase.shared.Messages");
+		return new MessageFactoryImpl(messageSource, serviceContext);
 	}
 
 	@Bean

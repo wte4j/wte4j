@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.wte4j.examples.showcase.server;
 
-/**
- * Root package for classes used on client side and compiled to javascript or server side like data transfer objects or service interfaces
- */
-package org.wte4j.examples.showcase.shared;
+public enum MessageKey {
+	TEMPLATE_NAME_NOT_EMPTY,
+	DATA_MODEL_NOT_FOUND,
+	TEMPLATE_EXISTS_ALREADY;
 
+	private static final String WTE4J_MESSAGE_BASE = "wte4j.message.";
+	private final String value;
+
+	private MessageKey() {
+		value = WTE4J_MESSAGE_BASE + this.name().toLowerCase();
+	}
+
+	public String getValue() {
+		return value;
+	}
+}

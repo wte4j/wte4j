@@ -13,8 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Root package for server side classes
- */
-package org.wte4j.examples.showcase.server;
+package org.wte4j.examples.showcase.client;
 
+import org.gwtbootstrap3.extras.growl.client.ui.Growl;
+import org.gwtbootstrap3.extras.growl.client.ui.GrowlOptions;
+import org.gwtbootstrap3.extras.growl.client.ui.GrowlPosition;
+import org.gwtbootstrap3.extras.growl.client.ui.GrowlType;
+
+public class GrowlFactory {
+	public static void success(String message) {
+		GrowlOptions go = new GrowlOptions();
+		go.setPosition(GrowlPosition.TOP_CENTER);
+		go.setType(GrowlType.SUCCESS);
+		Growl.growl(message, go);
+	}
+}

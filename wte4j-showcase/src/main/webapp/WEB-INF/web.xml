@@ -45,6 +45,15 @@
 		<servlet-name>gwtRemoteOrderService</servlet-name>
 		<url-pattern>/Showcase/orderService/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>templateManager</servlet-name>
+		<servlet-class>org.wte4j.examples.showcase.server.services.TemplateManagerServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>templateManager</servlet-name>
+		<url-pattern>/Showcase/templateManager/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
