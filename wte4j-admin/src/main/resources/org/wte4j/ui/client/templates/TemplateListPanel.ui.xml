@@ -1,14 +1,21 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+	xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt" >
+	
+	<ui:style>
+		.wte4jAdminContextMenu{
+			border: none;
+			padding: 0px;
+			background-color: transparent;
+		}
+	
+	</ui:style>
 
-	<g:FlowPanel ui:field="tablePanel" width="100%">	
-		<c:CellTable ui:field="templateTable" />
-		<c:AbstractPager ui:field="tablePager" />
-		
-
-	</g:FlowPanel>
-
-
+	<b.gwt:FlowPanel ui:field="tablePanel">		
+		<b.gwt:CellTable ui:field="templateTable" bordered="false"	condensed="true" striped="true" hover="true" pageSize="10"  />
+		<b:Pagination ui:field="templateTablePagination" paginationSize="SMALL" />
+		<g:PopupPanel ui:field="contextPanel" visible="false" addStyleNames='{style.wte4jAdminContextMenu}' modal="true" autoHideEnabled="true" />	
+	</b.gwt:FlowPanel>
 </ui:UiBinder> 

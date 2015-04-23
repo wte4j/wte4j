@@ -129,7 +129,6 @@
 				<version>3.0.1</version>
 				<scope>provided</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>javax.servlet.jsp</groupId>
 				<artifactId>jsp-api</artifactId>
@@ -181,12 +180,22 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-dbcp2</artifactId>
+				<version>2.1</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
-			</dependency>
-
-			<!-- ===== Springframework ====== -->
+			</dependency>			<!-- ===== Springframework ====== -->
 
 
 			<dependency>
@@ -229,17 +238,6 @@
 				<artifactId>hsqldb</artifactId>
 				<version>2.3.2</version>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-dbcp2</artifactId>
-				<version>2.1</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>	
 
 			<!-- logging -->
 
@@ -260,6 +258,15 @@
 				<artifactId>slf4j-jdk14</artifactId>
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
+			</dependency>
+			
+			<!-- GWT -->
+
+			<dependency>
+				<groupId>org.gwtbootstrap3</groupId>
+				<artifactId>gwtbootstrap3</artifactId>
+				<version>0.9</version>
+				<scope>provided</scope>
 			</dependency>
 
 		</dependencies>

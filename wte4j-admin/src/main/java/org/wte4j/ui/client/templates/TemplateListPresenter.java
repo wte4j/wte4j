@@ -18,8 +18,11 @@ package org.wte4j.ui.client.templates;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
 import org.wte4j.ui.client.Application;
-import org.wte4j.ui.client.MessageDialog;
+import org.wte4j.ui.client.dialog.DialogType;
+import org.wte4j.ui.client.dialog.MessageDialog;
 import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
 import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter;
@@ -29,18 +32,19 @@ import org.wte4j.ui.shared.TemplateService;
 import org.wte4j.ui.shared.TemplateServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 public class TemplateListPresenter {
 
@@ -52,20 +56,22 @@ public class TemplateListPresenter {
 	private TemplateListDisplay display;
 	private TemplateDto current;
 
-	private NoSelectionModel<TemplateDto> selectionModel;
+	private SingleSelectionModel<TemplateDto> selectionModel;
 	private ListDataProvider<TemplateDto> dataProvider;
 
 	public TemplateListPresenter() {
-		((ServiceDefTarget)templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
-		selectionModel = new NoSelectionModel<TemplateDto>();
+		((ServiceDefTarget) templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
+		selectionModel = new SingleSelectionModel<TemplateDto>();
 		selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				current = selectionModel.getLastSelectedObject();
-				boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
-				logger.fine("current template locking status = " + isCurrentTemplateLocked);
-				display.setLockCommandVisible(!isCurrentTemplateLocked);
-				display.setUnLockCommandVisible(isCurrentTemplateLocked);
+				current = selectionModel.getSelectedObject();
+				if (current != null) {
+					boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
+					logger.fine("current template locking status = " + isCurrentTemplateLocked);
+					display.setLockCommandVisible(!isCurrentTemplateLocked);
+					display.setUnLockCommandVisible(isCurrentTemplateLocked);
+				}
 			}
 		});
 		dataProvider = new ListDataProvider<TemplateDto>();
@@ -82,44 +88,52 @@ public class TemplateListPresenter {
 		display.getDataContainer().setSelectionModel(selectionModel);
 		dataProvider.addDataDisplay(display.getDataContainer());
 
-		display.setDowndLoadCommand(new ScheduledCommand() {
+		display.setDowndLoadCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				downLoadTemplate();
+
 			}
 		});
 
-		display.setLockCommand(new ScheduledCommand() {
+		display.setLockCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				lockTemplate();
 
 			}
 		});
 
-		display.setUnlockCommand(new ScheduledCommand() {
+		display.setUnlockCommand(new ClickHandler() {
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				unlockTemplate();
 
 			}
 		});
-		display.setDeleteCommand(new ScheduledCommand() {
+		display.setDeleteCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				deleteTemplate();
 
 			}
 		});
-		display.setUpdateCommand(new ScheduledCommand() {
+		display.setUpdateCommand(new ClickHandler() {
 
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				updateTemplate();
 
+			}
+		});
+
+		display.addContextMenuCloseHandler(new CloseHandler<PopupPanel>() {
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				selectionModel.clear();
 			}
 		});
 
@@ -138,9 +152,7 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				MessageDialog dialog = new MessageDialog("", caught
-						.getMessage(), MessageDialog.ERROR);
-				dialog.show();
+				showError("", caught.getMessage());
 			}
 		});
 	}
@@ -149,9 +161,9 @@ public class TemplateListPresenter {
 		final TemplateDto toRemove = current;
 		String documentName = toRemove.getDocumentName();
 		MessageDialog deleteConfirmationDialog = new MessageDialog(
-				documentName, 
-				Application.LABELS.deleteConfirmation(documentName), 
-				MessageDialog.QUESTION, 
+				documentName,
+				Application.LABELS.deleteConfirmation(documentName),
+				DialogType.QUESTION,
 				getDeleteTemplateConfirmationOkHandler(toRemove));
 		deleteConfirmationDialog.show();
 	}
@@ -216,21 +228,20 @@ public class TemplateListPresenter {
 
 	void updateTemplate() {
 
-		PopupPanel updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
+		Modal updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
 		updateTemplatePopupPanel.show();
 	}
 
-	private PopupPanel getUpdateTemplatePopupPanel() {
-		final PopupPanel updateTemplatePopupPanel = new PopupPanel();
-
-		updateTemplatePopupPanel.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
-		updateTemplatePopupPanel.setGlassEnabled(true);
-		updateTemplatePopupPanel.center();
-
+	private Modal getUpdateTemplatePopupPanel() {
+		final Modal updateTemplatePopupPanel = new Modal();
+		updateTemplatePopupPanel.setTitle("Update Template " + current.getDocumentName());
+		ModalBody body = new ModalBody();
+		body.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
+		updateTemplatePopupPanel.add(body);
 		return updateTemplatePopupPanel;
 	}
 
-	private TemplateUploadDisplay getUpdateTemplateFormPanel(PopupPanel updateTemplatePopupPanel) {
+	private TemplateUploadDisplay getUpdateTemplateFormPanel(Modal updateTemplatePopupPanel) {
 		TemplateUploadDisplay updateTemplateFormPanel = new TemplateUploadFormPanel();
 		TemplateUploadPresenter templateListPresenter = new TemplateUploadPresenter(current, getTemplateFileRestURL());
 		templateListPresenter.bindTo(updateTemplateFormPanel);
@@ -242,7 +253,7 @@ public class TemplateListPresenter {
 	}
 
 	private FileUploadedHandler getFileUploadedHandler(
-			final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+			final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new FileUploadedHandler() {
 
 			@Override
@@ -261,7 +272,7 @@ public class TemplateListPresenter {
 		};
 	}
 
-	private ClickHandler getSubmitButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private ClickHandler getSubmitButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
 
 			@Override
@@ -280,7 +291,7 @@ public class TemplateListPresenter {
 		return uploadingPanel;
 	}
 
-	private ClickHandler getCancelButtonClickHandler(final PopupPanel updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private ClickHandler getCancelButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
 		return new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
@@ -302,14 +313,14 @@ public class TemplateListPresenter {
 	}
 
 	void showError(String title, String message) {
-		showDialog(title, message, MessageDialog.ERROR);
+		showDialog(title, message, DialogType.ERROR);
 	}
 
 	void showInfo(String title, String message) {
-		showDialog(title, message, MessageDialog.INFO);
+		showDialog(title, message, DialogType.INFO);
 	}
 
-	void showDialog(String title, String message, int dialogType) {
+	void showDialog(String title, String message, DialogType dialogType) {
 		new MessageDialog(title, message, dialogType).show();
 	}
 }

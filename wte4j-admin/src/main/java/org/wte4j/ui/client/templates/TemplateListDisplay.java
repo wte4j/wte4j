@@ -17,26 +17,30 @@ package org.wte4j.ui.client.templates;
 
 import org.wte4j.ui.shared.TemplateDto;
 
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.HasData;
 
 public interface TemplateListDisplay extends IsWidget {
 
 	HasData<TemplateDto> getDataContainer();
 
-	void setDowndLoadCommand(ScheduledCommand command);
+	void setDowndLoadCommand(ClickHandler command);
 
-	void setUpdateCommand(ScheduledCommand command);
+	void setUpdateCommand(ClickHandler command);
 
 	void setUnLockCommandVisible(boolean visible);
 
-	void setUnlockCommand(ScheduledCommand command);
+	void setUnlockCommand(ClickHandler command);
 
 	void setLockCommandVisible(boolean visible);
 
-	void setLockCommand(ScheduledCommand command);
+	void setLockCommand(ClickHandler command);
 
-	void setDeleteCommand(ScheduledCommand command);
+	void setDeleteCommand(ClickHandler command);
+
+	void addContextMenuCloseHandler(CloseHandler<PopupPanel> handler);
 
 }

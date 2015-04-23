@@ -25,6 +25,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
@@ -35,15 +36,15 @@ public class PopupCell<T> implements Cell<T> {
 	private Set<String> consumedEvents;
 
 	public PopupCell(PopupPanel popupPanel, Cell<T> contentCell) {
-		this.contentCell=contentCell;
+		this.contentCell = contentCell;
 		this.popupPanel = popupPanel;
-		
+
 		consumedEvents = new HashSet<String>();
-		if(contentCell.getConsumedEvents() != null){
-			consumedEvents.addAll(contentCell.getConsumedEvents() );
-		}		
+		if (contentCell.getConsumedEvents() != null) {
+			consumedEvents.addAll(contentCell.getConsumedEvents());
+		}
 		consumedEvents.add(BrowserEvents.CLICK);
-		
+
 	}
 
 	@Override
@@ -60,12 +61,24 @@ public class PopupCell<T> implements Cell<T> {
 			return;
 		}
 		final Element domElement = Element.as(eventTarget);
-		popupPanel.setPopupPositionAndShow(new PositionCallback() {			
+		popupPanel.setPopupPositionAndShow(new PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
-				popupPanel.setPopupPosition(domElement.getAbsoluteLeft(), domElement.getAbsoluteTop());
+
+				int positionLeft = domElement.getAbsoluteLeft();
+				int outerleft = domElement.getAbsoluteLeft() + popupPanel.getOffsetWidth();
+				if (outerleft > Window.getClientWidth()) {
+					positionLeft = domElement.getAbsoluteLeft() - popupPanel.getOffsetWidth() + domElement.getOffsetWidth();
+				}
+
+				int positionTop = domElement.getAbsoluteTop();
+				int outerTop = domElement.getAbsoluteTop() + popupPanel.getOffsetWidth();
+				if (outerTop > Window.getClientHeight()) {
+					positionTop = domElement.getAbsoluteTop() - popupPanel.getOffsetHeight() + domElement.getOffsetHeight();
+				}
+				popupPanel.setPopupPosition(positionLeft, positionTop);
 			}
-		});		
+		});
 	}
 
 	public boolean dependsOnSelection() {

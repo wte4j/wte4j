@@ -38,6 +38,7 @@
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
 	<!-- Other module inherits -->
+	<inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='org.wte4j.ui.client.Wte4jAdmin' />

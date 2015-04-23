@@ -15,27 +15,29 @@
  */
 package org.wte4j.ui.client.templates;
 
+import static org.wte4j.ui.client.Application.LABELS;
+
 import java.util.Date;
 
-import org.wte4j.ui.client.cell.CellTableResources;
+import org.gwtbootstrap3.client.ui.Pagination;
+import org.gwtbootstrap3.client.ui.constants.ButtonSize;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
+import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.wte4j.ui.client.cell.PopupCell;
 import org.wte4j.ui.client.templates.contextmenu.TemplateContextMenu;
 import org.wte4j.ui.shared.TemplateDto;
-import static org.wte4j.ui.client.Application.LABELS;
-import static org.wte4j.ui.client.Application.RESOURCES;
 
 import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.AbstractPager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
@@ -47,6 +49,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.RowCountChangeEvent;
 
 public class TemplateListPanel extends Composite implements
 		TemplateListDisplay {
@@ -57,21 +61,25 @@ public class TemplateListPanel extends Composite implements
 	@UiField
 	FlowPanel tablePanel;
 
-	@UiField(provided = true)
-	CellTable<TemplateDto> templateTable = new CellTable<TemplateDto>(20, CellTableResources.RESOURCES);
+	@UiField
+	CellTable<TemplateDto> templateTable;
+
+	@UiField
+	PopupPanel contextPanel;
 
 	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
 	private Column<TemplateDto, String> editorColumn;
 	private Column<TemplateDto, ?> actionColumn;
 
-	@UiField(provided = true)
-	AbstractPager tablePager = new SimplePager();
+	@UiField
+	Pagination templateTablePagination;
+
+	private SimplePager internalPager;
 
 	private DateTimeFormat timeStampFormat = DateTimeFormat
 			.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 
-	private PopupPanel contextPanel;
 	private TemplateContextMenu templateContextMenu;
 
 	private TextColumn<TemplateDto> statusColumn;
@@ -84,13 +92,9 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	private void initContextMenu() {
-
 		templateContextMenu = new TemplateContextMenu();
-		contextPanel = new PopupPanel(true);
 		contextPanel.add(templateContextMenu);
-
 		ClickHandler clickHandler = new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				contextPanel.hide();
@@ -104,13 +108,32 @@ public class TemplateListPanel extends Composite implements
 
 	private void initTemplateTable() {
 		templateTable.addStyleName("wte-cellTable");
-		tablePager.setDisplay(templateTable);
+
+		internalPager = new SimplePager();
+		internalPager.setRangeLimited(true);
+		internalPager.setPageSize(templateTable.getPageSize());
+		internalPager.setDisplay(templateTable);
 
 		initNameColumn();
 		initEditedAtColumn();
 		initEditorColumn();
 		initStatusColumn();
 		initActionColumn();
+
+		templateTable.addRowCountChangeHandler(new RowCountChangeEvent.Handler() {
+
+			@Override
+			public void onRowCountChange(RowCountChangeEvent event) {
+				templateTablePagination.rebuild(internalPager);
+			}
+		});
+
+		templateTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			@Override
+			public void onRangeChange(RangeChangeEvent event) {
+				templateTablePagination.rebuild(internalPager);
+			}
+		});
 	}
 
 	private void initNameColumn() {
@@ -155,15 +178,14 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	private void initActionColumn() {
-
-		ImageResourceCell imageResourceCell = new ImageResourceCell();
-		PopupCell<ImageResource> popupCell = new PopupCell<ImageResource>(
-				contextPanel, imageResourceCell);
-		actionColumn = new Column<TemplateDto, ImageResource>(
+		ButtonCell buttonCell = new ButtonCell(IconType.COG, ButtonType.LINK, ButtonSize.DEFAULT);
+		PopupCell<String> popupCell = new PopupCell<String>(
+				contextPanel, buttonCell);
+		actionColumn = new Column<TemplateDto, String>(
 				popupCell) {
 			@Override
-			public ImageResource getValue(TemplateDto object) {
-				return RESOURCES.contextMenuIcon();
+			public String getValue(TemplateDto object) {
+				return "";
 			}
 		};
 		actionColumn.setCellStyleNames("templates-action-cell");
@@ -197,36 +219,31 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	@Override
-	public void setDowndLoadCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getDownloadAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setDowndLoadCommand(final ClickHandler command) {
+		templateContextMenu.getDownloadAction().addClickHandler(wrapClickHandler(command));
 	}
 
 	@Override
-	public void setUpdateCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUpdateAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
-
-	}
-
-	@Override
-	public void setUnlockCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getUnlockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setUpdateCommand(ClickHandler command) {
+		templateContextMenu.getUpdateAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
 	@Override
-	public void setLockCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getLockAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setUnlockCommand(ClickHandler command) {
+		templateContextMenu.getUnlockAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
 	@Override
-	public void setDeleteCommand(ScheduledCommand command) {
-		ScheduledCommand decoretedCommandWithCloseContextMenu = decorateCommandWithCloseContextMenu(command);
-		templateContextMenu.getDeleteAction().setScheduledCommand(decoretedCommandWithCloseContextMenu);
+	public void setLockCommand(ClickHandler command) {
+		templateContextMenu.getLockAction().addClickHandler(wrapClickHandler(command));
+
+	}
+
+	@Override
+	public void setDeleteCommand(ClickHandler command) {
+		templateContextMenu.getDeleteAction().addClickHandler(wrapClickHandler(command));
 
 	}
 
@@ -241,6 +258,11 @@ public class TemplateListPanel extends Composite implements
 		templateContextMenu.getLockAction().setVisible(visible);
 	}
 
+	@Override
+	public void addContextMenuCloseHandler(CloseHandler<PopupPanel> handler) {
+		contextPanel.addCloseHandler(handler);
+	}
+
 	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
 		return new ScheduledCommand() {
 			@Override
@@ -251,8 +273,18 @@ public class TemplateListPanel extends Composite implements
 		};
 	}
 
-	interface TemplateTablePanelUiBInder extends
-			UiBinder<Widget, TemplateListPanel> {
+	private ClickHandler wrapClickHandler(final ClickHandler toWrap) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				contextPanel.hide();
+				toWrap.onClick(event);
+
+			}
+		};
+	}
+
+	interface TemplateTablePanelUiBInder extends UiBinder<Widget, TemplateListPanel> {
 	}
 
 }

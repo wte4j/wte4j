@@ -175,6 +175,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId> ${project.parent.groupId}</groupId>
 			<artifactId>wte4j-admin</artifactId>
 			<version>${project.version}</version>
@@ -187,16 +192,27 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
 
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
