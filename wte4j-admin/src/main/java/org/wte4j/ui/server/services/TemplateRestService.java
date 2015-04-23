@@ -51,7 +51,7 @@ public class TemplateRestService {
 	@Autowired
 	@Qualifier("wte4j-admin")
 	private MessageFactory messageFactory;
-	
+
 	@Autowired
 	private FileUploadResponseFactory fileUploadResponseFactory;
 
@@ -72,7 +72,7 @@ public class TemplateRestService {
 		return documentContent;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
+	@RequestMapping(method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public String updateTemplate(@RequestParam("name") String name, @RequestParam("language") String language,
 			@RequestParam("file") MultipartFile file) {
 
@@ -90,21 +90,21 @@ public class TemplateRestService {
 			template.update(in, serviceContext.getUser());
 			templateRepository.persist(template);
 			return fileUploadResponseFactory.createJsonSuccessResponse(MessageKey.TEMPLATE_UPLOADED);
-		} catch(IOException e) {
+		} catch (IOException e) {
 			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
 		}
 	}
-	
+
 	@ExceptionHandler(WteFileUploadException.class)
 	public String handleException(WteFileUploadException e) {
 		return fileUploadResponseFactory.createJsonErrorResponse(e.getMessageKey());
 	}
-	
+
 	@ExceptionHandler(IllegalStateException.class)
 	public String handleException(IllegalStateException e) {
 		return fileUploadResponseFactory.createJsonErrorResponse(MessageKey.TEMPLATE_CLASS_NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(WteException.class)
 	public String handleException(WteException e) {
 		return fileUploadResponseFactory.createJsonErrorResponse(MessageKey.UPLOADED_FILE_NOT_VALID);
