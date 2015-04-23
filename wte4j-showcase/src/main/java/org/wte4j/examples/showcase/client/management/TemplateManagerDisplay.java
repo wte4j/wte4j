@@ -43,9 +43,9 @@ public interface TemplateManagerDisplay extends IsWidget {
 
 	boolean validate();
 
-	void showModalLoading();
+	void showSpinner();
 
-	void hideModalLoading();
+	void hideSpinner();
 
 	void displayError(String message);
 

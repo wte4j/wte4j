@@ -225,14 +225,14 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 	}
 	
 	@Override
-	public void showModalLoading() {
+	public void showSpinner() {
 		closeDialog.setVisible(false);
 		createTemplate.setVisible(false);
 		loadingSpinner.setVisible(true);
 	}
 	
 	@Override
-	public void hideModalLoading() {
+	public void hideSpinner() {
 		closeDialog.setVisible(true);
 		createTemplate.setVisible(true);
 		loadingSpinner.setVisible(false);

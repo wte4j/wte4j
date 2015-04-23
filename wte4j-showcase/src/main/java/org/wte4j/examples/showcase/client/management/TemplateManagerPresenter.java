@@ -126,7 +126,7 @@ public class TemplateManagerPresenter {
 
 	private void createTemplate() {
 		if (display.validate()) {
-			display.showModalLoading();
+			display.showSpinner();
 			final String dataModel = display.getSelectedDataModel();
 			final String templateName = display.getTemplateName();
 			createTemplate(dataModel, templateName);
@@ -138,7 +138,7 @@ public class TemplateManagerPresenter {
 				templateName, new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void nothing) {
-						display.hideModalLoading();
+						display.hideSpinner();
 						display.hideDataModelList();
 						GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
 						displayTemplatesPresenter.loadData();
@@ -146,7 +146,7 @@ public class TemplateManagerPresenter {
 
 					@Override
 					public void onFailure(Throwable e) {
-						display.hideModalLoading();
+						display.hideSpinner();
 						display.displayError(e.getMessage());
 					}
 				});
