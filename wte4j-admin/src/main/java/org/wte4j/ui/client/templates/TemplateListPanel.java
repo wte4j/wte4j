@@ -259,7 +259,7 @@ public class TemplateListPanel extends Composite implements
 	}
 
 	@Override
-	public void setContextCloseHandler(CloseHandler<PopupPanel> handler) {
+	public void addContextMenuCloseHandler(CloseHandler<PopupPanel> handler) {
 		contextPanel.addCloseHandler(handler);
 	}
 
