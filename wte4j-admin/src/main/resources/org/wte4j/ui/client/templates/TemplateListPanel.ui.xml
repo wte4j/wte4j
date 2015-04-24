@@ -4,13 +4,16 @@
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
 	xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt" >
 	
-	<ui:style>
-		.wte4jAdminContextMenu{
+	<ui:style type='org.wte4j.ui.client.templates.TemplateListPanel.MyStyle'>
+		.wte4jAdminContextMenu {
 			border: none;
 			padding: 0px;
 			background-color: transparent;
 		}
-	
+
+		.templatesActionCell button {
+			padding: 0;
+		}
 	</ui:style>
 
 	<b.gwt:FlowPanel ui:field="tablePanel">		
