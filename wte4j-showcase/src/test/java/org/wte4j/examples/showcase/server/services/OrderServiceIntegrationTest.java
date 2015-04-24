@@ -48,7 +48,7 @@ public class OrderServiceIntegrationTest {
 	@Test
 	public void testListOrderTemplates() {
 		List<String> templates = orderService.listOrderTemplates();
-		assertEquals(1, templates.size());
+		assertEquals(2, templates.size());
 	}
 
 	@Test

@@ -18,29 +18,36 @@ package org.wte4j.ui.client.templates.upload;
 import static org.wte4j.ui.client.Application.LABELS;
 
 import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.SubmitButton;
-import org.wte4j.ui.shared.TemplateDto;
+import org.gwtbootstrap3.client.ui.Image;
+import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
+import org.gwtbootstrap3.client.ui.gwt.FormPanel;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TemplateUploadFormPanel extends Composite implements
 		TemplateUploadDisplay {
 
-	@UiField
+	@UiField(provided = true)
 	FormPanel formPanel;
+	
+	@UiField
+	FlowPanel flowPanel;
 
 	@UiField
-	SubmitButton submitButton;
+	Button submitButton;
 
 	@UiField
 	Button cancelButton;
@@ -54,90 +61,90 @@ public class TemplateUploadFormPanel extends Composite implements
 	@UiField
 	Hidden templateLanguage;
 
+	@UiField
+	Image loadingSpinner;
+
 	private static TemplateUploadFormPanelUiBInder uiBinder = GWT
 			.create(TemplateUploadFormPanelUiBInder.class);
 
-	private TemplateUploadPresenter templateUploadPresenter;
-	private TemplateDto currentTemplate;
-	private String templateUploadRestURL;
-
 	public TemplateUploadFormPanel() {
+		initForm();
 		initWidget(uiBinder.createAndBindUi(this));
+		initIFrame();
 		initButtons();
 	}
 
-	@Override
-	public void setPresenter(TemplateUploadPresenter templateUploadPresenter) {
-		this.templateUploadPresenter = templateUploadPresenter;
+	private void initForm() {
+		formPanel = new FormPanel("wte4j-fileupload-iframe");
+		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+		formPanel.setMethod(FormPanel.METHOD_POST);
+	}
+
+	private void initIFrame() {
+		final Frame iframe = new Frame("javascript:\"\"");
+		iframe.getElement().setAttribute("name", "wte4j-fileupload-iframe");
+		iframe.getElement().setAttribute("style","position:absolute;width:0;height:0;border:0");
+		iframe.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent arg0) {
+				String content = IFrameElement.as(iframe.getElement()).getContentDocument().getBody().getInnerHTML();
+				if (content != null && !"".equals(content))
+					formPanel.fireEvent(new SubmitCompleteEvent(content){});
+			}
+		});
+		flowPanel.add(iframe);
 	}
 
 	@Override
-	public void setData(TemplateDto currentTemplate,
-			String templateUploadRestURL) {
-		this.currentTemplate = currentTemplate;
-		this.templateUploadRestURL = templateUploadRestURL;
-		dataChanged();
+	public void setAction(String templateUploadRestURL) {
+		formPanel.setAction(templateUploadRestURL);
 	}
 
-	@UiHandler("submitButton")
-	void onSubmitButtonClicked(ClickEvent clickEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onSubmitButtonClick(clickEvent);
+	@Override
+	public void setSpinnerVisible(boolean value) {
+		loadingSpinner.setVisible(value);
 	}
 
-	@UiHandler("cancelButton")
-	void onCancelButtonClicked(ClickEvent clickEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onCancelButtonClick(clickEvent);
+	@Override
+	public void setSubmitButtonEnabled(boolean enabled) {
+		submitButton.setEnabled(enabled);
 	}
 
-	@UiHandler("formPanel")
-	void onSubmitComplete(SubmitCompleteEvent submitCompleteEvent) {
-		if (templateUploadPresenter != null)
-			templateUploadPresenter.onSubmitComplete(submitCompleteEvent);
+	@Override
+	public void addSubmitButtonClickHandler(ClickHandler clickHandler) {
+		submitButton.addClickHandler(clickHandler);
+
 	}
 
+	@Override
+	public void addCancelButtonClickHandler(ClickHandler clickHandler) {
+		cancelButton.addClickHandler(clickHandler);
+	}
+
+	@Override
+	public void addSubmitCompleteHandler(SubmitCompleteHandler handler) {
+		formPanel.addSubmitCompleteHandler(handler);
+	}
+
+	@Override
+	public void submitForm() {
+		formPanel.submit();
+	}
 	private void initButtons() {
 		submitButton.setText(LABELS.submit());
 		cancelButton.setText(LABELS.cancel());
 	}
 
-	private void dataChanged() {
-		setMetaData();
-		setVisibleContent();
-		setHiddenContent();
+	public void setTemplateName(String value) {
+		templateName.setValue(value);
 	}
 
-	private void setMetaData() {
-		formPanel.setAction(templateUploadRestURL);
-		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
-		formPanel.setMethod(FormPanel.METHOD_POST);
-	}
-
-	private void setVisibleContent() {
-		setFileUploadInput();
-	}
-
-	private void setHiddenContent() {
-		setNameTextBox();
-		setLanguageTextBox();
-	}
-
-	private void setFileUploadInput() {
-		fileUpload.setName("file");
-	}
-
-	private void setNameTextBox() {
-		templateName.setName("name");
-		templateName.setValue(currentTemplate.getDocumentName());
-	}
-
-	private void setLanguageTextBox() {
-		templateLanguage.setName("language");
-		templateLanguage.setValue(currentTemplate.getLanguage());
+	public void setLanguage(String value) {
+		templateLanguage.setValue(value);
 	}
 
 	interface TemplateUploadFormPanelUiBInder extends
 			UiBinder<Widget, TemplateUploadFormPanel> {
 	}
+
 }

@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.Label;
 
 public class MainPresenter {
 	private MainDisplay mainDisplay;
+	private TemplateManagerDisplay templateManagerDisplay;
+	private GenerateDocumentDisplay generateDocumentDisplay;
 
 	public void bind(MainDisplay aDisplay) {
 		if (mainDisplay != null) {
@@ -39,9 +41,23 @@ public class MainPresenter {
 		}
 		mainDisplay = aDisplay;
 
+		initGenerateDocument();
+		initManageTemplate();
 		bindGenerateDocumentAction();
 		bindManageTemplateAction();
 
+	}
+
+	private void initGenerateDocument() {
+		generateDocumentDisplay = new GenerateDocumentPanel();
+		GenerateDocumentPresenter contentPresenter = new GenerateDocumentPresenter();
+		contentPresenter.bind(generateDocumentDisplay);
+	}
+
+	private void initManageTemplate() {
+		templateManagerDisplay = new TemplateManagerPanel();
+		TemplateManagerPresenter contentPresenter = new TemplateManagerPresenter();
+		contentPresenter.bind(templateManagerDisplay);
 	}
 
 	private void bindManageTemplateAction() {
@@ -65,22 +81,16 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		TemplateManagerDisplay contentDisplay = new TemplateManagerPanel();
-		TemplateManagerPresenter contentPresenter = new TemplateManagerPresenter();
-		contentPresenter.bind(contentDisplay);
 		
-		mainDisplay.setMainContent(contentDisplay);
+		mainDisplay.setMainContent(templateManagerDisplay);
 		mainDisplay.setRightContent(new Label("Helptext manage templates"));
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
 	}
 
 	public void displayGenerateDocumentContent() {
-		GenerateDocumentDisplay contentDisplay = new GenerateDocumentPanel();
-		GenerateDocumentPresenter contentPresenter = new GenerateDocumentPresenter();
-		contentPresenter.bind(contentDisplay);
-
-		mainDisplay.setMainContent(contentDisplay);
+		
+		mainDisplay.setMainContent(generateDocumentDisplay);
 		mainDisplay.setRightContent(new Label("Helptext generate documents"));
 		mainDisplay.setGenerateDocumentActive(true);
 		mainDisplay.setManageTemplatesActive(false);

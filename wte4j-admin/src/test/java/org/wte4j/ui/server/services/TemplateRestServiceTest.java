@@ -77,7 +77,7 @@ public class TemplateRestServiceTest {
 						.param("name", "template")
 						.param("language", "de"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("text/html"));
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class TemplateRestServiceTest {
 						.param("name", "template")
 						.param("language", "de"));
 		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("text/html"));
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
 		assertTrue(content.contains(MessageKey.TEMPLATE_NOT_FOUND.getValue()));

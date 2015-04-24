@@ -15,16 +15,28 @@
  */
 package org.wte4j.ui.client.templates.upload;
 
-import org.wte4j.ui.shared.TemplateDto;
-
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface TemplateUploadDisplay extends IsWidget {
 
-	public abstract void setData(TemplateDto currentTemplate,
-			String templateUploadRestURL);
+	void setAction(String templateUploadRestURL);
 
-	public abstract void setPresenter(
-			TemplateUploadPresenter templateUploadPresenter);
+	void setSpinnerVisible(boolean show);
+
+	void setTemplateName(String templateName);
+
+	public void setLanguage(String value);
+
+	void setSubmitButtonEnabled(boolean enabled);
+
+	void addSubmitButtonClickHandler(ClickHandler clickHandler);
+
+	void addCancelButtonClickHandler(ClickHandler clickHandler);
+
+	void addSubmitCompleteHandler(SubmitCompleteHandler handler);
+
+	void submitForm();
 
 }

@@ -18,13 +18,9 @@ package org.wte4j.ui.client.templates;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.gwtbootstrap3.client.ui.Modal;
-import org.gwtbootstrap3.client.ui.ModalBody;
 import org.wte4j.ui.client.Application;
 import org.wte4j.ui.client.dialog.DialogType;
 import org.wte4j.ui.client.dialog.MessageDialog;
-import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
-import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter.FileUploadedHandler;
 import org.wte4j.ui.shared.TemplateDto;
@@ -39,7 +35,6 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -59,6 +54,8 @@ public class TemplateListPresenter {
 	private SingleSelectionModel<TemplateDto> selectionModel;
 	private ListDataProvider<TemplateDto> dataProvider;
 
+	private TemplateUploadPresenter uploadPresenter;
+
 	public TemplateListPresenter() {
 		((ServiceDefTarget) templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
 		selectionModel = new SingleSelectionModel<TemplateDto>();
@@ -75,6 +72,8 @@ public class TemplateListPresenter {
 			}
 		});
 		dataProvider = new ListDataProvider<TemplateDto>();
+		uploadPresenter = new TemplateUploadPresenter();
+		uploadPresenter.addFileUploadedHandler(getFileUploadedHandler());
 
 	}
 
@@ -136,6 +135,9 @@ public class TemplateListPresenter {
 				selectionModel.clear();
 			}
 		});
+
+		display.getTemplateUploadDisplay().addCancelButtonClickHandler(getCancelButtonClickHandler());
+		uploadPresenter.bindTo(display.getTemplateUploadDisplay());
 
 	}
 
@@ -227,76 +229,31 @@ public class TemplateListPresenter {
 	}
 
 	void updateTemplate() {
-
-		Modal updateTemplatePopupPanel = getUpdateTemplatePopupPanel();
-		updateTemplatePopupPanel.show();
+		uploadPresenter.startUpload(current, getTemplateFileRestURL());
+		display.showTemplateUploadDisplay("Update Template " + current.getDocumentName());
 	}
 
-	private Modal getUpdateTemplatePopupPanel() {
-		final Modal updateTemplatePopupPanel = new Modal();
-		updateTemplatePopupPanel.setTitle("Update Template " + current.getDocumentName());
-		ModalBody body = new ModalBody();
-		body.add(getUpdateTemplateFormPanel(updateTemplatePopupPanel));
-		updateTemplatePopupPanel.add(body);
-		return updateTemplatePopupPanel;
-	}
-
-	private TemplateUploadDisplay getUpdateTemplateFormPanel(Modal updateTemplatePopupPanel) {
-		TemplateUploadDisplay updateTemplateFormPanel = new TemplateUploadFormPanel();
-		TemplateUploadPresenter templateListPresenter = new TemplateUploadPresenter(current, getTemplateFileRestURL());
-		templateListPresenter.bindTo(updateTemplateFormPanel);
-		PopupPanel uploadingPopup = getUploadingPopup();
-		templateListPresenter.addSubmitButtonClickHandler(getSubmitButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
-		templateListPresenter.addCancelButtonClickHandler(getCancelButtonClickHandler(updateTemplatePopupPanel, uploadingPopup));
-		templateListPresenter.addFileUploadedHandler(getFileUploadedHandler(updateTemplatePopupPanel, uploadingPopup));
-		return updateTemplateFormPanel;
-	}
-
-	private FileUploadedHandler getFileUploadedHandler(
-			final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private FileUploadedHandler getFileUploadedHandler() {
 		return new FileUploadedHandler() {
-
 			@Override
 			public void onSuccess(String result) {
-				uploadingPopup.hide();
-				updateTemplatePopupPanel.hide();
+				display.hideTemplateUploadDisplay();
 				showInfo(Application.LABELS.updateTemplate(), result);
 			}
 
 			@Override
 			public void onFailure(String errorMessage) {
-				uploadingPopup.hide();
-				updateTemplatePopupPanel.setVisible(true);
+				display.hideTemplateUploadDisplay();
 				showError(Application.LABELS.updateTemplate(), errorMessage);
 			}
 		};
 	}
 
-	private ClickHandler getSubmitButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
-		return new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent arg0) {
-				updateTemplatePopupPanel.setVisible(false);
-				uploadingPopup.show();
-			}
-		};
-	}
-
-	private PopupPanel getUploadingPopup() {
-		PopupPanel uploadingPanel = new PopupPanel();
-		uploadingPanel.center();
-		uploadingPanel.add(new Image(Application.RESOURCES.loading()));
-		uploadingPanel.setGlassEnabled(true);
-		return uploadingPanel;
-	}
-
-	private ClickHandler getCancelButtonClickHandler(final Modal updateTemplatePopupPanel, final PopupPanel uploadingPopup) {
+	private ClickHandler getCancelButtonClickHandler() {
 		return new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
-				uploadingPopup.hide();
-				updateTemplatePopupPanel.hide();
+				display.hideTemplateUploadDisplay();
 			}
 		};
 	}

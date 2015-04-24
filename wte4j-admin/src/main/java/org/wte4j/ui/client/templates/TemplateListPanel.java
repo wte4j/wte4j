@@ -19,6 +19,8 @@ import static org.wte4j.ui.client.Application.LABELS;
 
 import java.util.Date;
 
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
 import org.gwtbootstrap3.client.ui.Pagination;
 import org.gwtbootstrap3.client.ui.constants.ButtonSize;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
@@ -26,11 +28,12 @@ import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.wte4j.ui.client.cell.PopupCell;
 import org.wte4j.ui.client.templates.contextmenu.TemplateContextMenu;
+import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
+import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
 import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -46,7 +49,6 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
@@ -60,39 +62,43 @@ public class TemplateListPanel extends Composite implements
 			.create(TemplateTablePanelUiBInder.class);
 
 	@UiField
-	FlowPanel tablePanel;
-
-	@UiField
 	CellTable<TemplateDto> templateTable;
 
-	@UiField
-	PopupPanel contextPanel;
-	
     @UiField
-    MyStyle style;
-
-	private Column<TemplateDto, String> nameColumn;
+    MyStyle style;	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
 	private Column<TemplateDto, String> editorColumn;
+	private TextColumn<TemplateDto> statusColumn;
 	private Column<TemplateDto, ?> actionColumn;
 
 	@UiField
 	Pagination templateTablePagination;
-
 	private SimplePager internalPager;
 
 	private DateTimeFormat timeStampFormat = DateTimeFormat
 			.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 
+	@UiField
+	PopupPanel contextPanel;
 	private TemplateContextMenu templateContextMenu;
 
-	private TextColumn<TemplateDto> statusColumn;
+	@UiField
+	Modal templateUploadModal;
+	private TemplateUploadDisplay templateUploadDisplay;
 
 	public TemplateListPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initContextMenu();
 		initTemplateTable();
+		initTemplateUploadDisplay();
 
+	}
+
+	protected void initTemplateUploadDisplay() {
+		ModalBody body = new ModalBody();
+		templateUploadModal.add(body);
+		templateUploadDisplay = new TemplateUploadFormPanel();
+		body.add(templateUploadDisplay);
 	}
 
 	private void initContextMenu() {
@@ -262,14 +268,21 @@ public class TemplateListPanel extends Composite implements
 		contextPanel.addCloseHandler(handler);
 	}
 
-	private ScheduledCommand decorateCommandWithCloseContextMenu(final ScheduledCommand command) {
-		return new ScheduledCommand() {
-			@Override
-			public void execute() {
-				contextPanel.hide();
-				command.execute();
-			}
-		};
+	@Override
+	public TemplateUploadDisplay getTemplateUploadDisplay() {
+		return templateUploadDisplay;
+	}
+
+	@Override
+	public void showTemplateUploadDisplay(String title) {
+		templateUploadModal.setTitle(title);
+		templateUploadModal.show();
+
+	}
+
+	@Override
+	public void hideTemplateUploadDisplay() {
+		templateUploadModal.hide();
 	}
 
 	private ClickHandler wrapClickHandler(final ClickHandler toWrap) {

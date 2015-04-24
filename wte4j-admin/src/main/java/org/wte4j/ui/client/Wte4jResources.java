@@ -21,6 +21,6 @@ import com.google.gwt.resources.client.ImageResource;
 public interface Wte4jResources extends ClientBundle {
 
 	@Source("images/loader.gif")
-	ImageResource loading();
+	ImageResource spinner();
 
 }
