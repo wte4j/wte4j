@@ -20,10 +20,10 @@
 					styleName="{style.formelement}" />
 				<b:Image ui:field="loadingSpinner" resource="{res.spinner}"
 					visible="false" />
-				<b:SubmitButton ui:field="submitButton" type="PRIMARY"
+				<b:Button ui:field="submitButton" type="PRIMARY"
 					marginRight="5" marginLeft="5" />
 				<b:Button ui:field="cancelButton" />
 			</b.gwt:FlowPanel>
-		</b.gwt:FormPanel>     
+		</b.gwt:FormPanel>
 	</b.gwt:HTMLPanel>
 </ui:UiBinder> 

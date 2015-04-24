@@ -50,7 +50,7 @@ public class TemplateUploadPresenter {
 			public void onClick(ClickEvent event) {
 				templateUploadDisplay.setSubmitButtonEnabled(false);
 				templateUploadDisplay.setSpinnerVisible(true);
-
+				templateUploadDisplay.submitForm();
 			}
 		});
 

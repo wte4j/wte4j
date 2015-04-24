@@ -37,4 +37,6 @@ public interface TemplateUploadDisplay extends IsWidget {
 
 	void addSubmitCompleteHandler(SubmitCompleteHandler handler);
 
+	void submitForm();
+
 }
