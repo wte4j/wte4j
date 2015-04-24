@@ -15,6 +15,7 @@
  */
 package org.wte4j.ui.client.templates;
 
+import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
 import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -43,4 +44,9 @@ public interface TemplateListDisplay extends IsWidget {
 
 	void addContextMenuCloseHandler(CloseHandler<PopupPanel> handler);
 
+	TemplateUploadDisplay getTemplateUploadDisplay();
+
+	void showTemplateUploadDisplay(String title);
+
+	void hideTemplateUploadDisplay();
 }

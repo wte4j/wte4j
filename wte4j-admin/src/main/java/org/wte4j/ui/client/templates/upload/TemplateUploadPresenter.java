@@ -32,14 +32,9 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 public class TemplateUploadPresenter {
 	private TemplateUploadDisplay templateUploadDisplay;
 	private List<FileUploadedHandler> fileUploadedHandlers;
-	private TemplateDto currentTemplate;
-	private String templateUploadRestURL;
 
-	public TemplateUploadPresenter(TemplateDto currentTemplate,
-			String templateUploadRestURL) {
-		this.currentTemplate = currentTemplate;
-		this.templateUploadRestURL = templateUploadRestURL;
-		initHandlers();
+	public TemplateUploadPresenter() {
+		fileUploadedHandlers = new ArrayList<FileUploadedHandler>();
 	}
 
 	public void addFileUploadedHandler(FileUploadedHandler fileUploadedHandler) {
@@ -48,8 +43,16 @@ public class TemplateUploadPresenter {
 
 	public void bindTo(TemplateUploadDisplay aTemplateUploadDisplay) {
 		this.templateUploadDisplay = aTemplateUploadDisplay;
-		this.templateUploadDisplay.setData(currentTemplate,
-				templateUploadRestURL);
+
+		templateUploadDisplay.addSubmitButtonClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				templateUploadDisplay.setSubmitButtonEnabled(false);
+				templateUploadDisplay.setSpinnerVisible(true);
+
+			}
+		});
 
 		templateUploadDisplay.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
@@ -67,19 +70,15 @@ public class TemplateUploadPresenter {
 			}
 		});
 
-		templateUploadDisplay.addSubmitButtonClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				templateUploadDisplay.setSubmitButtonEnabled(false);
-				templateUploadDisplay.setSpinnerVisible(true);
-
-			}
-		});
 	}
 
-	private void initHandlers() {
-		fileUploadedHandlers = new ArrayList<FileUploadedHandler>();
+	public void startUpload(TemplateDto currentTemplate,
+			String templateUploadRestURL) {
+		templateUploadDisplay.setAction(templateUploadRestURL);
+		templateUploadDisplay.setTemplateName(currentTemplate.getDocumentName());
+		templateUploadDisplay.setLanguage(currentTemplate.getLanguage());
+		templateUploadDisplay.setSpinnerVisible(false);
+		templateUploadDisplay.setSubmitButtonEnabled(true);
 	}
 
 	private FileUploadResponse parseResponse(String results) {

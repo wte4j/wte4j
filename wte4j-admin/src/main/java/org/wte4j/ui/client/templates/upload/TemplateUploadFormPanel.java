@@ -20,7 +20,7 @@ import static org.wte4j.ui.client.Application.LABELS;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.SubmitButton;
-import org.wte4j.ui.shared.TemplateDto;
+import org.gwtbootstrap3.client.ui.gwt.FormPanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,7 +28,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TemplateUploadFormPanel extends Composite implements
 		TemplateUploadDisplay {
 
-	@UiField
+	@UiField(provided = true)
 	FormPanel formPanel;
 
 	@UiField
@@ -60,20 +59,21 @@ public class TemplateUploadFormPanel extends Composite implements
 	private static TemplateUploadFormPanelUiBInder uiBinder = GWT
 			.create(TemplateUploadFormPanelUiBInder.class);
 
-	private TemplateDto currentTemplate;
-	private String templateUploadRestURL;
-
 	public TemplateUploadFormPanel() {
+		initForm();
 		initWidget(uiBinder.createAndBindUi(this));
 		initButtons();
 	}
 
+	private void initForm() {
+		formPanel = new FormPanel();
+		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+		formPanel.setMethod(FormPanel.METHOD_POST);
+	}
+
 	@Override
-	public void setData(TemplateDto currentTemplate,
-			String templateUploadRestURL) {
-		this.currentTemplate = currentTemplate;
-		this.templateUploadRestURL = templateUploadRestURL;
-		dataChanged();
+	public void setAction(String templateUploadRestURL) {
+		formPanel.setAction(templateUploadRestURL);
 	}
 
 	@Override
@@ -107,39 +107,12 @@ public class TemplateUploadFormPanel extends Composite implements
 		cancelButton.setText(LABELS.cancel());
 	}
 
-	private void dataChanged() {
-		setMetaData();
-		setVisibleContent();
-		setHiddenContent();
+	public void setTemplateName(String value) {
+		templateName.setValue(value);
 	}
 
-	private void setMetaData() {
-		formPanel.setAction(templateUploadRestURL);
-		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
-		formPanel.setMethod(FormPanel.METHOD_POST);
-	}
-
-	private void setVisibleContent() {
-		setFileUploadInput();
-	}
-
-	private void setHiddenContent() {
-		setNameTextBox();
-		setLanguageTextBox();
-	}
-
-	private void setFileUploadInput() {
-		fileUpload.setName("file");
-	}
-
-	private void setNameTextBox() {
-		templateName.setName("name");
-		templateName.setValue(currentTemplate.getDocumentName());
-	}
-
-	private void setLanguageTextBox() {
-		templateLanguage.setName("language");
-		templateLanguage.setValue(currentTemplate.getLanguage());
+	public void setLanguage(String value) {
+		templateLanguage.setValue(value);
 	}
 
 	interface TemplateUploadFormPanelUiBInder extends
