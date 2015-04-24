@@ -39,6 +39,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -63,7 +64,8 @@ public class TemplateListPanel extends Composite implements
 	@UiField
 	CellTable<TemplateDto> templateTable;
 
-	private Column<TemplateDto, String> nameColumn;
+    @UiField
+    MyStyle style;	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
 	private Column<TemplateDto, String> editorColumn;
 	private TextColumn<TemplateDto> statusColumn;
@@ -196,7 +198,7 @@ public class TemplateListPanel extends Composite implements
 				return "";
 			}
 		};
-		actionColumn.setCellStyleNames("templates-action-cell");
+		actionColumn.setCellStyleNames("templates-action-cell " + style.templatesActionCell());
 		addColumntoTemplateTable(actionColumn, "");
 	}
 
@@ -234,31 +236,26 @@ public class TemplateListPanel extends Composite implements
 	@Override
 	public void setUpdateCommand(ClickHandler command) {
 		templateContextMenu.getUpdateAction().addClickHandler(wrapClickHandler(command));
-
 	}
 
 	@Override
 	public void setUnlockCommand(ClickHandler command) {
 		templateContextMenu.getUnlockAction().addClickHandler(wrapClickHandler(command));
-
 	}
 
 	@Override
 	public void setLockCommand(ClickHandler command) {
 		templateContextMenu.getLockAction().addClickHandler(wrapClickHandler(command));
-
 	}
 
 	@Override
 	public void setDeleteCommand(ClickHandler command) {
 		templateContextMenu.getDeleteAction().addClickHandler(wrapClickHandler(command));
-
 	}
 
 	@Override
 	public void setUnLockCommandVisible(boolean visible) {
 		templateContextMenu.getUnlockAction().setVisible(visible);
-
 	}
 
 	@Override
@@ -297,6 +294,10 @@ public class TemplateListPanel extends Composite implements
 
 			}
 		};
+	}
+	
+	interface MyStyle extends CssResource {
+		String templatesActionCell();
 	}
 
 	interface TemplateTablePanelUiBInder extends UiBinder<Widget, TemplateListPanel> {
