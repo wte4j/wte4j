@@ -101,15 +101,17 @@ public class TemplateUploadFormPanel extends Composite implements
 	}
 
 	@Override
-	public void setSpinnerVisible(boolean value) {
-		loadingSpinner.setVisible(value);
+	public void showSpinner() {
+		loadingSpinner.setVisible(true);
+		setButtonsVisible(false);
 	}
-
+	
 	@Override
-	public void setSubmitButtonEnabled(boolean enabled) {
-		submitButton.setEnabled(enabled);
+	public void hideSpinner() {
+		loadingSpinner.setVisible(false);
+		setButtonsVisible(true);
 	}
-
+	
 	@Override
 	public void addSubmitButtonClickHandler(ClickHandler clickHandler) {
 		submitButton.addClickHandler(clickHandler);
@@ -125,11 +127,17 @@ public class TemplateUploadFormPanel extends Composite implements
 	public void addSubmitCompleteHandler(SubmitCompleteHandler handler) {
 		formPanel.addSubmitCompleteHandler(handler);
 	}
-
+	
 	@Override
 	public void submitForm() {
 		formPanel.submit();
 	}
+	
+	private void setButtonsVisible(boolean visible) {
+		submitButton.setVisible(visible);
+		cancelButton.setVisible(visible);
+	}
+	
 	private void initButtons() {
 		submitButton.setText(LABELS.submit());
 		cancelButton.setText(LABELS.cancel());
@@ -146,5 +154,6 @@ public class TemplateUploadFormPanel extends Composite implements
 	interface TemplateUploadFormPanelUiBInder extends
 			UiBinder<Widget, TemplateUploadFormPanel> {
 	}
+
 
 }

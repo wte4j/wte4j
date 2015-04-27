@@ -4,9 +4,13 @@
 	xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt" xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 
 	<ui:style>
-	.formelement {
+	.formElement {
 		display: block;
 		margin: 5px
+	}
+
+	.loadingSpinner {
+		margin: 15px;
 	}
 	</ui:style>
 
@@ -17,9 +21,9 @@
 				<g:Hidden ui:field="templateName" name="name" />
 				<g:Hidden ui:field="templateLanguage" name="language" />
 				<g:FileUpload ui:field="fileUpload" name="file"
-					styleName="{style.formelement}" />
+					styleName="{style.formElement}" />
 				<b:Image ui:field="loadingSpinner" resource="{res.spinner}"
-					visible="false" />
+					visible="false" styleName="{style.loadingSpinner}" />
 				<b:Button ui:field="submitButton" type="PRIMARY"
 					marginRight="5" marginLeft="5" />
 				<b:Button ui:field="cancelButton" />

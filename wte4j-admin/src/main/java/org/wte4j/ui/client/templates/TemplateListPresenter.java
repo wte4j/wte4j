@@ -243,7 +243,6 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onFailure(String errorMessage) {
-				display.hideTemplateUploadDisplay();
 				showError(Application.LABELS.updateTemplate(), errorMessage);
 			}
 		};
