@@ -4,12 +4,12 @@
 	xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt" xmlns:b.html='urn:import:org.gwtbootstrap3.client.ui.html'>
 	<ui:with field='labels' type="org.wte4j.examples.showcase.client.Labels" />
 	<b.gwt:HTMLPanel>
-		<b:Row>
+		<b.html:Paragraph>
 			<b:Button ui:field="addTemplate" type="PRIMARY" ><ui:text from="{labels.addTemplate}" /></b:Button>
-		</b:Row>
-		<b:Row marginTop="20">
+		</b.html:Paragraph>
+		<b.html:Paragraph>
 			<b.gwt:HTMLPanel ui:field="templateList" />
-		</b:Row>
+		</b.html:Paragraph>
 
 		<b:Modal ui:field="dialog" title="{labels.selectDataModel}">
 			<b:ModalBody>

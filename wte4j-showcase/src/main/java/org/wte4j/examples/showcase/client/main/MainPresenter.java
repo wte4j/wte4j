@@ -15,20 +15,19 @@
  */
 package org.wte4j.examples.showcase.client.main;
 
-import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
+import org.gwtbootstrap3.client.ui.html.Paragraph;
+import org.wte4j.examples.showcase.client.Application;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentDisplay;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPanel;
 import org.wte4j.examples.showcase.client.generation.GenerateDocumentPresenter;
 import org.wte4j.examples.showcase.client.management.TemplateManagerDisplay;
 import org.wte4j.examples.showcase.client.management.TemplateManagerPanel;
 import org.wte4j.examples.showcase.client.management.TemplateManagerPresenter;
-import org.wte4j.ui.client.templates.TemplateListPanel;
-import org.wte4j.ui.client.templates.TemplateListPresenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public class MainPresenter {
 	private MainDisplay mainDisplay;
@@ -81,19 +80,28 @@ public class MainPresenter {
 	}
 
 	public void displayTemplatesContent() {
-		
 		mainDisplay.setMainContent(templateManagerDisplay);
-		mainDisplay.setRightContent(new Label("Helptext manage templates"));
+		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_template_manager_helptext());
+		mainDisplay.setRightContent(helpText);
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
 	}
 
 	public void displayGenerateDocumentContent() {
-		
 		mainDisplay.setMainContent(generateDocumentDisplay);
-		mainDisplay.setRightContent(new Label("Helptext generate documents"));
+		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_document_generator_helptext());
+		mainDisplay.setRightContent(helpText);
 		mainDisplay.setGenerateDocumentActive(true);
 		mainDisplay.setManageTemplatesActive(false);
+	}
 
+	private IsWidget generateHelpText(
+			String helpText) {
+		FlowPanel helpTextcontainer = new FlowPanel();
+		String[] htmlHelpText = helpText.split("\n");
+		for (String line : htmlHelpText) {
+			helpTextcontainer.add(new Paragraph(line));
+		}
+		return helpTextcontainer;
 	}
 }
