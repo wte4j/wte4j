@@ -3,9 +3,14 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
 	xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt" xmlns:b.html='urn:import:org.gwtbootstrap3.client.ui.html'>
 	<ui:with field='labels' type="org.wte4j.examples.showcase.client.Labels" />
+	<ui:style>
+		.tableHandCursor > tbody > tr {
+			cursor: pointer;
+		}
+	</ui:style>
 	<b.gwt:HTMLPanel>
 		<b.gwt:CellTable ui:field="orderTable" bordered="false"
-			condensed="true" striped="true" hover="true" />
+			condensed="true" striped="true" hover="true" addStyleNames="{style.tableHandCursor}" />
 
 		<b:Modal ui:field="dialog" title="{labels.selectDocument}:">
 			<b:ModalBody>
