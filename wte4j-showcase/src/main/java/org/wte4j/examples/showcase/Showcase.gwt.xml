@@ -20,8 +20,13 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.resources.Resources" />
+	<inherits name="com.google.gwt.logging.Logging" />
 
-	<!-- Other module inherits -->
+	<set-property name="gwt.logging.logLevel" value="INFO" />
+	<set-property name="gwt.logging.enabled" value="TRUE" />
+
+	<!-- Wte4jAdmin module -->
 	<inherits name="org.wte4j.ui.Wte4jAdmin"/>
 	
 	<!-- Other module inherits -->
