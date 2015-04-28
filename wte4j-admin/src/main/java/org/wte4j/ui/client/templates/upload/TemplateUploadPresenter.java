@@ -48,8 +48,7 @@ public class TemplateUploadPresenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				templateUploadDisplay.setSubmitButtonEnabled(false);
-				templateUploadDisplay.setSpinnerVisible(true);
+				templateUploadDisplay.startLoadingAnimation();
 				templateUploadDisplay.submitForm();
 			}
 		});
@@ -65,8 +64,7 @@ public class TemplateUploadPresenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				templateUploadDisplay.setSpinnerVisible(false);
-
+				templateUploadDisplay.stopLoadingAnimation();
 			}
 		});
 
@@ -77,8 +75,7 @@ public class TemplateUploadPresenter {
 		templateUploadDisplay.setAction(templateUploadRestURL);
 		templateUploadDisplay.setTemplateName(currentTemplate.getDocumentName());
 		templateUploadDisplay.setLanguage(currentTemplate.getLanguage());
-		templateUploadDisplay.setSpinnerVisible(false);
-		templateUploadDisplay.setSubmitButtonEnabled(true);
+		templateUploadDisplay.stopLoadingAnimation();
 	}
 
 	private FileUploadResponse parseResponse(String results) {
@@ -94,8 +91,7 @@ public class TemplateUploadPresenter {
 	}
 
 	private void onFileUploaded(SubmitCompleteEvent event) {
-		templateUploadDisplay.setSpinnerVisible(false);
-		templateUploadDisplay.setSubmitButtonEnabled(true);
+		templateUploadDisplay.stopLoadingAnimation();
 		FileUploadResponse response = parseResponse(event.getResults());
 		if (response.getDone()) {
 			fireSuccessfulFileUpload(response.getMessage());

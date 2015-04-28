@@ -25,6 +25,7 @@ import org.gwtbootstrap3.client.ui.Pagination;
 import org.gwtbootstrap3.client.ui.constants.ButtonSize;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.constants.ModalBackdrop;
 import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.wte4j.ui.client.cell.PopupCell;
 import org.wte4j.ui.client.templates.contextmenu.TemplateContextMenu;
@@ -97,6 +98,7 @@ public class TemplateListPanel extends Composite implements
 	protected void initTemplateUploadDisplay() {
 		ModalBody body = new ModalBody();
 		templateUploadModal.add(body);
+		templateUploadModal.setDataBackdrop(ModalBackdrop.STATIC);
 		templateUploadDisplay = new TemplateUploadFormPanel();
 		body.add(templateUploadDisplay);
 	}

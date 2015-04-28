@@ -20,7 +20,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface Wte4jResources extends ClientBundle {
 
-	@Source("images/loader.gif")
+	@Source("images/loading-spinner.gif")
 	ImageResource spinner();
 
 }
