@@ -101,13 +101,13 @@ public class TemplateUploadFormPanel extends Composite implements
 	}
 
 	@Override
-	public void showSpinner() {
+	public void startLoadingAnimation() {
 		loadingSpinner.setVisible(true);
 		setButtonsVisible(false);
 	}
 	
 	@Override
-	public void hideSpinner() {
+	public void stopLoadingAnimation() {
 		loadingSpinner.setVisible(false);
 		setButtonsVisible(true);
 	}

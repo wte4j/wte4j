@@ -35,7 +35,7 @@ public interface TemplateUploadDisplay extends IsWidget {
 
 	void submitForm();
 
-	void showSpinner();
+	void startLoadingAnimation();
 	
-	void hideSpinner();
+	void stopLoadingAnimation();
 }
