@@ -23,13 +23,9 @@ public interface TemplateUploadDisplay extends IsWidget {
 
 	void setAction(String templateUploadRestURL);
 
-	void setSpinnerVisible(boolean show);
-
 	void setTemplateName(String templateName);
 
 	public void setLanguage(String value);
-
-	void setSubmitButtonEnabled(boolean enabled);
 
 	void addSubmitButtonClickHandler(ClickHandler clickHandler);
 
@@ -39,4 +35,7 @@ public interface TemplateUploadDisplay extends IsWidget {
 
 	void submitForm();
 
+	void startLoadingAnimation();
+	
+	void stopLoadingAnimation();
 }

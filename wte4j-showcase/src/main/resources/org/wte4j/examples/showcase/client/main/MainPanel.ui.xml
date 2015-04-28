@@ -16,16 +16,13 @@
 				</b:NavbarNav>
 			</b:NavbarCollapse>
 		</b:Navbar>
-		<b:Container>
-			<b:Row>
-				<b:Column size="MD_9,LG_9">
-					<b.g:FlowPanel ui:field="mainContent" />
-				</b:Column>
-				<b:Column size="MD_3, LG_3">
-					<b.g:FlowPanel ui:field="rightContent"/>
-				</b:Column>			
-			</b:Row>		
-		</b:Container>	
-
+		<b:Row>
+			<b:Column size="MD_9,LG_9">
+				<b.g:FlowPanel ui:field="mainContent" />
+			</b:Column>
+			<b:Column size="MD_3, LG_3">
+				<b.g:FlowPanel ui:field="rightContent"/>
+			</b:Column>			
+		</b:Row>		
 	</b:Container>
 </ui:UiBinder>
