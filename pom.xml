@@ -29,7 +29,7 @@
 
 	<licenses>
 		<license>
-			<name>Apache 2</name>
+			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
@@ -75,7 +75,7 @@
 
 	<build>
 		<plugins>
-
+		
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
@@ -87,9 +87,10 @@
 						<email>www.born.ch</email>
 					</properties>
 					<excludes>
-						<exclude>src/test/resources/**</exclude>
+						<exclude>**/NOTICE</exclude>
+						<exclude>**/LICENSE</exclude>
 						<exclude>src/main/resources/**</exclude>
-						<exclude>**/wte4j-demo/**</exclude>
+						<exclude>src/test/resources/**</exclude>						
 					</excludes>
 				</configuration>
 				<executions>
@@ -100,7 +101,7 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			
 		</plugins>
 
 		<pluginManagement>
@@ -137,9 +138,10 @@
 			</dependency>
 
 			<dependency>
-				<groupId>jstl</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.2</version>				
+				<groupId>javax.servlet.jsp.jstl</groupId>
+				<artifactId>javax.servlet.jsp.jstl-api</artifactId>
+				<version>1.2.1</version>
+				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
