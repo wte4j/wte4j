@@ -16,8 +16,7 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -31,6 +30,11 @@
 	<properties>
 		<gwtVersion>2.7.0</gwtVersion>
 		<skip.enhanceJPA>false</skip.enhanceJPA>
+		<!-- the following artifacts have been added manually to src/license/NOTICE-template.ftl  
+						xbean-asm4-shaded: The Apache Software License, Version 2.0
+						stax-api: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+		-->
+		<license.excludedArtifacts>xbean-asm4-shaded|stax-api</license.excludedArtifacts>
 	</properties>
 
 	<dependencyManagement>
@@ -79,7 +83,7 @@
 
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
-			<artifactId>gwtbootstrap3</artifactId>			
+			<artifactId>gwtbootstrap3</artifactId>
 		</dependency>
 
 
@@ -242,7 +246,7 @@
 					</i18nMessagesBundles>
 					<webappDirectory>${project.build.directory}/gwtWebAppDirectory</webappDirectory>
 				</configuration>
-			</plugin>
+			</plugin>	
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

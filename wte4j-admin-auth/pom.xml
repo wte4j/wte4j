@@ -87,9 +87,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
+		  <groupId>javax.servlet.jsp.jstl</groupId>
+		  <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+		 
+		</dependency>	
 	
 		<!-- GWT -->
 

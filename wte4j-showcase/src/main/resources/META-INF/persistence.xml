@@ -5,5 +5,5 @@
 	<persistence-unit name="wte4j-templates" transaction-type="RESOURCE_LOCAL">		
 		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-	</persistence-unit>
+		</persistence-unit>
 </persistence> 
