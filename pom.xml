@@ -59,6 +59,7 @@
 		<module>wte4j-admin-auth</module>
 		<module>wte4j-admin-war</module>
 		<module>wte4j-showcase</module>
+		<module>wte4j-distribution</module>
 	</modules>
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -89,7 +90,7 @@
 						<exclude>**/NOTICE</exclude>
 						<exclude>**/LICENSE</exclude>
 						<exclude>src/main/resources/**</exclude>
-						<exclude>src/test/resources/**</exclude>						
+						<exclude>src/test/resources/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -100,7 +101,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 
 		<pluginManagement>
@@ -114,7 +114,39 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.8</version>
+					<configuration>						
+						<excludedGroups>${project.groupId}</excludedGroups>
+						<includedScopes>compile,runtime</includedScopes>
+						<licenseMerges>
+							<licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache Software License 2.0|Apache License, Version 2.0|
+								http://www.apache.org/licenses/LICENSE-2.0.txt|Apache License Version
+								2|GWT Terms
+							</licenseMerge>
+							<licenseMerge>Apache Software Licenses|Apache Software License</licenseMerge>
+							<licenseMerge>BSD Style License|BSD|BSD style|BSD style License</licenseMerge>
+							<licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
+							<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|Common Public License Version 1.0</licenseMerge>
+						</licenseMerges>
+						<includedLicenses>
+							<includedLicense>The Apache Software License, Version 2.0</includedLicense>
+							<includedLicense>Apache Software Licenses</includedLicense>
+							<includedLicense>MIT License</includedLicense>
+							<includedLicense>BSD Style License</includedLicense>
+							<includedLicense>New BSD License</includedLicense>
+							<includedLicense>Public Domain</includedLicense>
+							<includedLicense>Common Development and Distribution License (CDDL), version 1.0</includedLicense>
+							<includedLicense>HSQLDB License, a BSD open source license</includedLicense>
+							<includedLicense>License Mozilla PMIT Licenseublic License version 1.1</includedLicense>
+						</includedLicenses>
+					</configuration>
+				</plugin>
 			</plugins>
+
 
 		</pluginManagement>
 	</build>
@@ -275,8 +307,6 @@
 
 	<dependencies>
 
-
-
 		<!-- Logging api -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -309,65 +339,4 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>add-license-and-notice</id>
-			<activation>
-				<file>
-					<exists>src/license/NOTICE-template.ftl</exists>
-				</file>
- 			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>license-maven-plugin</artifactId>
-						<version>1.8</version>						
-						<executions>
-							<execution>
-								<id>add-license-and-notice</id>
-								<goals>
-									<goal>update-project-license</goal>
-									<goal>add-third-party</goal>
-								</goals>
-								<phase>prepare-package</phase>
-								<configuration>
-									<failIfWarning>true</failIfWarning>
-									<!-- copy licence file to META-INF  -->
-									<organizationName>-</organizationName>
-									<licenseName>apache_v2</licenseName>
-									<licenseFile>${project.build.directory}/${project.build.finalName}/META-INF/LICENSE</licenseFile>
-									<!-- generate NOTICE file and copy to to META-INF   -->
-									<outputDirectory>${project.build.directory}/${project.build.finalName}/META-INF</outputDirectory>
-									<thirdPartyFilename>NOTICE</thirdPartyFilename>
-									<fileTemplate>${basedir}/src/license/NOTICE-template.ftl</fileTemplate>
-									<includedScopes>compile,runtime</includedScopes>
-									<licenseMerges>
-										<licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache Software License 2.0|http://www.apache.org/licenses/LICENSE-2.0.txt|GWT Terms</licenseMerge>
-										<licenseMerge>Apache Software Licenses|Apache Software License</licenseMerge>
-										<licenseMerge>BSD Style License|BSD|BSD style|BSD style License</licenseMerge>
-										<licenseMerge>MIT License|MIT license</licenseMerge>
-										<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</licenseMerge>
-									</licenseMerges>
-									<includedLicenses>
-										<includedLicense>The Apache Software License, Version 2.0</includedLicense>
-										<includedLicense>Apache Software Licenses</includedLicense>
-										<includedLicense>MIT License</includedLicense>
-										<includedLicense>BSD Style License</includedLicense>
-										<includedLicense>Public Domain</includedLicense>
-										<includedLicense>Common Development and Distribution License (CDDL), version 1.0</includedLicense>
-										<includedLicense>HSQLDB License, a BSD open source license</includedLicense>
-										<includedLicense>License Mozilla PMIT Licenseublic License version 1.1</includedLicense>
-									</includedLicenses>					
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
-			</build>
-
-		</profile>
-
-	</profiles>
 </project>
