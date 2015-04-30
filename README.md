@@ -20,7 +20,7 @@ You can find the latest release of the wte4j repo archived as .zip and .tar.gz f
 
 https://github.com/wte4j/wte4j/releases
 
-1. Download Tomcat 7 from http://tomcat.apache.org/ (min Version 7) and unarchive it
+1. Download Tomcat 7 from http://tomcat.apache.org/ (min. Version 7) and unarchive it.
 2. Download a .zip or .tar.gz release, unarchive it.
 3. Copy the wars/wte4j-showcase.war file in tomcats webapp folder
 4. Start tomcat. Showcase will be available at http://localhost:8080/wte4j-showcase
