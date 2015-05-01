@@ -87,10 +87,14 @@
 		</dependency>
 
 		<dependency>
-		  <groupId>javax.servlet.jsp.jstl</groupId>
-		  <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-		 
-		</dependency>	
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-spec</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-impl</artifactId>
+		</dependency>
 	
 		<!-- GWT -->
 
