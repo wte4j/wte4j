@@ -149,7 +149,6 @@ public class TemplateListPresenter {
 			public void onSuccess(List<TemplateDto> result) {
 				dataProvider.setList(result);
 				dataProvider.refresh();
-				display.getDataContainer().setRowData(0, result);
 			}
 
 			@Override
@@ -238,12 +237,14 @@ public class TemplateListPresenter {
 			@Override
 			public void onSuccess(String result) {
 				display.hideTemplateUploadDisplay();
+				loadData();
 				showInfo(Application.LABELS.updateTemplate(), result);
 			}
 
 			@Override
 			public void onFailure(String errorMessage) {
 				showError(Application.LABELS.updateTemplate(), errorMessage);
+				loadData();
 			}
 		};
 	}
