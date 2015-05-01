@@ -38,15 +38,7 @@
 
 	<absolute-ordering>
 		<others />
-	</absolute-ordering>
-
-	<login-config>
-		<auth-method>FORM</auth-method>
-		<form-login-config>
-			<form-login-page>/login.jsp</form-login-page>
-			<form-error-page>/login.jsp</form-error-page>
-		</form-login-config>
-	</login-config>
+	</absolute-ordering>	
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
