@@ -16,9 +16,7 @@
     limitations under the License.
 
 -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="wte4j-showcase" version="3.0">
 
 
@@ -31,10 +29,14 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>org.wte4j.examples.showcase.server.config.RootApplicationConfig</param-value>
 	</context-param>
-	
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>	
+	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
 
 	<!-- Servlets -->
 	<servlet>
@@ -45,7 +47,7 @@
 		<servlet-name>gwtRemoteOrderService</servlet-name>
 		<url-pattern>/Showcase/orderService/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>templateManager</servlet-name>
 		<servlet-class>org.wte4j.examples.showcase.server.services.TemplateManagerServiceImpl</servlet-class>
