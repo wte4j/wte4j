@@ -13,18 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.shared.service;
+package org.wte4j.ui.shared;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.wte4j.examples.showcase.shared.TemplateManagerServiceException;
+public class InvalidTemplateServiceException extends RuntimeException {
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+	private List<String> details = new ArrayList<String>();
 
-@RemoteServiceRelativePath("templateManager")
-public interface TemplateManagerService extends RemoteService {
+	public InvalidTemplateServiceException() {
+	}
 
-	List<String> listDataModel();
-	void createTemplate(String className, String templateName) throws TemplateManagerServiceException;
+	public InvalidTemplateServiceException(String message) {
+		super(message);
+	}
+
+	public InvalidTemplateServiceException(String summary, List<String> details) {
+		super(summary);
+		this.details = details;
+	}
+
+	public List<String> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<String> details) {
+		this.details = details;
+	}
+
 }

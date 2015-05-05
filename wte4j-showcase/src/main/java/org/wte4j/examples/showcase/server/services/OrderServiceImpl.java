@@ -15,7 +15,7 @@
  */
 package org.wte4j.examples.showcase.server.services;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 	public String createDocument(OrderDataDto order, String documentName) {
 
 		try {
-			File file = templateEngine.createDocument(documentName, "en", order);
+			Path file = templateEngine.createDocument(documentName, "en", order);
 			return file.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -118,6 +118,13 @@ public class OrderServiceImpl implements OrderService {
 
 		}
 
+	}
+
+	@Override
+	public List<String> listDataModel() {
+		List<String> models = new ArrayList<String>();
+		models.add(OrderDataDto.class.getName());
+		return models;
 	}
 
 }

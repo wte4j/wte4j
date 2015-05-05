@@ -37,7 +37,7 @@
 
 	<servlet>
 		<servlet-name>templateService</servlet-name>
-		<servlet-class>org.wte4j.ui.server.services.TemplateRepositoryGWTAdapter</servlet-class>
+		<servlet-class>org.wte4j.ui.server.services.TemplateServiceGWTAdapter</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>templateService</servlet-name>

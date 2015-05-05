@@ -31,8 +31,8 @@
 		<connection>scm:git:git@github.com:wte4j/wte4j.git</connection>
 		<url>scm:git:git@github.com:wte4j/wte4j.git</url>
 		<developerConnection>scm:git:git@github.com:wte4j/wte4j.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<licenses>
 		<license>
@@ -79,6 +79,7 @@
 		<spring.version>4.1.3.RELEASE</spring.version>
 		<openJPA.version>2.3.0</openJPA.version>
 		<slf4j.version>1.7.7</slf4j.version>
+		<gwtVersion>2.7.0</gwtVersion>
 	</properties>
 
 	<build>
@@ -377,11 +378,26 @@
 				<scope>runtime</scope>
 			</dependency>
 			
-			<!-- GWT -->
+			<!-- GWT -->			
+			
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt</artifactId>
+				<version>${gwtVersion}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>		
 
 			<dependency>
 				<groupId>org.gwtbootstrap3</groupId>
 				<artifactId>gwtbootstrap3</artifactId>
+				<version>0.9</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.gwtbootstrap3</groupId>
+				<artifactId>gwtbootstrap3-extras</artifactId>
 				<version>0.9</version>
 				<scope>provided</scope>
 			</dependency>

@@ -28,13 +28,15 @@ import org.wte4j.ui.server.services.MessageFactory;
 import org.wte4j.ui.server.services.MessageFactoryImpl;
 import org.wte4j.ui.server.services.ServiceContext;
 import org.wte4j.ui.server.services.SimpleServiceContext;
+import org.wte4j.ui.server.services.TemplateServiceImpl;
+import org.wte4j.ui.shared.TemplateService;
 
 @Configuration
 public class Wte4jAdminConfig {
 
 	@Autowired
 	ServiceContext serviceContext;
-	
+
 	@Bean
 	@Qualifier("wte4j-admin")
 	public MessageFactory messageFactory() {
@@ -52,6 +54,11 @@ public class Wte4jAdminConfig {
 	@Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
 	public ServiceContext serviceContext() {
 		return new SimpleServiceContext();
+	}
+
+	@Bean
+	public TemplateService templateService() {
+		return new TemplateServiceImpl();
 	}
 
 }

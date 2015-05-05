@@ -39,6 +39,7 @@
 
 	<!-- Other module inherits -->
 	<inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
+	<inherits name="org.gwtbootstrap3.extras.growl.Growl"/>
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='org.wte4j.ui.client.Wte4jAdmin' />

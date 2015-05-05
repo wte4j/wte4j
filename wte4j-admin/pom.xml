@@ -26,12 +26,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>wte4j-admin</artifactId>
-	<packaging>jar</packaging>
-
-	<properties>
-		<!-- Convenience property to set the GWT version -->
-		<gwtVersion>2.7.0</gwtVersion>		
-	</properties>
+	<packaging>jar</packaging>	
 
 	<build>
 		<plugins>
@@ -129,6 +124,12 @@
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
 			<artifactId>gwtbootstrap3</artifactId>			
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3-extras</artifactId>
 		</dependency>
 		
 

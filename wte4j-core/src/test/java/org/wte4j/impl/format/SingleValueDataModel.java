@@ -17,7 +17,7 @@ package org.wte4j.impl.format;
 
 import org.wte4j.WteDataModel;
 
-class SingleValueDataModel implements WteDataModel {
+public class SingleValueDataModel implements WteDataModel {
 	private Object value;
 
 	public SingleValueDataModel(Object value) {

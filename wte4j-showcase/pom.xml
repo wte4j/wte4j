@@ -28,7 +28,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<gwtVersion>2.7.0</gwtVersion>
+		
 		<skip.enhanceJPA>false</skip.enhanceJPA>
 		<!-- the following artifacts have been added manually to src/license/NOTICE-template.ftl  
 						xbean-asm4-shaded: The Apache Software License, Version 2.0
@@ -36,20 +36,7 @@
 		-->
 		<license.excludedArtifacts>xbean-asm4-shaded|stax-api</license.excludedArtifacts>
 	</properties>
-
-	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.google.gwt</groupId>
-				<artifactId>gwt</artifactId>
-				<version>${gwtVersion}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<dependencies>
 		<!-- wte4j -->
 
 		<dependency>
@@ -86,12 +73,9 @@
 			<artifactId>gwtbootstrap3</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
 			<artifactId>gwtbootstrap3-extras</artifactId>
-			<version>0.9</version>
-			<scope>provided</scope>
 		</dependency>
 
 	<!-- Spring -->
@@ -179,7 +163,7 @@
 						</goals>
 						<configuration>
 							<includeArtifactIds>wte4j-core</includeArtifactIds>
-							<includes>**/PersistentTemplate.class, **/User.class</includes>
+							<includes>**/PersistentTemplate.class, **/User.class, **/MappingDetail.class</includes>
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteReleases>true</overWriteReleases>

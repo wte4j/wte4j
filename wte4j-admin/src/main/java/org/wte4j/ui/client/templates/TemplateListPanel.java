@@ -29,6 +29,8 @@ import org.gwtbootstrap3.client.ui.constants.ModalBackdrop;
 import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.wte4j.ui.client.cell.PopupCell;
 import org.wte4j.ui.client.templates.contextmenu.TemplateContextMenu;
+import org.wte4j.ui.client.templates.mapping.MappingDisplay;
+import org.wte4j.ui.client.templates.mapping.MappingPanel;
 import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
 import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
 import org.wte4j.ui.shared.TemplateDto;
@@ -50,6 +52,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
@@ -65,8 +68,9 @@ public class TemplateListPanel extends Composite implements
 	@UiField
 	CellTable<TemplateDto> templateTable;
 
-    @UiField
-    MyStyle style;	private Column<TemplateDto, String> nameColumn;
+	@UiField
+	MyStyle style;
+	private Column<TemplateDto, String> nameColumn;
 	private Column<TemplateDto, Date> editedAtColumn;
 	private Column<TemplateDto, String> editorColumn;
 	private TextColumn<TemplateDto> statusColumn;
@@ -84,23 +88,17 @@ public class TemplateListPanel extends Composite implements
 	private TemplateContextMenu templateContextMenu;
 
 	@UiField
-	Modal templateUploadModal;
-	private TemplateUploadDisplay templateUploadDisplay;
+	Modal modalPanel;
+	@UiField
+	ModalBody modalBody;
+
+	private TemplateUploadDisplay templateUploadDisplay = new TemplateUploadFormPanel("wte4-admin-template-update");;
+	private MappingDisplay mappingDisplay = new MappingPanel();
 
 	public TemplateListPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initContextMenu();
 		initTemplateTable();
-		initTemplateUploadDisplay();
-
-	}
-
-	protected void initTemplateUploadDisplay() {
-		ModalBody body = new ModalBody();
-		templateUploadModal.add(body);
-		templateUploadModal.setDataBackdrop(ModalBackdrop.STATIC);
-		templateUploadDisplay = new TemplateUploadFormPanel();
-		body.add(templateUploadDisplay);
 	}
 
 	private void initContextMenu() {
@@ -277,14 +275,40 @@ public class TemplateListPanel extends Composite implements
 
 	@Override
 	public void showTemplateUploadDisplay(String title) {
-		templateUploadModal.setTitle(title);
-		templateUploadModal.show();
+		initModelPanel(title, templateUploadDisplay);
 
 	}
 
 	@Override
 	public void hideTemplateUploadDisplay() {
-		templateUploadModal.hide();
+		hideModalPanel();
+	}
+
+	@Override
+	public void showMappingDisplay(String title) {
+		initModelPanel(title, mappingDisplay);
+	}
+
+	@Override
+	public void hideMappingDisplay() {
+		hideModalPanel();
+	}
+
+	@Override
+	public MappingDisplay getMappingDisplay() {
+		return mappingDisplay;
+	}
+
+	private void initModelPanel(String title, IsWidget content) {
+		modalPanel.setTitle(title);
+		modalPanel.setDataBackdrop(ModalBackdrop.STATIC);
+		modalBody.add(content);
+		modalPanel.show();
+	}
+
+	private void hideModalPanel() {
+		modalPanel.hide();
+		modalBody.clear();
 	}
 
 	private ClickHandler wrapClickHandler(final ClickHandler toWrap) {
@@ -297,7 +321,7 @@ public class TemplateListPanel extends Composite implements
 			}
 		};
 	}
-	
+
 	interface MyStyle extends CssResource {
 		String templatesActionCell();
 	}

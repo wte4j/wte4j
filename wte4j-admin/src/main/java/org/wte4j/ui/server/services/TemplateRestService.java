@@ -16,15 +16,18 @@
 package org.wte4j.ui.server.services;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +41,7 @@ import org.wte4j.LockingException;
 import org.wte4j.Template;
 import org.wte4j.TemplateRepository;
 import org.wte4j.WteException;
+import org.wte4j.ui.shared.FileUploadResponseDto;
 
 @RestController
 @RequestMapping("/templates")
@@ -47,10 +51,6 @@ public class TemplateRestService {
 
 	@Autowired
 	private ServiceContext serviceContext;
-
-	@Autowired
-	@Qualifier("wte4j-admin")
-	private MessageFactory messageFactory;
 
 	@Autowired
 	private FileUploadResponseFactory fileUploadResponseFactory;
@@ -90,6 +90,32 @@ public class TemplateRestService {
 			template.update(in, serviceContext.getUser());
 			templateRepository.persist(template);
 			return fileUploadResponseFactory.createJsonSuccessResponse(MessageKey.TEMPLATE_UPLOADED);
+		} catch (IOException e) {
+			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
+		}
+	}
+
+	/**
+	 * processes template file upload and save the file on the server side in
+	 * temp folder. returns the path
+	 * 
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping(value = "temp", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
+	public String uploadFile(@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
+		if (file.isEmpty()) {
+			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
+		}
+		try {
+			File tempFile = File.createTempFile(name, ".docx");
+			try (OutputStream out = new FileOutputStream(tempFile); InputStream in = file.getInputStream()) {
+				IOUtils.copy(in, out);
+				FileUploadResponseDto response = new FileUploadResponseDto();
+				response.setDone(true);
+				response.setMessage(tempFile.toString());
+				return fileUploadResponseFactory.toJson(response);
+			}
 		} catch (IOException e) {
 			throw new WteFileUploadException(MessageKey.UPLOADED_FILE_NOT_READABLE);
 		}

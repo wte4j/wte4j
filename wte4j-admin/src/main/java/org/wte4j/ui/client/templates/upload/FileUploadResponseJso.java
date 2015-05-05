@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client;
+package org.wte4j.ui.client.templates.upload;
 
-import org.gwtbootstrap3.extras.growl.client.ui.Growl;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlOptions;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlPosition;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlType;
+import org.wte4j.ui.shared.FileUploadResponse;
 
-public class GrowlFactory {
-	public static void success(String message) {
-		GrowlOptions go = new GrowlOptions();
-		go.setPosition(GrowlPosition.TOP_CENTER);
-		go.setType(GrowlType.SUCCESS);
-		Growl.growl(message, go);
+import com.google.gwt.core.client.JavaScriptObject;
+
+public class FileUploadResponseJso extends JavaScriptObject implements FileUploadResponse {
+	protected FileUploadResponseJso() {
 	}
+
+	public final native boolean getDone()/*-{
+											return this.done;
+											}-*/;
+
+	public final native String getMessage() /*-{
+											return this.message;
+											}-*/;
+
 }

@@ -15,8 +15,8 @@
  */
 package org.wte4j;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public interface TemplateEngine {
 
@@ -43,9 +43,19 @@ public interface TemplateEngine {
 	 * @throws InvalidTemplateException
 	 * @throws IOException
 	 */
-	File createDocument(String documentName, String language, Object data)
+	Path createDocument(String documentName, String language, Object data)
 			throws IllegalArgumentException, InvalidTemplateException,
 			IOException;
+
+	/**
+	 * converts a given docx file in template file
+	 * 
+	 * @param aFile
+	 *            path to the docx file
+	 * @return
+	 * @throws IOException
+	 */
+	TemplateFile asTemplateFile(Path aFile) throws IOException;
 
 	/**
 	 * Gives acces to the repository.

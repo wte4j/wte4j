@@ -15,28 +15,26 @@
  */
 package org.wte4j.examples.showcase.client.management;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.wte4j.examples.showcase.client.Application;
-import org.wte4j.examples.showcase.client.GrowlFactory;
-import org.wte4j.examples.showcase.shared.service.TemplateManagerServiceAsync;
+import org.wte4j.ui.client.GrowlFactory;
+import org.wte4j.ui.client.dialog.DialogType;
+import org.wte4j.ui.client.dialog.MessageDialog;
 import org.wte4j.ui.client.templates.TemplateListDisplay;
 import org.wte4j.ui.client.templates.TemplateListPresenter;
+import org.wte4j.ui.client.templates.mapping.MappingPanel;
+import org.wte4j.ui.client.templates.upload.TemplateUploadFormPanel;
+import org.wte4j.ui.shared.TemplateDto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class TemplateManagerPresenter {
-
-	private TemplateManagerServiceAsync templateService = TemplateManagerServiceAsync.Util
-			.getInstance();
-
-	private TemplateManagerDisplay display;
+public class TemplateManagerPresenter implements NewTemplateWizard.WizardContainer {
 
 	private TemplateListPresenter displayTemplatesPresenter;
+
+	private TemplateManagerDisplay display;
+	private NewTemplateWizard newTemplateWizard = new NewTemplateWizard();
 
 	public void bind(TemplateManagerDisplay aDisplay) {
 		if (display != null) {
@@ -45,25 +43,13 @@ public class TemplateManagerPresenter {
 		display = aDisplay;
 		bindTemplateList();
 		initAddTemplateButton();
-		initDialogButtons();
+		initNewTemplateWizard();
 	}
 
-	private void initDialogButtons() {
-		display.addCloseDialogClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent arg0) {
-				display.hideAddTemplateDialog();
-			}
-		});
-
-		display.addCreateTemplateClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent arg0) {
-				createTemplate();
-			}
-		});
+	private void initNewTemplateWizard() {
+		newTemplateWizard.bind(new TemplateUploadFormPanel("create-new-template-upload"));
+		newTemplateWizard.bind(new NewTemplatePanel());
+		newTemplateWizard.bind(new MappingPanel());
 	}
 
 	private void bindTemplateList() {
@@ -77,79 +63,53 @@ public class TemplateManagerPresenter {
 		display.addAddTemplateClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent clickEvent) {
-				displayDataModelListForSelection();
+				showNewTemplateDialog();
+			}
+		});
+
+		display.addCreateTemplateFromFile(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				showNewTemplateDialogWithFileUpload();
 			}
 		});
 	}
 
-	public void displayDataModelListForSelection() {
-		templateService.listDataModel(new AsyncCallback<List<String>>() {
-
-			@Override
-			public void onSuccess(List<String> dataModels) {
-				List<DataModelItem> dataModelItems = new ArrayList<DataModelItem>();
-				for (String dataModel : dataModels) {
-					dataModelItems.add(createDataModelItem(dataModel));
-				}
-				display.setDataModelListItems(dataModelItems);
-				display.showAddTemplateDialog();
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
-		});
-
+	void showNewTemplateDialog() {
+		newTemplateWizard.startWithModel(this);
 	}
 
-	DataModelItem createDataModelItem(String dataModel) {
-		DataModelItem dataModelItem = new DataModelItem();
-		dataModelItem.setText(dataModel);
-		dataModelItem.setClickHandler(new DataModelClickHandler(dataModel));
-		return dataModelItem;
+	void showNewTemplateDialogWithFileUpload() {
+		newTemplateWizard.startWihtFileUpload(this);
 	}
 
-	private class DataModelClickHandler implements ClickHandler {
-
-		private String dataModel;
-
-		public DataModelClickHandler(String dataModel) {
-			this.dataModel = dataModel;
-		}
-
-		@Override
-		public void onClick(ClickEvent event) {
-			display.setSelectedDataModel(dataModel);
-		}
+	@Override
+	public void displayWizardContent(IsWidget wiget) {
+		display.setDialogContent(wiget, Application.LABELS.addTemplate());
 	}
 
-	private void createTemplate() {
-		if (display.validateAddTemplateForm()) {
-			display.showSpinner();
-			final String dataModel = display.getSelectedDataModel();
-			final String templateName = display.getTemplateName();
-			createTemplate(dataModel, templateName);
-		}
+	@Override
+	public void showErrorMessage(String message) {
+		MessageDialog messageDialog = new MessageDialog("", message, DialogType.ERROR);
+		messageDialog.show();
 	}
 
-	private void createTemplate(String dataModel, final String templateName) {
-		templateService.createTemplate(dataModel,
-				templateName, new AsyncCallback<Void>() {
-					@Override
-					public void onSuccess(Void nothing) {
-						display.hideSpinner();
-						display.hideAddTemplateDialog();
-						GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(templateName));
-						displayTemplatesPresenter.loadData();
-					}
+	@Override
+	public void onWizardStarted() {
+		display.showAddTemplateDialog();
+	}
 
-					@Override
-					public void onFailure(Throwable e) {
-						display.hideSpinner();
-						display.displayAddTemplateError(e.getMessage());
-					}
-				});
+	@Override
+	public void onWizardCanceled() {
+		display.hideAddTemplateDialog();
+	}
+
+	@Override
+	public void onWizardCompleted(TemplateDto created) {
+		display.hideAddTemplateDialog();
+		GrowlFactory.success(Application.MESSAGES.wte4j_message_template_creation_success(created.getDocumentName()));
+		displayTemplatesPresenter.loadData();
 	}
 
 }

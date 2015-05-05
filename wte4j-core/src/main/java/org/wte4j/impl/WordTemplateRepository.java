@@ -30,18 +30,15 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.wte4j.FileStore;
-import org.wte4j.FormatterFactory;
 import org.wte4j.LockingException;
 import org.wte4j.Template;
 import org.wte4j.TemplateExistException;
 import org.wte4j.TemplateQuery;
 import org.wte4j.TemplateRepository;
 import org.wte4j.User;
-import org.wte4j.WteModelService;
 
 @Repository
 @Transactional("wte4j")
@@ -51,26 +48,19 @@ public class WordTemplateRepository implements TemplateRepository {
 
 	@PersistenceContext(unitName = "wte4j-templates")
 	protected EntityManager em;
-
-	@Autowired(required = false)
-	@Qualifier("wteModelService")
-	protected WteModelService modelService;
-
 	@Autowired
-	protected FormatterFactory formatterFactory;
+	protected TemplateContextFactory contextFactory;
 
 	@Autowired(required = false)
 	protected FileStore fileStore;
 
 	protected WordTemplateRepository() {
-	};
+	}
 
-	public WordTemplateRepository(EntityManager em,
-			WteModelService modelService, FormatterFactory formatterFactory) {
+	public WordTemplateRepository(EntityManager em, TemplateContextFactory contextFactory) {
 		super();
 		this.em = em;
-		this.modelService = modelService;
-		this.formatterFactory = formatterFactory;
+		this.contextFactory = contextFactory;
 	}
 
 	public void setFileStore(FileStore fileStore) {
@@ -87,8 +77,8 @@ public class WordTemplateRepository implements TemplateRepository {
 		try {
 			PersistentTemplate persistentTemplate = getPersistentTemplate(
 					documentName, language);
-			return new WordTemplate<Object>(persistentTemplate, modelService,
-					formatterFactory);
+			return new WordTemplate<Object>(persistentTemplate,
+					contextFactory);
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -104,8 +94,8 @@ public class WordTemplateRepository implements TemplateRepository {
 				throw new IllegalArgumentException(inputType.getName()
 						+ " is not suported by the specified template");
 			}
-			return new WordTemplate<E>(persistentTemplate, modelService,
-					formatterFactory);
+			return new WordTemplate<E>(persistentTemplate,
+					contextFactory);
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -130,7 +120,7 @@ public class WordTemplateRepository implements TemplateRepository {
 		PersistentTemplate unwrapped = unwrap(aTemplate);
 		unwrapped.lock(user);
 		unwrapped = update(unwrapped);
-		return new WordTemplate<E>(unwrapped, modelService, formatterFactory);
+		return new WordTemplate<E>(unwrapped, contextFactory);
 	}
 
 	@Override
@@ -138,7 +128,7 @@ public class WordTemplateRepository implements TemplateRepository {
 		PersistentTemplate unwrapped = unwrap(template);
 		unwrapped.unlock();
 		unwrapped = update(unwrapped);
-		return new WordTemplate<E>(unwrapped, modelService, formatterFactory);
+		return new WordTemplate<E>(unwrapped, contextFactory);
 	}
 
 	@Override
@@ -156,7 +146,7 @@ public class WordTemplateRepository implements TemplateRepository {
 			updateFileStore(unwrapped);
 		}
 
-		return new WordTemplate<E>(unwrapped, modelService, formatterFactory);
+		return new WordTemplate<E>(unwrapped, contextFactory);
 
 	}
 
@@ -228,7 +218,7 @@ public class WordTemplateRepository implements TemplateRepository {
 				templates.size());
 		for (PersistentTemplate persistentTemplate : templates) {
 			wrapped.add(new WordTemplate<Object>(persistentTemplate,
-					modelService, formatterFactory));
+					contextFactory));
 		}
 		return wrapped;
 	}

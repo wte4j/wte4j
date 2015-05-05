@@ -235,8 +235,6 @@ public class Docx4JWordTemplate {
 		} catch (Docx4JException e) {
 			unwrapIOException(e);
 			throw new WteException("Can not marshall document", e);
-		} finally {
-			IOUtils.closeQuietly(out);
 		}
 	}
 

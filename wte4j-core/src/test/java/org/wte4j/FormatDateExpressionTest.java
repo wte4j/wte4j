@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.impl.format;
+package org.wte4j;
 
 import static org.junit.Assert.assertEquals;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -29,14 +33,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.wte4j.FormatterFactory;
-import org.wte4j.impl.expression.ResolverFactoryImpl;
-import org.wte4j.impl.expression.ValueResolver;
-import org.wte4j.impl.expression.ValueResolverFactory;
+import org.wte4j.impl.TemplateContext;
+import org.wte4j.impl.TemplateContextFactory;
+import org.wte4j.impl.context.TemplateContextFactoryImpl;
+import org.wte4j.impl.format.FormatterRegistry;
 
 /**
  * Ueberprueft, dass die Formatierungen von Datum und Zeit via
@@ -50,15 +55,8 @@ public class FormatDateExpressionTest {
 	private static final TimeZone MEZ = TimeZone.getTimeZone("CET");
 	private static final Locale LOCALE = Locale.GERMAN;
 
-	private static final Map<String, Class<?>> ELEMENTS = Collections
-			.<String, Class<?>> singletonMap("value", Date.class);
-
 	@Autowired
-	private FormatterFactory formatterRegistry;
-
-	public ValueResolverFactory templateContext() {
-		return new ResolverFactoryImpl(LOCALE, formatterRegistry, ELEMENTS);
-	}
+	private TemplateContextFactory contextFactory;
 
 	@BeforeClass
 	public static void setMEZAsDefaultTimeZone() {
@@ -72,127 +70,108 @@ public class FormatDateExpressionTest {
 
 	@Test()
 	public void formateDateShortTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:date(short) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15.02.1977", formated);
+		testFormat(calendar, "format:date(short) value", "15.02.1977");
 	}
 
 	@Test()
 	public void formateDateMediumTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:date(medium) value");
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15. Feb. 1977", formated);
+		testFormat(calendar, "format:date(medium) value", "15. Feb. 1977");
 	}
 
 	@Test()
 	public void formateDateLongTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:date(long) value");
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15. Februar 1977", formated);
+		testFormat(calendar, "format:date(long) value", "15. Februar 1977");
 	}
 
 	@Test()
 	public void formateTimeShortTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:time(short) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.clear();
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("22:33", formated);
+
+		testFormat(calendar, "format:time(short) value", "22:33");
 	}
 
 	@Test()
 	public void formateTimeMediumTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:time(medium) value");
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("22:33:44", formated);
+
+		testFormat(calendar, "format:time(medium) value", "22:33:44");
 	}
 
 	@Test()
 	public void formateTimeLongTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:time(long) value");
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
 		calendar.set(Calendar.MILLISECOND, 123);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("22:33:44.123 MEZ", formated);
+
+		testFormat(calendar, "format:time(long) value", "22:33:44.123 MEZ");
 	}
 
 	@Test()
 	public void formateDateTimeShortTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:dateTime(short, short) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.clear();
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15.02.1977 22:33", formated);
+
+		testFormat(calendar, "format:dateTime(short, short) value", "15.02.1977 22:33");
 	}
 
 	@Test()
 	public void formateDateTimeMediumTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:dateTime(medium, medium) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15. Feb. 1977 22:33:44", formated);
+		testFormat(calendar, "format:dateTime(medium, medium) value", "15. Feb. 1977 22:33:44");
 	}
 
 	@Test()
 	public void formateDateTimeLongTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:dateTime(long, long) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
 		calendar.set(Calendar.MILLISECOND, 123);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15. Februar 1977 22:33:44.123 MEZ", formated);
+
+		testFormat(calendar, "format:dateTime(long, long) value", "15. Februar 1977 22:33:44.123 MEZ");
 	}
 
 	@Test()
 	public void formateDateTimeDifferentFormatTest() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:dateTime(short, medium) value");
+
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("15.02.1977 22:33:44", formated);
+
+		testFormat(calendar, "format:dateTime(short, medium) value", "15.02.1977 22:33:44");
 	}
 
 	@Test()
 	public void formateDateTimeWithPattern() {
-		ValueResolver<String> expression = templateContext()
-				.createStringResolver("format:customDateTime(yyyy) value");
 		Calendar calendar = Calendar.getInstance(LOCALE);
 		calendar.set(1977, 01, 15, 22, 33, 44);
-		String formated = expression.resolve(new SingleValueDataModel(calendar
-				.getTime()));
-		assertEquals("1977", formated);
+
+		testFormat(calendar, "format:customDateTime(yyyy) value", "1977");
+	}
+
+	void testFormat(Calendar input, String expression, String expected) {
+		Template<Date> template = mock(Template.class);
+		when(template.getLanguage()).thenReturn(LOCALE.getLanguage());
+		when(template.getInputType()).thenReturn((Class) Date.class);
+
+		TemplateContext<Date> context = contextFactory.createTemplateContext(template);
+		context.bind(input.getTime());
+
+		String formated = context.resolveValue(expression);
+		assertEquals(expected, formated);
 	}
 
 	@Configuration
@@ -201,6 +180,43 @@ public class FormatDateExpressionTest {
 		public FormatterFactory formatterRegistry() {
 			return new FormatterRegistry();
 		}
+
+		@Bean
+		@Qualifier("wteModelService")
+		public WteModelService wteModelService() {
+			return new SimpleModelService();
+		}
+
+		@Bean
+		public TemplateContextFactory templateContextFactory() {
+			return new TemplateContextFactoryImpl();
+		}
 	}
 
+	public static class SimpleModelService implements WteModelService {
+
+		@Override
+		public Map<String, Class<?>> listModelElements(Class<?> inputClass, Map<String, String> properties) {
+			return Collections.<String, Class<?>> singletonMap("value", inputClass);
+		}
+
+		@Override
+		public List<String> listRequiredModelProperties() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public WteDataModel createModel(Template<?> template, final Object input) {
+			return new WteDataModel() {
+
+				@Override
+				public Object getValue(String key) {
+					if (key.equals("value")) {
+						return input;
+					}
+					return null;
+				}
+			};
+		}
+	}
 }

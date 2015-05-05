@@ -16,6 +16,7 @@
 package org.wte4j.ui.shared;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -29,4 +30,20 @@ public interface TemplateService extends RemoteService {
 	TemplateDto unlockTemplate(TemplateDto template) throws TemplateServiceException;;
 
 	void deleteTemplate(TemplateDto template) throws TemplateServiceException;
+
+	List<ModelElementDto> listModelElements(String inputType, Map<String, String> properties) throws TemplateServiceException;
+
+	/**
+	 * List all content ids for dynamic content in a template file. The file
+	 * must have been uploaded to the server bevor.
+	 * 
+	 * @param templateFile
+	 *            name of the file on server
+	 * @return
+	 */
+	List<String> listContendIds(String templateFile) throws TemplateServiceException;
+
+	TemplateDto saveTemplateData(TemplateDto templateDto, String uploadedTemplate) throws TemplateServiceException, InvalidTemplateServiceException;
+
+	TemplateDto createTemplate(TemplateDto newTemplate, String templateFile) throws TemplateServiceException, InvalidTemplateServiceException;
 }

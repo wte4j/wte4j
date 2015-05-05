@@ -15,7 +15,6 @@
  */
 package org.wte4j.ui.shared;
 
-
 public class TemplateServiceException extends RuntimeException {
 
 	public TemplateServiceException() {
@@ -23,6 +22,10 @@ public class TemplateServiceException extends RuntimeException {
 
 	public TemplateServiceException(String message) {
 		super(message);
+	}
+
+	public TemplateServiceException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

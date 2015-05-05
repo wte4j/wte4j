@@ -15,26 +15,28 @@
  */
 package org.wte4j.ui.client.templates;
 
+import static org.wte4j.ui.client.Application.LABELS;
+
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.wte4j.ui.client.Application;
+import org.wte4j.ui.client.GrowlFactory;
 import org.wte4j.ui.client.dialog.DialogType;
 import org.wte4j.ui.client.dialog.MessageDialog;
+import org.wte4j.ui.client.templates.mapping.MappingPresenter;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter;
 import org.wte4j.ui.client.templates.upload.TemplateUploadPresenter.FileUploadedHandler;
+import org.wte4j.ui.shared.InvalidTemplateServiceException;
 import org.wte4j.ui.shared.TemplateDto;
-import org.wte4j.ui.shared.TemplateService;
 import org.wte4j.ui.shared.TemplateServiceAsync;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -45,35 +47,28 @@ public class TemplateListPresenter {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 
-	private TemplateServiceAsync templateService = GWT
-			.create(TemplateService.class);
+	private TemplateServiceAsync templateService = TemplateServiceAsync.Util.getInstance();
 
 	private TemplateListDisplay display;
 	private TemplateDto current;
+	private String uploadedFile;
 
 	private SingleSelectionModel<TemplateDto> selectionModel;
 	private ListDataProvider<TemplateDto> dataProvider;
 
 	private TemplateUploadPresenter uploadPresenter;
+	private MappingPresenter mappingPresenter;
 
 	public TemplateListPresenter() {
-		((ServiceDefTarget) templateService).setServiceEntryPoint(Application.BASE_PATH + "templateService");
+
 		selectionModel = new SingleSelectionModel<TemplateDto>();
-		selectionModel.addSelectionChangeHandler(new Handler() {
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				current = selectionModel.getSelectedObject();
-				if (current != null) {
-					boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
-					logger.fine("current template locking status = " + isCurrentTemplateLocked);
-					display.setLockCommandVisible(!isCurrentTemplateLocked);
-					display.setUnLockCommandVisible(isCurrentTemplateLocked);
-				}
-			}
-		});
+		selectionModel.addSelectionChangeHandler(createSelectionChangeHandler());
 		dataProvider = new ListDataProvider<TemplateDto>();
+
 		uploadPresenter = new TemplateUploadPresenter();
 		uploadPresenter.addFileUploadedHandler(getFileUploadedHandler());
+
+		mappingPresenter = new InternalMappingPresenter();
 
 	}
 
@@ -124,7 +119,7 @@ public class TemplateListPresenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				updateTemplate();
+				startFileUpload();
 
 			}
 		});
@@ -138,6 +133,7 @@ public class TemplateListPresenter {
 
 		display.getTemplateUploadDisplay().addCancelButtonClickHandler(getCancelButtonClickHandler());
 		uploadPresenter.bindTo(display.getTemplateUploadDisplay());
+		mappingPresenter.bind(display.getMappingDisplay());
 
 	}
 
@@ -163,7 +159,7 @@ public class TemplateListPresenter {
 		String documentName = toRemove.getDocumentName();
 		MessageDialog deleteConfirmationDialog = new MessageDialog(
 				documentName,
-				Application.LABELS.deleteConfirmation(documentName),
+				LABELS.deleteConfirmation(documentName),
 				DialogType.QUESTION,
 				getDeleteTemplateConfirmationOkHandler(toRemove));
 		deleteConfirmationDialog.show();
@@ -189,19 +185,19 @@ public class TemplateListPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				loadData();
-				showError(Application.LABELS.deleteTemplate(), caught.getLocalizedMessage());
+				showError(LABELS.deleteTemplate(), caught.getLocalizedMessage());
 			}
 		});
 	}
 
 	void lockTemplate() {
 		final TemplateDto toLock = current;
-		templateService.lockTemplate(toLock, getRefreshAsCallback(toLock, Application.LABELS.unlockTemplate()));
+		templateService.lockTemplate(toLock, getRefreshAsCallback(toLock, LABELS.unlockTemplate()));
 	}
 
 	void unlockTemplate() {
 		final TemplateDto toUnlock = current;
-		templateService.unlockTemplate(toUnlock, getRefreshAsCallback(toUnlock, Application.LABELS.unlockTemplate()));
+		templateService.unlockTemplate(toUnlock, getRefreshAsCallback(toUnlock, LABELS.unlockTemplate()));
 	}
 
 	private AsyncCallback<TemplateDto> getRefreshAsCallback(final TemplateDto templateToRefresh, final String actionDescriptor) {
@@ -227,24 +223,66 @@ public class TemplateListPresenter {
 		Window.open(url, "parent", "");
 	}
 
-	void updateTemplate() {
-		uploadPresenter.startUpload(current, getTemplateFileRestURL());
+	void startFileUpload() {
+		uploadPresenter.startUpload(current, getTemplateFileRestURL() + "/temp");
 		display.showTemplateUploadDisplay("Update Template " + current.getDocumentName());
+	}
+
+	void updateTemplate() {
+		templateService.saveTemplateData(current, uploadedFile, new AsyncCallback<TemplateDto>() {
+			@Override
+			public void onSuccess(TemplateDto result) {
+				display.hideTemplateUploadDisplay();
+				mappingPresenter.startEditMapping(current, uploadedFile);
+				display.showMappingDisplay(LABELS.updateTemplate_header(current.getDocumentName()));
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				display.hideTemplateUploadDisplay();
+				if (caught instanceof InvalidTemplateServiceException) {
+					InvalidTemplateServiceException e = (InvalidTemplateServiceException) caught;
+					mappingPresenter.startEditMapping(current, uploadedFile);
+					mappingPresenter.displayInvalidTemplateMessage(e);
+					display.showMappingDisplay(LABELS.updateTemplate_header(current.getDocumentName()));
+				} else {
+					showError(LABELS.updateTemplate_header(current.getDocumentName()), caught.getMessage());
+				}
+			}
+		});
 	}
 
 	private FileUploadedHandler getFileUploadedHandler() {
 		return new FileUploadedHandler() {
 			@Override
 			public void onSuccess(String result) {
+				uploadedFile = result;
+				mappingPresenter.startEditMapping(current, uploadedFile);
 				display.hideTemplateUploadDisplay();
-				loadData();
-				showInfo(Application.LABELS.updateTemplate(), result);
+				display.showMappingDisplay(LABELS.updateTemplate_header(current.getDocumentName()));
 			}
 
 			@Override
 			public void onFailure(String errorMessage) {
-				showError(Application.LABELS.updateTemplate(), errorMessage);
 				loadData();
+				showError(LABELS.updateTemplate_header(current.getDocumentName()), errorMessage);
+
+			}
+		};
+	}
+
+	private SelectionChangeEvent.Handler createSelectionChangeHandler() {
+		return new Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				TemplateDto selected = selectionModel.getSelectedObject();
+				if (selected != null) {
+					current = selected;
+					boolean isCurrentTemplateLocked = (current.getLockingUser() != null && current.getLockingUser().getUserId() != null);
+					logger.fine("current template locking status = " + isCurrentTemplateLocked);
+					display.setLockCommandVisible(!isCurrentTemplateLocked);
+					display.setUnLockCommandVisible(isCurrentTemplateLocked);
+				}
 			}
 		};
 	}
@@ -279,5 +317,23 @@ public class TemplateListPresenter {
 
 	void showDialog(String title, String message, DialogType dialogType) {
 		new MessageDialog(title, message, dialogType).show();
+	}
+
+	private class InternalMappingPresenter extends MappingPresenter {
+
+		@Override
+		protected void onSubmitSuccess(TemplateDto template) {
+			super.onSubmitSuccess(template);
+			display.hideMappingDisplay();
+			GrowlFactory.success(LABELS.message_templateUpdatedMessage());
+			loadData();
+		}
+
+		@Override
+		public void cancelEditMapping() {
+			super.cancelEditMapping();
+			display.hideMappingDisplay();
+		}
+
 	}
 }

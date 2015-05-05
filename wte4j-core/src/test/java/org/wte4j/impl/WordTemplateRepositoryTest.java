@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -35,12 +36,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -52,37 +56,31 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.wte4j.EmbeddedDataBaseConfig;
 import org.wte4j.FileStore;
-import org.wte4j.FormatterFactory;
 import org.wte4j.LockingException;
+import org.wte4j.MappingDetail;
 import org.wte4j.Template;
 import org.wte4j.TemplateQuery;
 import org.wte4j.User;
 import org.wte4j.WteModelService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={EmbeddedDataBaseConfig.class})
-@TransactionConfiguration(defaultRollback=true)
+@ContextConfiguration(classes = { EmbeddedDataBaseConfig.class })
+@TransactionConfiguration(defaultRollback = true)
 @Transactional
-public class WordTemplateRepositoryTest  {
+public class WordTemplateRepositoryTest {
 	private static final long LOCKED_TEMPLATE = 2;
-
 	private static final long UNLOCKED_TEMPLATE = 1;
-
 	@PersistenceContext
 	EntityManager entityManager;
-
-	FormatterFactory formatterFactory = mock(FormatterFactory.class);
-
+	TemplateContextFactory contextFactory = mock(TemplateContextFactory.class);
 	WteModelService modelService = mock(WteModelService.class);
-
 	WordTemplateRepository repository;
 
 	@Before
 	public void initTest() throws Exception {
-		repository = new WordTemplateRepository();
+		repository = new WordTemplateRepository(entityManager, contextFactory);
 		repository.em = entityManager;
-		repository.formatterFactory = formatterFactory;
-		repository.modelService = modelService;
+		repository.contextFactory = contextFactory;
 	}
 
 	@Test
@@ -126,7 +124,6 @@ public class WordTemplateRepositoryTest  {
 	@Transactional
 	public void locking() {
 		WordTemplate<?> template = unlockedTemplate();
-
 		User lockingUser = new User("locking", "Locking User");
 		Template<?> locked = repository.lockForEdit(template, lockingUser);
 		assertEquals(lockingUser, locked.getLockingUser());
@@ -151,10 +148,8 @@ public class WordTemplateRepositoryTest  {
 	public void lockingTemplateParallel() {
 		Template<?> template1 = unlockedTemplate();
 		Template<?> template2 = unlockedTemplate();
-
 		template1 = repository.lockForEdit(template1,
 				new User("first", "First"));
-
 		User second = new User("second", "Second User");
 		repository.lockForEdit(template2, second);
 		fail(LockingException.class + " expected");
@@ -174,7 +169,6 @@ public class WordTemplateRepositoryTest  {
 	@Transactional
 	public void unlock() {
 		WordTemplate<?> template = lockedTemplate();
-
 		Template<?> unlocked = repository.unlock(template);
 		assertNull(unlocked.getLockingUser());
 		assertTrue(isVersionIncontext(unlocked));
@@ -193,16 +187,13 @@ public class WordTemplateRepositoryTest  {
 	@Transactional
 	public void persistTemplateWithFileStore() throws Exception {
 		WordTemplate<?> template = newTemplate();
-
 		FileStore fileStore = mock(FileStore.class);
 		File file = File.createTempFile("content", "docx");
 		OutputStream out = FileUtils.openOutputStream(file);
 		when(fileStore.getOutStream(anyString())).thenReturn(out);
 		repository.setFileStore(fileStore);
-
 		try {
 			repository.persist(template);
-
 			File epected = FileUtils.toFile(getClass()
 					.getResource("empty.docx"));
 			assertTrue(FileUtils.contentEquals(epected, file));
@@ -216,7 +207,6 @@ public class WordTemplateRepositoryTest  {
 	public void persistOfLocked() throws Exception {
 		Template<?> template1 = unlockedTemplate();
 		WordTemplate<?> template2 = unlockedTemplate();
-
 		template1 = repository.lockForEdit(template1,
 				new User("user1", "user1"));
 		byte[] content = getContent("empty.docx");
@@ -233,11 +223,9 @@ public class WordTemplateRepositoryTest  {
 	@Transactional
 	public void changeContent() throws Exception {
 		WordTemplate<?> template = unlockedTemplate();
-
 		byte[] content = getContent("empty.docx");
 		User user = new User("new_editor", "New Editor");
 		template.update(new ByteArrayInputStream(content), user);
-
 		Template<?> peristed = repository.persist(template);
 		assertTrue(isVersionIncontext(peristed));
 	}
@@ -245,13 +233,11 @@ public class WordTemplateRepositoryTest  {
 	@Test
 	@Transactional
 	public void updateTemplateWithFileStore() throws Exception {
-
 		FileStore fileStore = mock(FileStore.class);
 		File file = File.createTempFile("content", "docx");
 		OutputStream out = FileUtils.openOutputStream(file);
 		when(fileStore.getOutStream(anyString())).thenReturn(out);
 		repository.setFileStore(fileStore);
-
 		WordTemplate<?> template = unlockedTemplate();
 		template.getPersistentData().setContent(getContent("empty.docx"));
 		try {
@@ -287,10 +273,8 @@ public class WordTemplateRepositoryTest  {
 	@Test
 	@Transactional
 	public void delteTemplateWithFileStore() throws Exception {
-
 		FileStore fileStore = mock(FileStore.class);
 		repository.setFileStore(fileStore);
-
 		WordTemplate<?> template = unlockedTemplate();
 		repository.delete(template);
 		verify(fileStore, times(1)).deleteFile(anyString());
@@ -304,10 +288,8 @@ public class WordTemplateRepositoryTest  {
 	@Transactional
 	public void errorsWithFileStore() throws Exception {
 		WordTemplate<?> template = unlockedTemplate();
-
 		FileStore fileStore = mock(FileStore.class);
 		repository.setFileStore(fileStore);
-
 		EntityManager entityManager = mock(EntityManager.class);
 		when(entityManager.merge(any())).thenThrow(new PersistenceException());
 		repository.em = entityManager;
@@ -329,8 +311,19 @@ public class WordTemplateRepositoryTest  {
 			templateData.setEditedAt(new Date());
 			templateData.setEditor(new User("user", "user"));
 
-			WordTemplate<?> template = new WordTemplate<Object>(templateData,
-					modelService, formatterFactory);
+			Map<String, String> properties = new HashMap<>();
+			properties.put("key", "value");
+			templateData.setProperties(properties);
+
+			MappingDetail value = new MappingDetail();
+			value.setModelKey("modelKey");
+
+			Map<String, MappingDetail> contentMaping = new HashedMap<String, MappingDetail>();
+			contentMaping.put("conentKey", value);
+
+			templateData.setContentMapping(contentMaping);
+
+			WordTemplate<?> template = new WordTemplate<Object>(templateData, contextFactory);
 			return template;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -340,12 +333,10 @@ public class WordTemplateRepositoryTest  {
 	/**
 	 * Returns a detached locked template
 	 */
-
 	private WordTemplate<?> lockedTemplate() {
 		PersistentTemplate template = getTemplateInContext(LOCKED_TEMPLATE);
 		entityManager.detach(template);
-		return new WordTemplate<Object>(template, modelService,
-				formatterFactory);
+		return new WordTemplate<Object>(template, contextFactory);
 	}
 
 	/**
@@ -354,8 +345,7 @@ public class WordTemplateRepositoryTest  {
 	private WordTemplate<?> unlockedTemplate() {
 		PersistentTemplate template = getTemplateInContext(UNLOCKED_TEMPLATE);
 		entityManager.detach(template);
-		return new WordTemplate<Object>(template, modelService,
-				formatterFactory);
+		return new WordTemplate<Object>(template, contextFactory);
 	}
 
 	private byte[] getContent(String file) throws IOException {
@@ -363,7 +353,6 @@ public class WordTemplateRepositoryTest  {
 		try {
 			in = getClass().getResourceAsStream(file);
 			return IOUtils.toByteArray(in);
-
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
@@ -371,7 +360,6 @@ public class WordTemplateRepositoryTest  {
 
 	PersistentTemplate getTemplateInContext(long id) {
 		return entityManager.find(PersistentTemplate.class, id);
-
 	}
 
 	private boolean isVersionIncontext(Template<?> template) {
@@ -384,5 +372,4 @@ public class WordTemplateRepositoryTest  {
 		return inContext.getVersion() == wordTemplate.getPersistentData()
 				.getVersion();
 	}
-
 }

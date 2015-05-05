@@ -13,21 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.server;
+package org.wte4j.ui.shared;
 
-public enum MessageKey {
-	TEMPLATE_NAME_NOT_EMPTY,
-	DATA_MODEL_NOT_FOUND,
-	TEMPLATE_EXISTS_ALREADY;
+import java.io.Serializable;
 
-	private static final String WTE4J_MESSAGE_BASE = "wte4j.message.";
-	private final String value;
+public class ModelElementDto implements Serializable {
+	private String name;
+	private String type;
 
-	private MessageKey() {
-		value = WTE4J_MESSAGE_BASE + this.name().toLowerCase();
+	public String getName() {
+		return name;
 	}
 
-	public String getValue() {
-		return value;
+	public void setName(String name) {
+		this.name = name;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 }

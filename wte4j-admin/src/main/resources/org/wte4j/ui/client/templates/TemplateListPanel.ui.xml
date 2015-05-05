@@ -20,6 +20,8 @@
 		<b.gwt:CellTable ui:field="templateTable" bordered="false"	condensed="true" striped="true" hover="true" pageSize="10"  />
 		<b:Pagination ui:field="templateTablePagination" paginationSize="SMALL" />
 		<g:PopupPanel ui:field="contextPanel" visible="false" addStyleNames='{style.wte4jAdminContextMenu}' modal="true" autoHideEnabled="true" />
-		<b:Modal ui:field="templateUploadModal" visible="false" closable="false" />	
+		<b:Modal ui:field="modalPanel" visible="false" closable="false" >
+			<b:ModalBody ui:field="modalBody"/>
+		</b:Modal>	
 	</b.gwt:FlowPanel>
 </ui:UiBinder> 
