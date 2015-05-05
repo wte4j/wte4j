@@ -6,6 +6,8 @@
 Wte4j is a Spring component that generates Open XML documents from a template.
 As a template one can use .docx or .dotx files with content-controls used by Microsoft Word as placeholders for the dynamic content.
 
+wte4j is using docx4j and apache poi to parse and build word documents.
+
 ## What do you get?
 Wte4j consists of five modules:
 
