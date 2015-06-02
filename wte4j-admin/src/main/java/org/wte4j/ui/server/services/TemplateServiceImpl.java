@@ -207,7 +207,7 @@ public class TemplateServiceImpl implements TemplateService {
 				MappingDetail mappingDetail = new MappingDetail();
 				mappingDetail.setModelKey(dto.getModelKey());
 				mappingDetail.setFormatterDefinition(dto.getFormatterDefinition());
-				target.put(dto.getConentControlId(), mappingDetail);
+				target.put(dto.getConentControlKey(), mappingDetail);
 			}
 		}
 

@@ -107,7 +107,7 @@ public class MappingPresenter {
 
 			@Override
 			public int compare(MappingDto o1, MappingDto o2) {
-				return o1.getConentControlId().toLowerCase().compareTo(o2.getConentControlId().toLowerCase());
+				return o1.getConentControlKey().toLowerCase().compareTo(o2.getConentControlKey().toLowerCase());
 			}
 		});
 
@@ -116,12 +116,12 @@ public class MappingPresenter {
 
 	private MappingDto createOreFindMapping(String contentControlId) {
 		for (MappingDto mapping : template.getMapping()) {
-			if (mapping.getConentControlId().equals(contentControlId)) {
+			if (mapping.getConentControlKey().equals(contentControlId)) {
 				return mapping;
 			}
 		}
 		MappingDto mapping = new MappingDto();
-		mapping.setgetConentControlId(contentControlId);
+		mapping.setContentControlKey(contentControlId);
 		return mapping;
 	}
 

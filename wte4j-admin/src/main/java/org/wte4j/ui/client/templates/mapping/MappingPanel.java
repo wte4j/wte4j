@@ -120,7 +120,7 @@ public class MappingPanel extends Composite implements
 		contentControlIdColumn = new TextColumn<MappingDto>() {
 			@Override
 			public String getValue(MappingDto mapping) {
-				return mapping.getConentControlId();
+				return mapping.getConentControlKey();
 			}
 		};
 		mappings.addColumn(contentControlIdColumn, LABELS.contentControlIdHeader());

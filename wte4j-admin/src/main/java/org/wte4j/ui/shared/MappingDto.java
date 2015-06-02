@@ -18,16 +18,16 @@ package org.wte4j.ui.shared;
 import java.io.Serializable;
 
 public class MappingDto implements Serializable {
-	private String conentControlId;
+	private String conentControlKey;
 	private String modelKey;
 	private String formatterDefinition;
 
-	public String getConentControlId() {
-		return conentControlId;
+	public String getConentControlKey() {
+		return conentControlKey;
 	}
 
-	public void setgetConentControlId(String conentControlId) {
-		this.conentControlId = conentControlId;
+	public void setContentControlKey(String conentControlId) {
+		this.conentControlKey = conentControlId;
 	}
 
 	public String getModelKey() {

@@ -61,7 +61,7 @@ public final class DtoFactory {
 		List<MappingDto> mappingDtos = new ArrayList<>();
 		for (Map.Entry<String, MappingDetail> entry : mapping.entrySet()) {
 			MappingDto mappingDto = new MappingDto();
-			mappingDto.setgetConentControlId(entry.getKey());
+			mappingDto.setContentControlKey(entry.getKey());
 			mappingDto.setModelKey(entry.getValue().getModelKey());
 			mappingDto.setFormatterDefinition(entry.getValue().getFormatterDefinition());
 			mappingDtos.add(mappingDto);
