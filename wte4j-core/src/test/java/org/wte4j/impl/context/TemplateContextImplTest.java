@@ -93,7 +93,7 @@ public class TemplateContextImplTest {
 	public void resolveValidExpressionWithMapping() {
 		MappingDetail mappingDetail = new MappingDetail();
 		mappingDetail.setModelKey("key");
-		mappingDetail.setFormatterDefinition("format:formatter(arg)");
+		mappingDetail.setFormatterDefinition("formatter(arg)");
 		Map<String, MappingDetail> contentMapping = new HashMap<String, MappingDetail>();
 		contentMapping.put("contentKey", mappingDetail);
 

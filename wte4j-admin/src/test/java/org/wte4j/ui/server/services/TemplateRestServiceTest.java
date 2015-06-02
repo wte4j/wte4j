@@ -105,12 +105,13 @@ public class TemplateRestServiceTest {
 	@Test
 	public void uploadTempFile() throws Exception {
 		ResultActions resultActions = mockMvc.perform(
-				MockMvcRequestBuilders.fileUpload("/templates/temp")
-						.file("file", "test".getBytes()));
-		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
+				MockMvcRequestBuilders.fileUpload("/templates//temp")
+						.file("file", "test".getBytes()).param("name", "fileName"));
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
+
+		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
 
 		Pattern pattern = Pattern.compile("\"message\":\"(.+)\"");
 		Matcher matcher = pattern.matcher(content);
