@@ -105,7 +105,7 @@ public class TemplateRestServiceTest {
 	@Test
 	public void uploadTempFile() throws Exception {
 		ResultActions resultActions = mockMvc.perform(
-				MockMvcRequestBuilders.fileUpload("/templates//temp")
+				MockMvcRequestBuilders.fileUpload("/templates/temp")
 						.file("file", "test".getBytes()).param("name", "fileName"));
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
@@ -118,7 +118,7 @@ public class TemplateRestServiceTest {
 		assertTrue(matcher.find());
 		Path file = Paths.get(matcher.group(1));
 		try {
-			assertTrue(Files.exists(file));
+			assertTrue("file " + file + "must exist", Files.exists(file));
 
 		} finally {
 			Files.deleteIfExists(file);
