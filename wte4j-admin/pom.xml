@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.wte4j</groupId>
 		<artifactId>wte4j-parent</artifactId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.1.1</version>
 	</parent>
 	<artifactId>wte4j-admin</artifactId>
 	<packaging>jar</packaging>
@@ -122,7 +122,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
