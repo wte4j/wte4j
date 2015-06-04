@@ -63,12 +63,13 @@ public class DatabaseConfigTest {
 				return tableNames;
 			}
 		});
-		assertEquals(5, wte4jTables.size());
+		assertEquals(6, wte4jTables.size());
 		assertTrue(wte4jTables.contains("person"));
 		assertTrue(wte4jTables.contains("purchase_order"));
 		assertTrue(wte4jTables.contains("wte4j_template"));
 		assertTrue(wte4jTables.contains("wte4j_template_properties"));
 		assertTrue(wte4jTables.contains("wte4j_gen"));
+		assertTrue(wte4jTables.contains("wte4j_template_content_mapping"));
 	}
 
 }
