@@ -21,11 +21,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Activate this if you use Java-Bean as Models -->
-	<!-- <bean id="wteFlatBeanModelService" class="org.wte4j.impl.service.FlatBeanModelService"/> -->
+	<!-- <bean id="wteModelService" class="org.wte4j.impl.service.FlatBeanModelService" /> -->
+	
 
 	<!-- Activate this if you provide the data via jdbc to the engine -->
 	<!-- per default it uses the same datasource as the engine ueses. You can define an other data source by adding a constructor-arg tag -->
-	<!-- <bean id="wteJdbcModelService" class="org.wte4j.impl.service.SimpleDbViewModelService"> -->
+	<!-- <bean id="wteModelService" class="org.wte4j.impl.service.SimpleDbViewModelService"> -->
 
 
 </beans>

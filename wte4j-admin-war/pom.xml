@@ -40,6 +40,9 @@
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openJPA.version}</version>
+				<configuration>					
+					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
+				</configuration>
 				<executions>
 					<execution>
 						<id>enhancer</id>
@@ -47,13 +50,10 @@
 						<goals>
 							<goal>enhance</goal>
 						</goals>
-						<configuration>
-							<configuration>
-								<toolProperties>
-									<includes>org/wte4j/impl/PersistentTemplate.java</includes>
-									<directory>${project.build.outputDirectory}</directory>
-								</toolProperties>
-							</configuration>
+						<configuration>							
+							<toolProperties>
+								<directory>${project.build.outputDirectory}</directory>
+							</toolProperties>
 						</configuration>
 					</execution>
 				</executions>
