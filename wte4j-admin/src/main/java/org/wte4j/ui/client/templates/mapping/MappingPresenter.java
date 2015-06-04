@@ -73,7 +73,6 @@ public class MappingPresenter {
 		template = aTemplate;
 		uploadedTemplateFile = aUploadedTemplateFile;
 		initModelElements();
-		initMappingData();
 	}
 
 	public void displayInvalidTemplateMessage(InvalidTemplateServiceException e) {
@@ -92,9 +91,13 @@ public class MappingPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				displayError(caught);
+				onInitMappingDataFailed(caught);
 			}
 		});
+	}
+
+	protected void onInitMappingDataFailed(Throwable caught) {
+		displayError(caught);
 	}
 
 	protected void updateTemplateMappingData(List<String> contentIds) {

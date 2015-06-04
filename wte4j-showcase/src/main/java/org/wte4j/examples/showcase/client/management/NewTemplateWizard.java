@@ -111,6 +111,8 @@ public class NewTemplateWizard {
 				@Override
 				public void onFailure(Throwable caught) {
 					parent.showErrorMessage(caught.getMessage());
+					startNameAndModelSelection();
+
 				}
 
 				@Override
@@ -184,6 +186,7 @@ public class NewTemplateWizard {
 			parent.showErrorMessage(cause.getMessage());
 			onWizardCanceled();
 		}
+
 	}
 
 	private class MappingStepPresenter extends MappingPresenter {
@@ -211,6 +214,12 @@ public class NewTemplateWizard {
 				}
 			});
 
+		}
+
+		@Override
+		protected void onInitMappingDataFailed(Throwable caught) {
+			parent.showErrorMessage(caught.getMessage());
+			cancelEditMapping();
 		}
 
 		@Override

@@ -335,5 +335,12 @@ public class TemplateListPresenter {
 			display.hideMappingDisplay();
 		}
 
+		@Override
+		protected void onInitMappingDataFailed(Throwable caught) {
+			showError("", caught.getMessage());
+			display.hideMappingDisplay();
+			startFileUpload();
+		}
+
 	}
 }

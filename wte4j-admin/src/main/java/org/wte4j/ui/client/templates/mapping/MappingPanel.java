@@ -26,6 +26,7 @@ import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Pagination;
 import org.gwtbootstrap3.client.ui.constants.AlertType;
 import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
+import org.gwtbootstrap3.client.ui.html.Paragraph;
 import org.gwtbootstrap3.client.ui.html.Strong;
 import org.gwtbootstrap3.client.ui.html.Text;
 import org.wte4j.ui.shared.MappingDto;
@@ -221,7 +222,9 @@ public class MappingPanel extends Composite implements
 		mainMessage.setText(message);
 		detailMessages.clear();
 		for (String detailMessage : details) {
-			detailMessages.add(new Text(detailMessage));
+			Paragraph paragraph = new Paragraph();
+			paragraph.add(new Text(detailMessage));
+			detailMessages.add(paragraph);
 		}
 		alert.setVisible(true);
 	}
