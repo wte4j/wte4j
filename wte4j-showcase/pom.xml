@@ -28,8 +28,6 @@
 	<packaging>war</packaging>
 
 	<properties>
-		
-		<skip.enhanceJPA>false</skip.enhanceJPA>
 		<!-- the following artifacts have been added manually to src/license/NOTICE-template.ftl  
 						xbean-asm4-shaded: The Apache Software License, Version 2.0
 						stax-api: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -149,36 +147,11 @@
 
 	<build>
 		<plugins>
-		<!-- open JPA entity enhancement -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>upack-dependencies</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<configuration>
-							<includeArtifactIds>wte4j-core</includeArtifactIds>
-							<includes>**/PersistentTemplate.class, **/User.class, **/MappingDetail.class</includes>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteReleases>true</overWriteReleases>
-							<skip>${skip.enhanceJPA}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openJPA.version}</version>
-				<configuration>
-					<classes>${project.build.outputDirectory}</classes>
+				<configuration>					
 					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
 				</configuration>
 				<executions>
@@ -188,8 +161,10 @@
 						<goals>
 							<goal>enhance</goal>
 						</goals>
-						<configuration>
-							<skip>${skip.enhanceJPA}</skip>
+						<configuration>							
+							<toolProperties>
+								<directory>${project.build.outputDirectory}</directory>
+							</toolProperties>
 						</configuration>
 					</execution>
 				</executions>

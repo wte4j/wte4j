@@ -27,7 +27,6 @@
 	<packaging>war</packaging>
 
 	<properties>		
-		<skip.enhanceJPA>false</skip.enhanceJPA>
 		<!-- the following artifacts have been added manually to src/license/NOTICE-template.ftl  
 						xbean-asm4-shaded: The Apache Software License, Version 2.0
 						stax-api: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -36,39 +35,11 @@
 	</properties>
 
 	<build>
-
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<execution>
-						<id>upack-dependencies</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>unpack-dependencies</goal>
-						</goals>
-						<configuration>
-							<includeArtifactIds>wte4j-core</includeArtifactIds>
-							<includes>**/PersistentTemplate.class, **/User.class,**/MappingDetail.class</includes>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteReleases>true</overWriteReleases>
-							<skip>${skip.enhanceJPA}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openJPA.version}</version>
-				<configuration>
-					<classes>${project.build.outputDirectory}</classes>
-					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
-				</configuration>
 				<executions>
 					<execution>
 						<id>enhancer</id>
@@ -77,7 +48,12 @@
 							<goal>enhance</goal>
 						</goals>
 						<configuration>
-							<skip>${skip.enhanceJPA}</skip>
+							<configuration>
+								<toolProperties>
+									<includes>org/wte4j/impl/PersistentTemplate.java</includes>
+									<directory>${project.build.outputDirectory}</directory>
+								</toolProperties>
+							</configuration>
 						</configuration>
 					</execution>
 				</executions>
@@ -127,7 +103,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
 
 	<dependencies>
 		<!-- JSP -->
@@ -140,12 +116,12 @@
 
 		<dependency>
 			<groupId>org.apache.taglibs</groupId>
-			<artifactId>taglibs-standard-spec</artifactId>			
+			<artifactId>taglibs-standard-spec</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.taglibs</groupId>
-			<artifactId>taglibs-standard-impl</artifactId>			
+			<artifactId>taglibs-standard-impl</artifactId>
 		</dependency>
 	
 		<!-- GWT -->
@@ -172,7 +148,7 @@
 			<groupId>org.gwtbootstrap3</groupId>
 			<artifactId>gwtbootstrap3</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
 			<artifactId>gwtbootstrap3-extras</artifactId>
