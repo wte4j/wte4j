@@ -18,7 +18,7 @@ package org.wte4j.ui.shared;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvalidTemplateServiceException extends RuntimeException {
+public class InvalidTemplateServiceException extends TemplateServiceException {
 
 	private List<String> details = new ArrayList<String>();
 

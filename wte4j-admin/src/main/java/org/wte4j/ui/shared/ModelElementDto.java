@@ -17,6 +17,8 @@ package org.wte4j.ui.shared;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class ModelElementDto implements Serializable {
 	private String name;
 	private String type;
@@ -35,6 +37,13 @@ public class ModelElementDto implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("name", name)
+				.append("type", type).build();
 	}
 
 }

@@ -85,39 +85,34 @@ public class TemplateServiceImpl implements TemplateService {
 
 	@Override
 	public TemplateDto lockTemplate(TemplateDto templateDto) {
-		Template<?> template = lookup(templateDto);
+
 		try {
+			Template<?> template = lookup(templateDto);
 			template = templateRepository.lockForEdit(template, serviceContext.getUser());
 			return DtoFactory.createTemplateDto(template);
-		} catch (LockingException e) {
-			logger.debug("template {}_{} is locked by {}",
-					template.getDocumentName(),
-					template.getLanguage(),
-					template.getLockingUser().getDisplayName(),
-					e);
-			throw createServiceException(MessageKey.LOCKED_TEMPLATE);
+		} catch (WteException e) {
+			throw createServiceException(e, templateDto);
 		}
 	}
 
 	@Override
 	public TemplateDto unlockTemplate(TemplateDto templateDto) {
-		Template<?> template = lookup(templateDto);
-		template = templateRepository.unlock(template);
-		return DtoFactory.createTemplateDto(template);
+		try {
+			Template<?> template = lookup(templateDto);
+			template = templateRepository.unlock(template);
+			return DtoFactory.createTemplateDto(template);
+		} catch (WteException e) {
+			throw createServiceException(e, templateDto);
+		}
 	}
 
 	@Override
 	public void deleteTemplate(TemplateDto templateDto) {
-		Template<?> template = lookup(templateDto);
 		try {
+			Template<?> template = lookup(templateDto);
 			templateRepository.delete(template);
-
-		} catch (LockingException e) {
-			logger.debug("template {}_{} is locked by {}",
-					template.getDocumentName(),
-					template.getLanguage(),
-					template.getLockingUser().getDisplayName(), e);
-			throw createServiceException(MessageKey.LOCKED_TEMPLATE);
+		} catch (WteException e) {
+			throw createServiceException(e, templateDto);
 		}
 
 	}
@@ -147,8 +142,11 @@ public class TemplateServiceImpl implements TemplateService {
 
 	@Override
 	public TemplateDto saveTemplateData(TemplateDto templateDto, String uploadedTemplate) throws TemplateServiceException {
-		Template<?> template = lookup(templateDto);
 		Path path = Paths.get(uploadedTemplate);
+		if (!Files.exists(path)) {
+			throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
+		}
+		Template<?> template = lookup(templateDto);
 		try (InputStream in = Files.newInputStream(path)) {
 			template.update(in, serviceContext.getUser());
 			copyMappingData(template.getContentMapping(), templateDto.getMapping());
@@ -156,11 +154,9 @@ public class TemplateServiceImpl implements TemplateService {
 			template = templateRepository.persist(template);
 			return DtoFactory.createTemplateDto(template);
 		} catch (IOException e) {
-			throw createServiceException(MessageKey.INTERNAL_SERVER_ERROR);
-		} catch (LockingException e) {
-			throw createServiceException(MessageKey.LOCKED_TEMPLATE);
-		} catch (InvalidTemplateException e) {
-			throw createInvalidTemplateServiceException(e.getErrors());
+			throw createServiceException(MessageKey.INTERNAL_SERVER_ERROR, e);
+		} catch (WteException e) {
+			throw createServiceException(e, templateDto);
 		}
 	}
 
@@ -180,7 +176,11 @@ public class TemplateServiceImpl implements TemplateService {
 					.setMappingData(mappingData);
 
 			if (StringUtils.isNotEmpty(templateFile)) {
-				templateBuilder.setTemplateFile(Paths.get(templateFile));
+				Path filePath = Paths.get(templateFile);
+				if (!Files.exists(filePath)) {
+					throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
+				}
+				templateBuilder.setTemplateFile(filePath);
 			}
 
 			Template<?> template = templateBuilder.build();
@@ -189,13 +189,25 @@ public class TemplateServiceImpl implements TemplateService {
 			return DtoFactory.createTemplateDto(template);
 		} catch (ClassNotFoundException e) {
 			throw createServiceException(MessageKey.TEMPLATE_CLASS_NOT_FOUND, e);
-		} catch (TemplateExistException e) {
-			throw createServiceException(MessageKey.TEMPLATE_EXISTS);
-		} catch (InvalidTemplateException e) {
-			throw createInvalidTemplateServiceException(e.getErrors());
-		} catch (RuntimeException e) {
-			logger.error("error on creating template", e);
+		} catch (WteException e) {
+			throw createServiceException(e, newTemplate);
+		}
+	}
+
+	@Override
+	public List<String> listContendIds(String pathToFile) throws TemplateServiceException {
+		Path filePath = Paths.get(pathToFile);
+		if (!Files.exists(filePath)) {
+			throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
+		}
+		try {
+			TemplateFile templateFile = templateEngine.asTemplateFile(filePath);
+			return templateFile.listContentIds();
+		} catch (IOException e) {
 			throw createServiceException(MessageKey.INTERNAL_SERVER_ERROR, e);
+		} catch (WteException e) {
+			logger.debug("error on parsing file {}", pathToFile, e);
+			throw createServiceException(MessageKey.UPLOADED_FILE_NOT_VALID, e);
 		}
 	}
 
@@ -221,9 +233,20 @@ public class TemplateServiceImpl implements TemplateService {
 		return template;
 	}
 
-	TemplateServiceException createServiceException(MessageKey key) {
-		String message = messageFactory.createMessage(key.getValue());
-		return new TemplateServiceException(message);
+	TemplateServiceException createServiceException(WteException exception, TemplateDto source) {
+		if (exception instanceof InvalidTemplateException) {
+			return createAndThrowInvalidTemplateServiceException((InvalidTemplateException) exception);
+		} else if (exception instanceof LockingException) {
+			return createServiceException(MessageKey.LOCKED_TEMPLATE, exception);
+		}
+		else if (exception instanceof TemplateExistException) {
+			return createServiceException(MessageKey.TEMPLATE_EXISTS, exception);
+		}
+		else {
+			logger.error("error on processing template {}", source, exception);
+			return createServiceException(MessageKey.INTERNAL_SERVER_ERROR, exception);
+		}
+
 	}
 
 	TemplateServiceException createServiceException(MessageKey key, Throwable cause) {
@@ -231,30 +254,18 @@ public class TemplateServiceImpl implements TemplateService {
 		return new TemplateServiceException(message, cause);
 	}
 
-	InvalidTemplateServiceException createInvalidTemplateServiceException(Map<String, ExpressionError> errors) {
+	TemplateServiceException createServiceException(MessageKey key) {
+		String message = messageFactory.createMessage(key.getValue());
+		return new TemplateServiceException(message);
+	}
+
+	InvalidTemplateServiceException createAndThrowInvalidTemplateServiceException(InvalidTemplateException e) {
 		String message = messageFactory.createMessage(MessageKey.UPLOADED_FILE_NOT_VALID.getValue());
 		List<String> details = new ArrayList<String>();
-		for (Map.Entry<String, ExpressionError> entry : errors.entrySet()) {
+		for (Map.Entry<String, ExpressionError> entry : e.getErrors().entrySet()) {
 			String detailMessage = messageFactory.createMessage("wte4j.message." + entry.getValue().name(), entry.getKey());
 			details.add(detailMessage);
 		}
 		return new InvalidTemplateServiceException(message, details);
-	}
-
-	@Override
-	public List<String> listContendIds(String pathToFile) throws TemplateServiceException {
-		Path filePath = Paths.get(pathToFile);
-		if (!Files.exists(filePath)) {
-			throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
-		}
-		try {
-			TemplateFile templateFile = templateEngine.asTemplateFile(filePath);
-			return templateFile.listContentIds();
-		} catch (IOException e) {
-			throw createServiceException(MessageKey.INTERNAL_SERVER_ERROR, e);
-		} catch (WteException e) {
-			logger.debug("error on parsing file {}", pathToFile, e);
-			throw createServiceException(MessageKey.UPLOADED_FILE_NOT_VALID, e);
-		}
 	}
 }

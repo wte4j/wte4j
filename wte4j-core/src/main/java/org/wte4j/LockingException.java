@@ -18,7 +18,7 @@ package org.wte4j;
 /**
  * * Exception is thrown, when a template is locked by an other user.
  */
-public class LockingException extends RuntimeException {
+public class LockingException extends WteException {
 
 	public LockingException(String message) {
 		super(message);
