@@ -45,6 +45,7 @@ import javax.persistence.Version;
 
 import org.apache.commons.io.IOUtils;
 import org.wte4j.LockingException;
+import org.wte4j.MappingDetail;
 import org.wte4j.User;
 
 /**
@@ -78,6 +79,14 @@ public class PersistentTemplate {
 	@MapKeyColumn(name = "property_key")
 	@Column(name = "property_value")
 	private Map<String, String> properties;
+
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = MappingDetail.class)
+	@AttributeOverrides(value = {
+			@AttributeOverride(name = "value.modelKey", column = @Column(name = "model_key", nullable = true, length = 250)),
+			@AttributeOverride(name = "value.formatterDefinition", column = @Column(name = "formatter_definition", nullable = true, length = 250)) })
+	@CollectionTable(name = "wte4j_template_content_mapping", joinColumns = @JoinColumn(name = "template_id"))
+	@MapKeyColumn(name = "conentend_control_id")
+	private Map<String, MappingDetail> contentMapping;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -161,6 +170,14 @@ public class PersistentTemplate {
 
 	public void setProperties(Map<String, String> modelProperties) {
 		this.properties = modelProperties;
+	}
+
+	public Map<String, MappingDetail> getContentMapping() {
+		return contentMapping;
+	}
+
+	public void setContentMapping(Map<String, MappingDetail> contentMapping) {
+		this.contentMapping = contentMapping;
 	}
 
 	public User getLockingUser() {

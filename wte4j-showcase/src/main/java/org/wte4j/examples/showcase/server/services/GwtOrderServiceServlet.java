@@ -53,6 +53,10 @@ public class GwtOrderServiceServlet extends RemoteServiceServlet implements Orde
 		return orderService.listOrderTemplates();
 	}
 
+	public List<String> listDataModel() {
+		return orderService.listDataModel();
+	}
+
 	@Override
 	public String createDocument(OrderDataDto order, String documentName) {
 		return orderService.createDocument(order, documentName);

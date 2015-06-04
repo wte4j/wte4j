@@ -33,8 +33,7 @@ public interface FormatterFactory {
 	 *             -if for the given arguments the formatter can not be build
 	 */
 
-	Formatter createFormatter(String name, List<String> args)
-			throws UnknownFormatterException, FormatterInstantiationException;
+	Formatter createFormatter(String name, List<String> args) throws UnknownFormatterException, FormatterInstantiationException;
 
 	/**
 	 * Creates a new formatter instance for a given type.
@@ -42,7 +41,6 @@ public interface FormatterFactory {
 	 * @throws FormatterInstantiationException
 	 *             if a new Instance can not be created.
 	 */
-	Formatter createDefaultFormatter(Class<?> type)
-			throws FormatterInstantiationException;
+	Formatter createDefaultFormatter(Class<?> type) throws FormatterInstantiationException;
 
 }

@@ -28,11 +28,6 @@
 	<artifactId>wte4j-admin</artifactId>
 	<packaging>jar</packaging>
 
-	<properties>
-		<!-- Convenience property to set the GWT version -->
-		<gwtVersion>2.7.0</gwtVersion>		
-	</properties>
-
 	<build>
 		<plugins>
 			<!-- GWT Maven Plugin -->
@@ -61,6 +56,38 @@
 					<webappDirectory>${project.build.outputDirectory}/META-INF/resources</webappDirectory>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openJPA.version}</version>
+				<configuration>
+					
+				</configuration>
+				<executions>
+					<execution>
+						<id>enhance-for-test</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>test-enhance</goal>
+						</goals>
+						<configuration>
+							<persistenceXmlFile>${project.basedir}/src/test/resources/test-persistence.xml</persistenceXmlFile>							
+							<includes>**/PersistentTemplate.class, **/User.class, **/MappingDetail.class</includes>
+							<toolProperties>
+								<directory>${project.build.testOutputDirectory}</directory>
+							</toolProperties>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.openjpa</groupId>
+						<artifactId>openjpa</artifactId>
+						<version>${openJPA.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -83,6 +110,19 @@
 									</pluginExecutionFilter>
 									<action>
 										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.openjpa</groupId>
+										<artifactId>openjpa-maven-plugin</artifactId>
+										<versionRange>[2.3.0,)</versionRange>
+										<goals>
+											<goal>test-enhance</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -125,10 +165,16 @@
 			<artifactId>gwt-dev</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.gwtbootstrap3</groupId>
-			<artifactId>gwtbootstrap3</artifactId>			
+			<artifactId>gwtbootstrap3</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3-extras</artifactId>
 		</dependency>
 		
 
@@ -164,7 +210,7 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>	
+			<artifactId>spring-context</artifactId>
 		</dependency>
 
 		<dependency>
@@ -187,19 +233,39 @@
 
 		<dependency>
 			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>			
+			<artifactId>commons-io</artifactId>
 		</dependency>
-		
-		<!-- logging -->
+
+		<!-- testing -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 </project>

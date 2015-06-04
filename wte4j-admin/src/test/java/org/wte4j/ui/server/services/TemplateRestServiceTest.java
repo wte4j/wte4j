@@ -16,8 +16,15 @@
 package org.wte4j.ui.server.services;
 
 import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -92,6 +99,30 @@ public class TemplateRestServiceTest {
 
 		String content = resultActions.andReturn().getResponse().getContentAsString();
 		assertTrue(content.contains(MessageKey.TEMPLATE_NOT_FOUND.getValue()));
+
+	}
+
+	@Test
+	public void uploadTempFile() throws Exception {
+		ResultActions resultActions = mockMvc.perform(
+				MockMvcRequestBuilders.fileUpload("/templates//temp")
+						.file("file", "test".getBytes()).param("name", "fileName"));
+
+		String content = resultActions.andReturn().getResponse().getContentAsString();
+
+		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
+
+		Pattern pattern = Pattern.compile("\"message\":\"(.+)\"");
+		Matcher matcher = pattern.matcher(content);
+		assertTrue(matcher.find());
+		Path file = Paths.get(matcher.group(1));
+		try {
+			assertTrue(Files.exists(file));
+
+		} finally {
+			Files.deleteIfExists(file);
+		}
 
 	}
 

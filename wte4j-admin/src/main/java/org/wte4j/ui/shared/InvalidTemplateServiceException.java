@@ -13,18 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.client;
+package org.wte4j.ui.shared;
 
-import org.gwtbootstrap3.extras.growl.client.ui.Growl;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlOptions;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlPosition;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlType;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GrowlFactory {
-	public static void success(String message) {
-		GrowlOptions go = new GrowlOptions();
-		go.setPosition(GrowlPosition.TOP_CENTER);
-		go.setType(GrowlType.SUCCESS);
-		Growl.growl(message, go);
+public class InvalidTemplateServiceException extends TemplateServiceException {
+
+	private List<String> details = new ArrayList<String>();
+
+	public InvalidTemplateServiceException() {
 	}
+
+	public InvalidTemplateServiceException(String message) {
+		super(message);
+	}
+
+	public InvalidTemplateServiceException(String summary, List<String> details) {
+		super(summary);
+		this.details = details;
+	}
+
+	public List<String> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<String> details) {
+		this.details = details;
+	}
+
 }

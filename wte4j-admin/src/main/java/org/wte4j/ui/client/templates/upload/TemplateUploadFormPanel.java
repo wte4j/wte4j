@@ -15,8 +15,6 @@
  */
 package org.wte4j.ui.client.templates.upload;
 
-import static org.wte4j.ui.client.Application.LABELS;
-
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
@@ -40,9 +38,11 @@ import com.google.gwt.user.client.ui.Widget;
 public class TemplateUploadFormPanel extends Composite implements
 		TemplateUploadDisplay {
 
+	private String id;
+
 	@UiField(provided = true)
 	FormPanel formPanel;
-	
+
 	@UiField
 	FlowPanel flowPanel;
 
@@ -67,29 +67,30 @@ public class TemplateUploadFormPanel extends Composite implements
 	private static TemplateUploadFormPanelUiBInder uiBinder = GWT
 			.create(TemplateUploadFormPanelUiBInder.class);
 
-	public TemplateUploadFormPanel() {
+	public TemplateUploadFormPanel(String id) {
+		this.id = id;
 		initForm();
 		initWidget(uiBinder.createAndBindUi(this));
 		initIFrame();
-		initButtons();
 	}
 
 	private void initForm() {
-		formPanel = new FormPanel("wte4j-fileupload-iframe");
+		formPanel = new FormPanel(id);
 		formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
 		formPanel.setMethod(FormPanel.METHOD_POST);
 	}
 
 	private void initIFrame() {
 		final Frame iframe = new Frame("javascript:\"\"");
-		iframe.getElement().setAttribute("name", "wte4j-fileupload-iframe");
-		iframe.getElement().setAttribute("style","position:absolute;width:0;height:0;border:0");
+		iframe.getElement().setAttribute("name", id);
+		iframe.getElement().setAttribute("style", "position:absolute;width:0;height:0;border:0");
 		iframe.addLoadHandler(new LoadHandler() {
 			@Override
 			public void onLoad(LoadEvent arg0) {
 				String content = IFrameElement.as(iframe.getElement()).getContentDocument().getBody().getInnerHTML();
 				if (content != null && !"".equals(content))
-					formPanel.fireEvent(new SubmitCompleteEvent(content){});
+					formPanel.fireEvent(new SubmitCompleteEvent(content) {
+					});
 			}
 		});
 		flowPanel.add(iframe);
@@ -105,13 +106,13 @@ public class TemplateUploadFormPanel extends Composite implements
 		loadingSpinner.setVisible(true);
 		setButtonsVisible(false);
 	}
-	
+
 	@Override
 	public void stopLoadingAnimation() {
 		loadingSpinner.setVisible(false);
 		setButtonsVisible(true);
 	}
-	
+
 	@Override
 	public void addSubmitButtonClickHandler(ClickHandler clickHandler) {
 		submitButton.addClickHandler(clickHandler);
@@ -127,20 +128,15 @@ public class TemplateUploadFormPanel extends Composite implements
 	public void addSubmitCompleteHandler(SubmitCompleteHandler handler) {
 		formPanel.addSubmitCompleteHandler(handler);
 	}
-	
+
 	@Override
 	public void submitForm() {
 		formPanel.submit();
 	}
-	
+
 	private void setButtonsVisible(boolean visible) {
 		submitButton.setVisible(visible);
 		cancelButton.setVisible(visible);
-	}
-	
-	private void initButtons() {
-		submitButton.setText(LABELS.submit());
-		cancelButton.setText(LABELS.cancel());
 	}
 
 	public void setTemplateName(String value) {
@@ -154,6 +150,5 @@ public class TemplateUploadFormPanel extends Composite implements
 	interface TemplateUploadFormPanelUiBInder extends
 			UiBinder<Widget, TemplateUploadFormPanel> {
 	}
-
 
 }

@@ -49,4 +49,6 @@ public interface OrderService extends RemoteService {
 	 * Returns a list of templates available for order data
 	 */
 	List<String> listOrderTemplates();
+
+	List<String> listDataModel();
 }

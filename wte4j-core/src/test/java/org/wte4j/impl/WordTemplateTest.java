@@ -20,15 +20,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -36,24 +39,33 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.docx4j.XmlUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.junit.Before;
 import org.junit.Test;
-import org.wte4j.Formatter;
-import org.wte4j.FormatterFactory;
-import org.wte4j.FormatterInstantiationException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.wte4j.ExpressionError;
 import org.wte4j.InvalidTemplateException;
 import org.wte4j.LockingException;
 import org.wte4j.Template;
-import org.wte4j.UnknownFormatterException;
 import org.wte4j.User;
-import org.wte4j.WteDataModel;
 import org.wte4j.WteException;
-import org.wte4j.WteModelService;
-import org.wte4j.impl.format.ToStringFormatter;
 
+@RunWith(MockitoJUnitRunner.class)
 public class WordTemplateTest {
-
 	private static final String EMPTY_WORD = "org/wte4j/impl/empty.docx";
 	private static final String TEST_TEXTFILE = "org/wte4j/impl/test.txt";
+
+	@Mock
+	private TemplateContextFactory contextFactory;
+
+	@Mock
+	private TemplateContext<String> templateContext;
+
+	@Before
+	public void initMocks() {
+		when(contextFactory.createTemplateContext((Template<String>) any())).thenReturn(templateContext);
+	}
 
 	@Test
 	public void writeTest() throws IOException {
@@ -61,10 +73,7 @@ public class WordTemplateTest {
 		byte[] content = new byte[1];
 		Arrays.fill(content, Byte.MIN_VALUE);
 		template.setContent(content);
-
-		WordTemplate<?> wordTemplate = new WordTemplate<Object>(template, null,
-				null);
-
+		WordTemplate<?> wordTemplate = new WordTemplate<Object>(template, null);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		wordTemplate.write(out);
 		assertTrue("Content is not equals",
@@ -88,7 +97,6 @@ public class WordTemplateTest {
 	@Test
 	public void updateUnlockedTemplate() throws IOException {
 		WordTemplate<?> wordTemplate = createWordTemplate(TEST_TEXTFILE);
-
 		User user = new User("user", "user");
 		updateContent(wordTemplate, user, EMPTY_WORD);
 		checkUpdateContent(wordTemplate, user, EMPTY_WORD);
@@ -107,7 +115,6 @@ public class WordTemplateTest {
 	public void updateLockedWithDifferentEditor() throws IOException {
 		WordTemplate<?> wordTemplate = createWordTemplate(TEST_TEXTFILE);
 		wordTemplate.getPersistentData().lock(new User("user1", "user1"));
-
 		User user2 = new User("user2", "user 2");
 		updateContent(wordTemplate, user2, EMPTY_WORD);
 		fail("Exception expected");
@@ -126,27 +133,32 @@ public class WordTemplateTest {
 	}
 
 	@Test
-	public void updateWithInvalidWordDocument() throws IOException {
-		WordTemplate<String> wordTemplate = createWordTemplate(EMPTY_WORD);
-		User editor = wordTemplate.getEditor();
+	public void listConentIds() throws IOException {
+		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/simpleTemplate.docx");
+		List<String> ids = wordTemplate.listContentIds();
+		assertEquals(1, ids.size());
+		assertEquals("value", ids.get(0));
+	}
 
+	@Test
+	public void validate() throws IOException {
+		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/simpleTemplate.docx");
+		when(templateContext.validate("value")).thenReturn(ExpressionError.ILLEGAL_CONTENT_KEY);
 		try {
-			updateContent(wordTemplate, new User("user", "user"),
-					"org/wte4j/impl/dateValueTemplate.docx");
-			fail("Exception expected");
+			wordTemplate.validate();
+			fail("InvalidTemplateExcption expected");
 		} catch (InvalidTemplateException e) {
-			checkUpdateContent(wordTemplate, editor, EMPTY_WORD);
+			assertEquals(ExpressionError.ILLEGAL_CONTENT_KEY, e.getErrors().get("value"));
 		}
 	}
 
 	@Test
 	public void toDocumentTest() throws IOException, Docx4JException {
-
 		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/simpleTemplate.docx");
+		when(templateContext.resolveValue("value")).thenReturn("test123");
 		File generatedDocument = File.createTempFile("generated", "docx");
-		try {
-			wordTemplate.toDocument("test123", generatedDocument);
-
+		try (OutputStream out = new FileOutputStream(generatedDocument)) {
+			wordTemplate.toDocument("gugus", out);
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
 					.load(generatedDocument);
 			String content = XmlUtils.marshaltoString(wordMLPackage
@@ -160,20 +172,22 @@ public class WordTemplateTest {
 	@Test(expected = InvalidTemplateException.class)
 	public void toDocumentWithInvalidDocument() throws IOException,
 			Docx4JException {
+		InvalidExpressionException error = new InvalidExpressionException(ExpressionError.FORMATTER_TYPE_MISSMATCH);
+		when(templateContext.resolveValue(anyString())).thenThrow(error);
 
 		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/dateValueTemplate.docx");
+
 		OutputStream out = new ByteArrayOutputStream();
 		wordTemplate.toDocument("test", out);
-		fail(InvalidTemplateException.class + " expected");
 	}
 
 	@Test
 	public void toTestDocument() throws IOException, Docx4JException {
+		when(templateContext.resolveValue("value")).thenReturn(TestDataModel.STRING_TEXT);
 		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/simpleTemplate.docx");
 		File generatedDocument = File.createTempFile("generated", "docx");
-		try {
-			wordTemplate.toTestDocument(generatedDocument);
-
+		try (OutputStream out = new FileOutputStream(generatedDocument)) {
+			wordTemplate.toTestDocument(out);
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
 					.load(generatedDocument);
 			String content = XmlUtils.marshaltoString(wordMLPackage
@@ -187,10 +201,12 @@ public class WordTemplateTest {
 	@Test(expected = InvalidTemplateException.class)
 	public void toTestDocumentWithInvalidTemplate() throws IOException,
 			Docx4JException {
+		InvalidExpressionException error = new InvalidExpressionException(ExpressionError.FORMATTER_TYPE_MISSMATCH);
+		when(templateContext.resolveValue(anyString())).thenThrow(error);
+
 		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/dateValueTemplate.docx");
 		OutputStream out = new ByteArrayOutputStream();
 		wordTemplate.toTestDocument(out);
-		fail(InvalidTemplateException.class + "expected");
 	}
 
 	private static void updateContent(WordTemplate<?> template, User user,
@@ -206,10 +222,8 @@ public class WordTemplateTest {
 	private void checkUpdateContent(WordTemplate<?> wordTemplate, User user,
 			String fileName) throws IOException {
 		File file = FileUtils.toFile(ClassLoader.getSystemResource(fileName));
-
 		byte[] expectedContent = FileUtils.readFileToByteArray(file);
 		byte[] currentContent = wordTemplate.getPersistentData().getContent();
-
 		assertTrue(Arrays.equals(expectedContent, currentContent));
 		assertEquals(user, wordTemplate.getEditor());
 		assertNotNull(wordTemplate.getEditedAt());
@@ -221,7 +235,6 @@ public class WordTemplateTest {
 				.getSystemResource(pathToTemplateFile));
 		byte[] templateContent = FileUtils
 				.readFileToByteArray(templateDocument);
-
 		PersistentTemplate persistentData = new PersistentTemplate();
 		persistentData.setDocumentName("test");
 		persistentData.setLanguage("de");
@@ -230,62 +243,9 @@ public class WordTemplateTest {
 		persistentData.setCreatedAt(new Date());
 		persistentData.setEditor(new User("default", "default"));
 		persistentData.setContent(templateContent);
-
 		WordTemplate<String> wordTemplate = new WordTemplate<String>(
-				persistentData, new SimpleValueModelService(),
-				new SimpleFormatterFactory());
+				persistentData, contextFactory);
 		return wordTemplate;
 	}
 
-	private static class SimpleValueModelService implements WteModelService {
-
-		@Override
-		public Map<String, Class<?>> listModelElements(Class<?> inputClass,
-				Map<String, String> properties) {
-			return Collections.<String, Class<?>> singletonMap("value",
-					String.class);
-		}
-
-		@Override
-		public List<String> listRequiredModelProperties() {
-			return Collections.emptyList();
-		}
-
-		@Override
-		public WteDataModel createModel(Template<?> template, final Object input) {
-			return new WteDataModel() {
-				@Override
-				public Object getValue(String key)
-						throws IllegalArgumentException {
-					if (key.equals("value")) {
-						return input.toString();
-					} else {
-						throw new IllegalArgumentException();
-					}
-				}
-			};
-		}
-
-	}
-
-	private static class SimpleFormatterFactory implements FormatterFactory {
-
-		private Formatter formatter = new ToStringFormatter();
-
-		@Override
-		public Formatter createFormatter(String name, List<String> args)
-				throws UnknownFormatterException,
-				FormatterInstantiationException {
-			if (name.equals("string")) {
-				return formatter;
-			}
-			throw new UnknownFormatterException(name);
-		}
-
-		@Override
-		public Formatter createDefaultFormatter(Class<?> type)
-				throws FormatterInstantiationException {
-			return formatter;
-		}
-	}
 }

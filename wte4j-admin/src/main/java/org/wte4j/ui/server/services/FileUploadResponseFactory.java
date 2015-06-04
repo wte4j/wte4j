@@ -16,16 +16,19 @@
 package org.wte4j.ui.server.services;
 
 import org.wte4j.ui.shared.FileUploadResponse;
+import org.wte4j.ui.shared.FileUploadResponseDto;
 
 public interface FileUploadResponseFactory {
 
-	public abstract FileUploadResponse createErrorResponse(MessageKey messageKey);
+	FileUploadResponse createErrorResponse(MessageKey messageKey);
 
-	public abstract FileUploadResponse createSuccessResponse(
+	FileUploadResponse createSuccessResponse(
 			MessageKey messageKey);
 
-	public abstract String createJsonSuccessResponse(MessageKey templateUploaded);
+	String createJsonSuccessResponse(MessageKey templateUploaded);
 
-	public abstract String createJsonErrorResponse(MessageKey messageKey);
+	String createJsonErrorResponse(MessageKey messageKey);
+
+	public String toJson(FileUploadResponseDto response);
 
 }

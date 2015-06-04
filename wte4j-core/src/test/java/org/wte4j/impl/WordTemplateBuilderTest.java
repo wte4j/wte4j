@@ -19,14 +19,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,13 +71,31 @@ public class WordTemplateBuilderTest {
 
 	@Test
 	public void testNormal() {
-		WordTemplateBuilder<String> wtb = new WordTemplateBuilder<String>(
-				new SimpleFormatterFactory(), new SimpleValueModelService(),
+		TemplateContextFactory contextFactory = mock(TemplateContextFactory.class);
+		WordTemplateBuilder<String> wtb = new WordTemplateBuilder<String>(contextFactory, new SimpleValueModelService(),
 				String.class);
 		wtb.setAuthor(new User("test1", "test2"));
 		Template<String> wt = wtb.build();
 		assertEquals(wt.getClass(), WordTemplate.class);
 		assertNotNull(wt);
+	}
+
+	@Test
+	public void buildWithFile() throws URISyntaxException, IOException {
+		URL fileUrl = ClassLoader.getSystemResource("org/wte4j/basic-values-template.docx");
+		Path file = Paths.get(fileUrl.toURI());
+
+		TemplateContextFactory contextFactory = mock(TemplateContextFactory.class);
+		WordTemplateBuilder<String> wtb = new WordTemplateBuilder<String>(contextFactory, new SimpleValueModelService(),
+				String.class);
+		Template<String> template = wtb.setAuthor(new User("test1", "test2"))
+				.setTemplateFile(file)
+				.build();
+
+		ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+		template.write(bytesOut);
+		assertTrue(Arrays.equals(Files.readAllBytes(file), bytesOut.toByteArray()));
+
 	}
 
 	@Test(expected = TemplateBuildException.class)
@@ -80,8 +107,8 @@ public class WordTemplateBuilderTest {
 	@Test(expected = TemplateBuildException.class)
 	public void testRequiredPropertiesMissing() {
 		requiredProperties.add("test");
-		WordTemplateBuilder<String> wtb = new WordTemplateBuilder<String>(
-				new SimpleFormatterFactory(), new SimpleValueModelService(),
+		TemplateContextFactory contextFactory = mock(TemplateContextFactory.class);
+		WordTemplateBuilder<String> wtb = new WordTemplateBuilder<String>(contextFactory, new SimpleValueModelService(),
 				String.class);
 		wtb.build();
 		fail("Exception expected");
@@ -99,9 +126,9 @@ public class WordTemplateBuilderTest {
 		when(service.listModelElements(inputType, properties)).thenReturn(
 				elements);
 
-		FormatterFactory factory = mock(FormatterFactory.class);
+		TemplateContextFactory contextFactory = mock(TemplateContextFactory.class);
 		WordTemplateBuilder<String> builder = new WordTemplateBuilder<String>(
-				factory, service, String.class);
+				contextFactory, service, String.class);
 
 		byte[] templateContent = builder.createBasicTemplate();
 		File templateFile = File.createTempFile("generated", "docx");

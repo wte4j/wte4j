@@ -15,71 +15,44 @@
  */
 package org.wte4j.examples.showcase.client.management;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.gwtbootstrap3.client.ui.Alert;
 import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.Form;
-import org.gwtbootstrap3.client.ui.FormGroup;
-import org.gwtbootstrap3.client.ui.Image;
-import org.gwtbootstrap3.client.ui.LinkedGroup;
 import org.gwtbootstrap3.client.ui.LinkedGroupItem;
 import org.gwtbootstrap3.client.ui.Modal;
-import org.gwtbootstrap3.client.ui.TextBox;
-import org.gwtbootstrap3.client.ui.constants.AlertType;
+import org.gwtbootstrap3.client.ui.ModalBody;
 import org.gwtbootstrap3.client.ui.constants.ModalBackdrop;
-import org.gwtbootstrap3.client.ui.form.error.BasicEditorError;
-import org.gwtbootstrap3.client.ui.form.validator.Validator;
 import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
-import org.wte4j.examples.showcase.client.Application;
 import org.wte4j.ui.client.templates.TemplateListDisplay;
 import org.wte4j.ui.client.templates.TemplateListPanel;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TemplateManagerPanel extends Composite implements TemplateManagerDisplay {
 
-	private static TemplateAdminListPanelUiBinder uiBinder = GWT.create(TemplateAdminListPanelUiBinder.class);
+	private static TemplateManagerPanelUiBinder uiBinder = GWT.create(TemplateManagerPanelUiBinder.class);
 
 	@UiField
 	Modal dialog;
 
 	@UiField
+	ModalBody dialogBody;
+
+	@UiField
 	Button addTemplate;
 
 	@UiField
+	Button addTemplateFromFile;
+
+	@UiField
 	HTMLPanel templateList;
-	
-	@UiField
-	TextBox templateName;
-	
-	@UiField
-	LinkedGroup dataModelList;
-
-	@UiField
-	Form createTemplateForm;
-	
-	@UiField
-	Button closeDialog;
-	
-	@UiField
-	Button createTemplate;
-
-	@UiField
-	FormGroup alertBox;
-	
-	@UiField
-	Image loadingSpinner;
 
 	private Map<String, LinkedGroupItem> dataModelNameToItem = new HashMap<String, LinkedGroupItem>();
 
@@ -87,9 +60,7 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 
 	public TemplateManagerPanel() {
 		this.initWidget(uiBinder.createAndBindUi(this));
-		initTemplateName();
 		initModal();
-		initSpinner();
 		initTemplateList();
 	}
 
@@ -99,62 +70,13 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 		templateList.add(templateListDisplay);
 	}
 
-	@SuppressWarnings("unchecked")
-	private void initTemplateName() {
-		Validator<String> validator = new Validator<String>() {
-			@Override
-			public int getPriority() {
-				return 0;
-			}
-
-			@Override
-			public List<EditorError> validate(Editor<String> editor,
-					String value) {
-				List<EditorError> errors = new ArrayList<EditorError>();
-				if (value == null || "".equals(value)) {
-					errors.add(new BasicEditorError(editor, value, Application.MESSAGES.wte4j_message_template_name_not_empty()));
-				}
-				return errors;
-			}
-		};
-		templateName.setValidators(validator);
-		templateName.setValidateOnBlur(true);
-	}
-	
 	private void initModal() {
 		dialog.setClosable(false);
 		dialog.setDataBackdrop(ModalBackdrop.STATIC);
 	}
-	
-	private void initSpinner() {
-		loadingSpinner.setResource(Application.RESOURCES.loadingSpinner());
-		loadingSpinner.setVisible(false);
-	}
-
-	@Override
-	public void setDataModelListItems(List<DataModelItem> dataModelItems) {
-		dataModelList.clear();
-		dataModelNameToItem.clear();
-		boolean first = true;
-		for (DataModelItem item : dataModelItems) {
-			LinkedGroupItem groupItem = new LinkedGroupItem();
-			groupItem.setText(item.getText());
-			groupItem.addClickHandler(item.getClickHandler());
-			if (first) {
-				groupItem.setActive(true);
-			} else {
-				groupItem.setActive(false);
-			}
-			first = false;
-			dataModelNameToItem.put(item.getText(), groupItem);
-			dataModelList.add(groupItem);
-		}
-	}
 
 	@Override
 	public void showAddTemplateDialog() {
-		templateName.clear();
-		alertBox.clear();
 		dialog.show();
 	}
 
@@ -162,95 +84,30 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 	public void hideAddTemplateDialog() {
 		dialog.hide();
 	}
-	
-	@Override
-	public String getTemplateName() {
-		return templateName.getText();
-	}
 
 	@Override
 	public void addAddTemplateClickHandler(ClickHandler clickHandler) {
 		addTemplate.addClickHandler(clickHandler);
 	}
-	
+
 	@Override
-	public void addCloseDialogClickHandler(ClickHandler clickHandler) {
-		closeDialog.addClickHandler(clickHandler);
-	}
-	
-	@Override
-	public void addCreateTemplateClickHandler(ClickHandler clickHandler) {
-		createTemplate.addClickHandler(clickHandler);
-	}
-	
-	@Override
-	public boolean validateAddTemplateForm() {
-		return createTemplateForm.validate() && isOneDataModelActive();
+	public void addCreateTemplateFromFile(ClickHandler clickHandler) {
+		addTemplateFromFile.addClickHandler(clickHandler);
+
 	}
 
-	private boolean isOneDataModelActive() {
-		boolean oneDataModel = false;
-		for (String dataModel : dataModelNameToItem.keySet()) {
-			LinkedGroupItem item = dataModelNameToItem.get(dataModel); 
-			if (!oneDataModel && item.isActive()) {
-				oneDataModel = true;
-			} else if (oneDataModel && item.isActive()) {
-				oneDataModel = false;
-				break;
-			}
-		}
-		if (!oneDataModel)
-			displayAddTemplateError(Application.MESSAGES.wte4j_message_one_data_model_selected());
-		return oneDataModel;
-	}
-	
-	@Override
-	public String getSelectedDataModel() {
-		for (String dataModel : dataModelNameToItem.keySet()) {
-			LinkedGroupItem item = dataModelNameToItem.get(dataModel);
-			if (item.isActive())
-				return dataModel;
-		}
-		return "";
-	}
-	
-	@Override
-	public void setSelectedDataModel(String selectedDataModel) {
-		for (String dataModel : dataModelNameToItem.keySet()) {
-			LinkedGroupItem item = dataModelNameToItem.get(dataModel);
-			if (dataModel.equals(selectedDataModel))
-				item.setActive(true);
-			else
-				item.setActive(false);
-		}
-	}
-	
-	@Override
-	public void showSpinner() {
-		closeDialog.setVisible(false);
-		createTemplate.setVisible(false);
-		loadingSpinner.setVisible(true);
-	}
-	
-	@Override
-	public void hideSpinner() {
-		closeDialog.setVisible(true);
-		createTemplate.setVisible(true);
-		loadingSpinner.setVisible(false);
-	}
-	
-	@Override
-	public void displayAddTemplateError(String message) {
-		Alert infoAlert = new Alert(message, AlertType.DANGER);
-		infoAlert.setDismissable(true);
-		alertBox.add(infoAlert);
-	}
-	
 	@Override
 	public TemplateListDisplay getTemplateListDisplay() {
 		return templateListDisplay;
 	}
 
-	interface TemplateAdminListPanelUiBinder extends UiBinder<Widget, TemplateManagerPanel> {
+	@Override
+	public void setDialogContent(IsWidget content, String title) {
+		dialog.setTitle(title);
+		dialogBody.clear();
+		dialogBody.add(content);
+	}
+
+	interface TemplateManagerPanelUiBinder extends UiBinder<Widget, TemplateManagerPanel> {
 	}
 }

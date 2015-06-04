@@ -16,7 +16,11 @@
 package org.wte4j.ui.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TemplateDto implements Serializable {
 
@@ -25,6 +29,9 @@ public class TemplateDto implements Serializable {
 	private Date updatedAt;
 	private UserDto editor;
 	private UserDto lockingUser;
+	private String inputType;
+	private Map<String, String> properties = new HashMap<>();
+	private List<MappingDto> mapping = new ArrayList<MappingDto>();
 
 	public String getDocumentName() {
 		return documentName;
@@ -65,4 +72,29 @@ public class TemplateDto implements Serializable {
 	public void setLockingUser(UserDto lockingUser) {
 		this.lockingUser = lockingUser;
 	}
+
+	public String getInputType() {
+		return inputType;
+	}
+
+	public void setInputType(String calssName) {
+		this.inputType = calssName;
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
+
+	public List<MappingDto> getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(List<MappingDto> mapping) {
+		this.mapping = mapping;
+	}
+
 }

@@ -17,18 +17,23 @@ package org.wte4j.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.wte4j.FormatterFactory;
 import org.wte4j.InvalidTemplateException;
 import org.wte4j.Template;
 import org.wte4j.TemplateBuilder;
 import org.wte4j.TemplateEngine;
+import org.wte4j.TemplateFile;
 import org.wte4j.TemplateRepository;
 import org.wte4j.WteException;
 import org.wte4j.WteModelService;
+import org.wte4j.impl.word.WordTemplateFile;
 
 @Service("wordTemplateEngine")
 public class SpringTemplateEngine implements TemplateEngine {
@@ -41,19 +46,19 @@ public class SpringTemplateEngine implements TemplateEngine {
 	protected WteModelService modelService;
 
 	@Autowired
-	protected FormatterFactory formatterFactory;
+	protected TemplateContextFactory contextFactory;
 
 	@Override
 	public <E> TemplateBuilder<E> getTemplateBuilder(Class<E> inputType) {
 		if (modelService == null) {
 			throw new WteException("no bean with qualifier wteModelService of type " + WteModelService.class.getName() + " is defined");
 		}
-		return new WordTemplateBuilder<E>(formatterFactory, modelService,
+		return new WordTemplateBuilder<E>(contextFactory, modelService,
 				inputType);
 	}
 
 	@Override
-	public File createDocument(String documentName, String language, Object data)
+	public Path createDocument(String documentName, String language, Object data)
 			throws IllegalArgumentException, InvalidTemplateException,
 			IOException {
 		Template<Object> template = templateRepository.getTemplate(
@@ -66,10 +71,12 @@ public class SpringTemplateEngine implements TemplateEngine {
 		return createFile(template, data);
 	}
 
-	File createFile(Template<Object> template, Object data) throws IOException {
+	Path createFile(Template<Object> template, Object data) throws IOException {
 		File tempFile = File.createTempFile(template.getDocumentName(), ".docx");
-		template.toDocument(data, tempFile);
-		return tempFile;
+		try (OutputStream out = Files.newOutputStream(tempFile.toPath())) {
+			template.toDocument(data, out);
+			return tempFile.toPath();
+		}
 	}
 
 	@Override
@@ -77,4 +84,12 @@ public class SpringTemplateEngine implements TemplateEngine {
 		return templateRepository;
 	}
 
+	@Override
+	public TemplateFile asTemplateFile(Path aFile) throws IOException {
+		try (InputStream in = Files.newInputStream(aFile)) {
+
+			WordTemplateFile templateFile = new WordTemplateFile(in);
+			return templateFile;
+		}
+	}
 }

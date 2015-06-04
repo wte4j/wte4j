@@ -22,7 +22,6 @@ import org.wte4j.ui.shared.FileUploadResponse;
 import org.wte4j.ui.shared.FileUploadResponseDto;
 import org.wte4j.ui.shared.TemplateDto;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -64,10 +63,15 @@ public class TemplateUploadPresenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				templateUploadDisplay.stopLoadingAnimation();
+				cancelFileUpload();
 			}
+
 		});
 
+	}
+
+	protected void cancelFileUpload() {
+		templateUploadDisplay.stopLoadingAnimation();
 	}
 
 	public void startUpload(TemplateDto currentTemplate,
@@ -117,19 +121,5 @@ public class TemplateUploadPresenter {
 		public void onSuccess(String fileUpdateResponse);
 
 		public void onFailure(String errorMessage);
-	}
-
-	public static class FileUploadResponseJso extends JavaScriptObject implements FileUploadResponse {
-		protected FileUploadResponseJso() {
-		}
-
-		public final native boolean getDone()/*-{
-												return this.done;
-												}-*/;
-
-		public final native String getMessage() /*-{
-												return this.message;
-												}-*/;
-
 	}
 }

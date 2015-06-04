@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.server;
+package org.wte4j.ui.client.templates.upload;
 
-public enum MessageKey {
-	TEMPLATE_NAME_NOT_EMPTY,
-	DATA_MODEL_NOT_FOUND,
-	TEMPLATE_EXISTS_ALREADY;
+import org.wte4j.ui.shared.FileUploadResponse;
 
-	private static final String WTE4J_MESSAGE_BASE = "wte4j.message.";
-	private final String value;
+import com.google.gwt.core.client.JavaScriptObject;
 
-	private MessageKey() {
-		value = WTE4J_MESSAGE_BASE + this.name().toLowerCase();
+public class FileUploadResponseJso extends JavaScriptObject implements FileUploadResponse {
+	protected FileUploadResponseJso() {
 	}
 
-	public String getValue() {
-		return value;
-	}
+	public final native boolean getDone()/*-{
+											return this.done;
+											}-*/;
+
+	public final native String getMessage() /*-{
+											return this.message;
+											}-*/;
+
 }

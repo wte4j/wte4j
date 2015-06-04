@@ -6,42 +6,15 @@
 	<b.gwt:HTMLPanel>
 		<b.html:Paragraph>
 			<b:Button ui:field="addTemplate" type="PRIMARY" ><ui:text from="{labels.addTemplate}" /></b:Button>
+			<b:Button ui:field="addTemplateFromFile" type="PRIMARY" ><ui:text from="{labels.addTemplateFromFile}" /></b:Button>
 		</b.html:Paragraph>
 		<b.html:Paragraph>
 			<b.gwt:HTMLPanel ui:field="templateList" />
 		</b.html:Paragraph>
 
-		<b:Modal ui:field="dialog" title="{labels.selectDataModel}">
-			<b:ModalBody>
-				<b:Form ui:field="createTemplateForm">
-					<b.gwt:FlowPanel>
-						<b:FieldSet>
-							<b:FormGroup>
-								<b:FormLabel for="templateName"><ui:text from="{labels.templateName}" />:</b:FormLabel>
-								<b:InlineHelpBlock iconType="EXCLAMATION_TRIANGLE" />
-								<b:TextBox b:id="templateName" ui:field="templateName" />
-							</b:FormGroup>
-							<b:FormGroup>
-								<b:Label><ui:text from="{labels.availableDataModels}" />:</b:Label>
-								<b:LinkedGroup ui:field="dataModelList" />
-							</b:FormGroup>
-							<b:FormGroup ui:field="alertBox" />
-							<b:FormGroup ui:field="buttonsLayer">
-								<b:Button ui:field="closeDialog" b:type="LINK"
-									addStyleNames="col-lg-2 col-lg-offset-8"><ui:text from="{labels.close}" /></b:Button>
-								<b:Button ui:field="createTemplate" b:type="PRIMARY"
-									addStyleNames="col-lg-2"><ui:text from="{labels.create}" /></b:Button>
-							</b:FormGroup>
-							<b.gwt:FlowPanel addStyleNames="col-lg-2 col-lg-offset-10">
-								<b:Image ui:field="loadingSpinner" />
-							</b.gwt:FlowPanel>
-						</b:FieldSet>
-					</b.gwt:FlowPanel>
-				</b:Form>
-			</b:ModalBody>
+		<b:Modal ui:field="dialog" title="{labels.selectDataModel}">			
+			<b:ModalBody ui:field="dialogBody"/>
 		</b:Modal>
-
-
 	</b.gwt:HTMLPanel>
 
 </ui:UiBinder>

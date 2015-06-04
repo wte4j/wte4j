@@ -15,11 +15,11 @@
  */
 package org.wte4j;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ import java.util.Map;
  * @param <E>
  *            type of the input to generate a document.
  */
-public interface Template<E> {
+public interface Template<E> extends TemplateFile {
 	String getDocumentName();
 
 	String getLanguage();
@@ -54,32 +54,28 @@ public interface Template<E> {
 	 * @param editor
 	 *            - the editor of the content
 	 * @throws IOException
-	 * @throws InvalidTemplateException
-	 *             if the new version is not valid
 	 * @throws LockingException
 	 *             if the template is locked by an other user
 	 */
-	void update(InputStream in, User editor) throws IOException,
-			InvalidTemplateException, LockingException;
+	void update(InputStream in, User editor) throws IOException, LockingException;
+
+	public Map<String, MappingDetail> getContentMapping();
 
 	/**
-	 * Write the content of the template to an output stream and closes the
-	 * stream.
+	 * Validates the template against the model and mapping.
 	 * 
-	 * @param out
-	 *            - the stream to write to content to.
-	 * @throws IOException
+	 * @throws InvalidTemplateException
+	 *             if the template is not valid for the given mapping and model
+	 *             definition.
 	 */
-	void write(OutputStream out) throws IOException;
+	public void validate() throws InvalidTemplateException;
 
 	/**
-	 * Write the content of the template to a given File
+	 * Lists all ids, set in content controls in the template
 	 * 
-	 * @param file
-	 *            - the file
-	 * @throws IOException
+	 * @return
 	 */
-	void write(File file) throws IOException;
+	public List<String> listContentIds();
 
 	/**
 	 * Generates a new document.
@@ -87,27 +83,12 @@ public interface Template<E> {
 	 * @param data
 	 *            - the data to be filled in the template
 	 * @param out
-	 *            - writes the generated document to this stream. The Stream
-	 *            will be closed at the end.
+	 *            - writes the generated document to this stream.
 	 * @throws IOException
 	 * @throws InvalidTemplateException
 	 * @throws WteException
 	 */
 	void toDocument(E data, OutputStream out) throws IOException,
-			InvalidTemplateException, WteException;
-
-	/**
-	 * Generates a new document.
-	 * 
-	 * @param data
-	 *            - the data to be filled in the template
-	 * @param file
-	 *            - the file where the generated document shall be written.
-	 * @throws IOException
-	 * @throws InvalidTemplateException
-	 * @throws WteException
-	 */
-	void toDocument(E data, File file) throws IOException,
 			InvalidTemplateException, WteException;
 
 	/**
@@ -122,16 +103,5 @@ public interface Template<E> {
 	 */
 	void toTestDocument(OutputStream out) throws IOException,
 			InvalidTemplateException;
-
-	/**
-	 * Generates a document with dummy content.
-	 * 
-	 * @param file
-	 *            - the file where the generated document shall be written.
-	 * @throws InvalidTemplateException
-	 *             if there is a mismatch between model and template
-	 * 
-	 */
-	void toTestDocument(File file) throws IOException, InvalidTemplateException;
 
 }

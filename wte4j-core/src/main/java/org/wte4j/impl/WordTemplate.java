@@ -21,22 +21,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.wte4j.FormatterFactory;
 import org.wte4j.InvalidTemplateException;
 import org.wte4j.LockingException;
+import org.wte4j.MappingDetail;
 import org.wte4j.Template;
 import org.wte4j.User;
-import org.wte4j.WteDataModel;
 import org.wte4j.WteException;
-import org.wte4j.WteModelService;
-import org.wte4j.impl.expression.ResolverFactoryImpl;
-import org.wte4j.impl.expression.ValueResolverFactory;
-import org.wte4j.impl.word.Docx4JWordTemplate;
+import org.wte4j.impl.word.WordTemplateFile;
 
 /**
  * {@link Template} implementation for word documents (docx)
@@ -45,73 +42,47 @@ import org.wte4j.impl.word.Docx4JWordTemplate;
  *            see {@link Template}
  */
 public class WordTemplate<E> implements Template<E> {
-
-	private WteModelService modelService;
-	private FormatterFactory formatterFactory;
-
 	private PersistentTemplate persistentData;
-	private DocumentGenerator documentGenerator;
+	private TemplateContextFactory contextFactory;
+	private WordTemplateFile document;
 
-	public WordTemplate(PersistentTemplate template,
-			WteModelService modelService, FormatterFactory formatterFactory) {
+	public WordTemplate(PersistentTemplate template, TemplateContextFactory contextFactory) {
 		this.persistentData = template;
-		this.modelService = modelService;
-		this.formatterFactory = formatterFactory;
-	}
-
-	@Override
-	public void toDocument(E data, File file) throws IOException,
-			InvalidTemplateException, WteException {
-		OutputStream out = FileUtils.openOutputStream(file);
-		toDocument(data, out);
+		this.contextFactory = contextFactory;
 	}
 
 	@Override
 	public void toDocument(E data, OutputStream out) throws IOException,
 			InvalidTemplateException {
-		prepareWorkDocument();
-		WteDataModel model = modelService.createModel(this, data);
-		documentGenerator.setContent(model);
-		documentGenerator.writeAsOpenXML(out);
+		prepareDocument();
+		TemplateContext<E> context = contextFactory.createTemplateContext(this);
+		context.bind(data);
+		document.updateDynamicContent(context);
+		document.writeAsOpenXML(out);
 	}
 
-	private void prepareWorkDocument() throws InvalidTemplateException,
-			IOException {
-		if (documentGenerator == null) {
-			documentGenerator = createDocumentGenerator(persistentData
-					.getContent());
+	private void prepareDocument() {
+		if (document == null) {
+			try {
+				document = createDocument(persistentData.getContent());
+			} catch (IOException e) {
+				throw new WteException(e);
+			}
 		}
-		documentGenerator.parseExpressions();
 	}
 
-	private DocumentGenerator createDocumentGenerator(byte[] content)
+	private WordTemplateFile createDocument(byte[] content)
 			throws IOException {
-		Docx4JWordTemplate docx = new Docx4JWordTemplate(
-				new ByteArrayInputStream(content));
-		Map<String, Class<?>> elements = modelService.listModelElements(
-				getInputType(), getProperties());
-		ValueResolverFactory context = new ResolverFactoryImpl(getLocale(),
-				formatterFactory, elements);
-		return new DocumentGenerator(docx, context);
+		return new WordTemplateFile(new ByteArrayInputStream(content));
 	}
 
 	@Override
 	public void toTestDocument(OutputStream out)
 			throws InvalidTemplateException, IOException {
-		Map<String, Class<?>> elements = modelService.listModelElements(
-				persistentData.getInputType(), persistentData.getProperties());
-		WteDataModel dataModel = new TestDataModel(elements);
-		prepareWorkDocument();
-		documentGenerator.setContent(dataModel);
-		documentGenerator.writeAsOpenXML(out);
-	}
-
-	@Override
-	public void toTestDocument(File file) throws IOException,
-			InvalidTemplateException {
-		OutputStream out = FileUtils.openOutputStream(file);
-		toTestDocument(out);
-
+		TemplateContext<E> context = contextFactory.createTemplateContext(this);
+		prepareDocument();
+		document.updateDynamicContent(context);
+		document.writeAsOpenXML(out);
 	}
 
 	@Override
@@ -160,17 +131,31 @@ public class WordTemplate<E> implements Template<E> {
 	public void update(InputStream in, User editor) throws IOException,
 			InvalidTemplateException, LockingException {
 		byte[] content = IOUtils.toByteArray(in);
-		DocumentGenerator newGenerator = createDocumentGenerator(content);
-		newGenerator.parseExpressions();
-		documentGenerator = newGenerator;
+		document = createDocument(content);
 		persistentData.setContent(content, editor);
+	}
+
+	@Override
+	public Map<String, MappingDetail> getContentMapping() {
+		return persistentData.getContentMapping();
+	}
+
+	@Override
+	public List<String> listContentIds() {
+		prepareDocument();
+		return document.listContentIds();
+	}
+
+	@Override
+	public void validate() throws InvalidTemplateException {
+		prepareDocument();
+		document.validate(contextFactory.createTemplateContext(this));
 	}
 
 	@Override
 	public void write(File file) throws IOException {
 		OutputStream out = FileUtils.openOutputStream(file);
 		write(out);
-
 	}
 
 	@Override

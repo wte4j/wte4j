@@ -15,6 +15,7 @@
  */
 package org.wte4j;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 public interface TemplateBuilder<E> {
@@ -27,10 +28,15 @@ public interface TemplateBuilder<E> {
 
 	TemplateBuilder<E> setProperties(Map<String, String> properties);
 
+	TemplateBuilder<E> setTemplateFile(Path file);
+
+	TemplateBuilder<E> setMappingData(Map<String, MappingDetail> mappingData);
+
 	/**
 	 * 
-	 * @return a valid template containing all the elements provided by 
-	 * {@linkplain WteModelService WteModelService.createModel(Template&lt;?&gt;, Object)}
+	 * @return a valid template containing all the elements provided by
+	 *         {@linkplain WteModelService
+	 *         WteModelService.createModel(Template&lt;?&gt;, Object)}
 	 * @throws TemplateBuildException
 	 */
 	Template<E> build() throws TemplateBuildException;

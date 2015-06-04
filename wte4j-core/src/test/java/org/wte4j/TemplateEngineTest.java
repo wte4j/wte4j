@@ -17,10 +17,11 @@ package org.wte4j;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -29,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.docx4j.TextUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.junit.Test;
@@ -44,14 +43,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.wte4j.EmbeddedDataBaseConfig;
-import org.wte4j.Template;
-import org.wte4j.TemplateBuilder;
-import org.wte4j.TemplateEngine;
-import org.wte4j.TemplateRepository;
-import org.wte4j.User;
-import org.wte4j.WteDataModel;
-import org.wte4j.WteModelService;
 import org.wte4j.impl.service.WteMapModel;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -63,53 +54,34 @@ public class TemplateEngineTest {
 	TemplateEngine wte;
 
 	@Test
-	
 	public void createDocumentWithBasicDynamicContent() throws Exception {
 		final String documentName = "basic_values";
 		final String language = "de";
-		final File templateDocument = FileUtils.toFile(ClassLoader
-				.getSystemResource("org/wte4j/basic-values-template.docx"));
+		final Path templateDocument = Paths.get(ClassLoader.getSystemResource("org/wte4j/basic-values-template.docx").toURI());
 
-		Template<Integer> template = createTemplate(documentName, language,
-				templateDocument);
+		TemplateBuilder<Integer> templateBuilder = wte.getTemplateBuilder(Integer.class);
+		Template<Integer> template = templateBuilder
+				.setDocumentName(documentName)
+				.setLanguage(language)
+				.setAuthor(new User("hw", "Hans Wurst"))
+				.setTemplateFile(templateDocument)
+				.build();
 
 		TemplateRepository repository = wte.getTemplateRepository();
 		template = repository.persist(template);
 
-		File document = wte.createDocument(documentName, language, 1);
-
-		WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
-				.load(document);
-		StringWriter writer = new StringWriter();
-		TextUtils.extractText(
-				wordMLPackage.getMainDocumentPart().getContents(), writer);
-		String contentAsText = writer.toString();
-		assertTrue(!contentAsText.contains("toReplace"));
-	}
-
-	private Template<Integer> createTemplate(String documentName,
-			String language) {
-
-		TemplateBuilder<Integer> builder = wte
-				.getTemplateBuilder(Integer.class);
-
-		Template<Integer> template = builder.setDocumentName(documentName)
-				.setLanguage(language)
-				.setAuthor(new User("userId", "Hans Wurst")).build();
-		return template;
-	}
-
-	private Template<Integer> createTemplate(String documentName,
-			String language, File templateDocument) throws IOException {
-		Template<Integer> template = createTemplate(documentName, language);
-		InputStream in = null;
-		try {
-			in = FileUtils.openInputStream(templateDocument);
-			template.update(in, template.getEditor());
+		Path file = wte.createDocument(documentName, language, 1);
+		try (InputStream in = Files.newInputStream(file)) {
+			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
+					.load(in);
+			StringWriter writer = new StringWriter();
+			TextUtils.extractText(
+					wordMLPackage.getMainDocumentPart().getContents(), writer);
+			String contentAsText = writer.toString();
+			assertTrue(!contentAsText.contains("toReplace"));
 		} finally {
-			IOUtils.closeQuietly(in);
+			Files.deleteIfExists(file);
 		}
-		return template;
 	}
 
 	@Configuration

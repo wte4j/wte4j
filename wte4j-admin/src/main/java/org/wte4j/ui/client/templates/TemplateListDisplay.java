@@ -15,6 +15,7 @@
  */
 package org.wte4j.ui.client.templates;
 
+import org.wte4j.ui.client.templates.mapping.MappingDisplay;
 import org.wte4j.ui.client.templates.upload.TemplateUploadDisplay;
 import org.wte4j.ui.shared.TemplateDto;
 
@@ -49,4 +50,10 @@ public interface TemplateListDisplay extends IsWidget {
 	void showTemplateUploadDisplay(String title);
 
 	void hideTemplateUploadDisplay();
+
+	void showMappingDisplay(String title);
+
+	void hideMappingDisplay();
+
+	MappingDisplay getMappingDisplay();
 }

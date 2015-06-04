@@ -13,18 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.examples.showcase.shared.service;
+package org.wte4j.ui.client.templates.mapping;
 
 import java.util.List;
 
-import org.wte4j.examples.showcase.shared.TemplateManagerServiceException;
+import org.gwtbootstrap3.client.ui.constants.AlertType;
+import org.wte4j.ui.shared.MappingDto;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.IsWidget;
 
-@RemoteServiceRelativePath("templateManager")
-public interface TemplateManagerService extends RemoteService {
+public interface MappingDisplay extends IsWidget {
 
-	List<String> listDataModel();
-	void createTemplate(String className, String templateName) throws TemplateManagerServiceException;
+	void resetTable();
+
+	void setMappingData(List<MappingDto> mappingData);
+
+	void setModelIdOptions(List<String> someModelIdOptions);
+
+	void addSaveButtonClickHandler(ClickHandler clickHandler);
+
+	void addCancelButtonClickHandler(ClickHandler clickHandler);
+
+	void hideAlert();
+
+	void showAlert(AlertType type, String message, List<String> details);
+
 }

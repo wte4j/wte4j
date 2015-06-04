@@ -15,7 +15,7 @@
  */
 package org.wte4j;
 
-public class TemplateExistException extends RuntimeException {
+public class TemplateExistException extends WteException {
 
 	public TemplateExistException(String message, Throwable cause) {
 		super(message, cause);
