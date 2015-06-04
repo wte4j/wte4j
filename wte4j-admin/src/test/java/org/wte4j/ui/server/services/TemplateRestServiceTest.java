@@ -23,8 +23,6 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +49,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.wte4j.Template;
 import org.wte4j.TemplateRepository;
 import org.wte4j.ui.server.config.RestServiceConfig;
+import org.wte4j.ui.shared.FileUploadResponseDto;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -113,10 +114,10 @@ public class TemplateRestServiceTest {
 		resultActions.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"));
 
-		Pattern pattern = Pattern.compile("\"message\":\"(.+)\"");
-		Matcher matcher = pattern.matcher(content);
-		assertTrue(matcher.find());
-		Path file = Paths.get(matcher.group(1));
+		ObjectMapper mapper = new ObjectMapper();
+		FileUploadResponseDto dto = mapper.readValue(content, FileUploadResponseDto.class);
+
+		Path file = Paths.get(dto.getMessage());
 		try {
 			assertTrue("file " + file + "must exist", Files.exists(file));
 
