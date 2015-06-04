@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wte4j.examples.showcase.server.services.OrderServiceImpl;
 import org.wte4j.examples.showcase.shared.service.OrderService;
@@ -27,11 +29,17 @@ import org.wte4j.examples.showcase.shared.service.OrderService;
 @EnableTransactionManagement
 @ImportResource({ "classpath:wte4j-core-application-context.xml" })
 @Import({ DatabaseConfig.class, Wte4jConfiguration.class })
+@PropertySource("classpath:showcase.properties")
 public class RootApplicationConfig {
 
 	@Bean
 	public OrderService orderService() {
 		return new OrderServiceImpl();
+	}
+
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 
 }
