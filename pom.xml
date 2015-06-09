@@ -26,6 +26,9 @@
 	<name>wte4j</name>
 	<inceptionYear>2015</inceptionYear>
 	<url>https://github.com/wte4j/wte4j</url>
+	<description>
+		A Engine to generate docx documents form templates and manage these templates	
+	</description>
 
 	<scm>
 		<connection>scm:git:git@github.com:wte4j/wte4j.git</connection>
@@ -123,11 +126,11 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.2</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.2</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<useReleaseProfile>false</useReleaseProfile>
@@ -148,6 +151,12 @@
 						<source>1.7</source>
 						<target>1.7</target>
 					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
 				</plugin>
 
 				<plugin>
