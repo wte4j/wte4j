@@ -112,8 +112,8 @@
 					<excludes>
 						<exclude>**/NOTICE</exclude>
 						<exclude>**/LICENSE</exclude>
-<!-- 						<exclude>src/main/resources/**</exclude> -->
-<!-- 						<exclude>src/test/resources/**</exclude> -->
+						<exclude>src/main/resources/**</exclude>
+						<exclude>src/test/resources/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
