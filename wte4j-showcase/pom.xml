@@ -34,7 +34,7 @@
 		-->
 		<license.excludedArtifacts>xbean-asm4-shaded|stax-api</license.excludedArtifacts>
 	</properties>
-		<dependencies>
+	<dependencies>
 		<!-- wte4j -->
 
 		<dependency>
@@ -148,10 +148,19 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**src/main/resources/db/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openJPA.version}</version>
-				<configuration>					
+				<configuration>
 					<includes>org/wte4j/impl/PersistentTemplate.java</includes>
 				</configuration>
 				<executions>
@@ -161,7 +170,7 @@
 						<goals>
 							<goal>enhance</goal>
 						</goals>
-						<configuration>							
+						<configuration>
 							<toolProperties>
 								<directory>${project.build.outputDirectory}</directory>
 							</toolProperties>
@@ -205,7 +214,7 @@
 					</i18nMessagesBundles>
 					<webappDirectory>${project.build.directory}/gwtWebAppDirectory</webappDirectory>
 				</configuration>
-			</plugin>	
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

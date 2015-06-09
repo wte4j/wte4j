@@ -31,37 +31,37 @@
 	</properties>
 
 	<build>
-		<plugins>	
+		<plugins>
 
 			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openJPA.version}</version>
-				<configuration>
-					<connectionDriverName>org.hsqldb.jdbc.JDBCDriver</connectionDriverName>
-					<persistenceXmlFile>${project.basedir}/src/test/resources/META-INF/persistence.xml</persistenceXmlFile>
-					<sqlFile>${project.basedir}/src/test/resources/sql/create-schema.sql</sqlFile>
-				</configuration>
+
 				<executions>
 					<execution>
-						<id>generate-sql</id>
-						<phase>generate-test-sources</phase>
+						<id>generate-sql</id>						
 						<goals>
-							<goal>sql</goal>
+							<goal>sql</goal>							
 						</goals>
+						<phase/>
+						<configuration>
+							<connectionDriverName>org.hsqldb.jdbc.JDBCDriver</connectionDriverName>
+							<persistenceXmlFile>${project.basedir}/src/test/resources/META-INF/persistence.xml</persistenceXmlFile>
+							<sqlFile>${project.basedir}/src/test/resources/sql/create-schema.sql</sqlFile>
+						</configuration>
 					</execution>
 					<execution>
 						<id>enhance-for-test</id>
 						<phase>process-test-classes</phase>
 						<goals>
-							<goal>test-enhance</goal>							
+							<goal>test-enhance</goal>
 						</goals>
 						<configuration>
 							<includes>**/PersistentTemplate.class, **/User.class, **/MappingDetail.class</includes>
 							<toolProperties>
-								<directory>${project.build.testOutputDirectory}</directory>							
+								<directory>${project.build.testOutputDirectory}</directory>
 							</toolProperties>
-						
 						</configuration>
 					</execution>
 				</executions>
@@ -74,7 +74,7 @@
 				</dependencies>
 			</plugin>
 		</plugins>
-		
+
 	</build>
 
 	<dependencies>
