@@ -7,8 +7,6 @@
 		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
-<!-- 			<property name="openjpa.DynamicEnhancementAgent" value="true"/> -->
-<!-- 			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/> -->
 		</properties>
 	</persistence-unit>
 </persistence> 
