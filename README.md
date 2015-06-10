@@ -21,7 +21,7 @@ Wte4j consists of five modules:
 ## How do you run wte4j-showcase?
 
 1. Make sure that you have java installed
-2. Download Tomcat 7 from http://tomcat.apache.org/ (min. Version 7) and unarchive it.
+2. Download Tomcat from http://tomcat.apache.org/ (min. Version 7) and unarchive it.
 3. Download the latest version from https://oss.sonatype.org/content/repositories/releases/org/wte4j/wte4j-showcase/ .
 4. Rename the downlaoded file to wte4j-showcase.war and copy the file in tomcats webapp folder.
 5. Start tomcat. Showcase will be available at http://localhost:8080/wte4j-showcase.
