@@ -6,6 +6,8 @@
 Wte4j is a Spring component that generates Open XML documents from a template.
 As a template one can use .docx or .dotx files with content-controls used by Microsoft Word as placeholders for the dynamic content.
 
+For a more detailed documentation visit this project's wiki here: https://github.com/wte4j/wte4j/wiki
+
 wte4j is using docx4j and apache poi to parse and build word documents.
 
 ## What do you get?
@@ -26,4 +28,4 @@ You can find the latest release of the wte4j repo archived as .zip and .tar.gz f
 4. Rename the downlaoded file to wte4j-showcase.war and copy the file in tomcats webapp folder.
 5. Start tomcat. Showcase will be available at http://localhost:8080/wte4j-showcase.
 
-For a more detailed documentation visit this project's wiki here: https://github.com/wte4j/wte4j/wiki
+
