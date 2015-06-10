@@ -12,8 +12,8 @@ wte4j is using docx4j and apache poi to parse and build word documents.
 Wte4j consists of five modules:
 
 - **wte4j-core** is the template engine, usable as a Spring component
-- **wte4j-admin** is a web fragment for managing the templates in a repository of a wte4j instance (not packed in release)
-- **wte4j-admin-auth** is a web fragment that implements an authentication solution (not packed in release)
+- **wte4j-admin** is a web fragment for managing the templates in a repository of a wte4j instance (available in maven central repository)
+- **wte4j-admin-auth** is a web fragment that implements an authentication solution (available in maven central repository)
 - **wte4j-admin-war** is a web app that combines **wte4j-admin** and **wte4j-admin-auth**
 - **wte4j-showcase** is a small demo web app that uses **wte4j-core** and **wte4j-admin** to give a functional overview of wte4j
 
@@ -22,8 +22,8 @@ You can find the latest release of the wte4j repo archived as .zip and .tar.gz f
 
 1. Make sure that you have java installed
 2. Download Tomcat 7 from http://tomcat.apache.org/ (min. Version 7) and unarchive it.
-3. Download a .zip or .tar.gz release from https://github.com/wte4j/wte4j/releases, unarchive it.
-4. Copy the wars/wte4j-showcase.war file in tomcats webapp folder
+3. Download the latest version from https://oss.sonatype.org/content/repositories/releases/org/wte4j/wte4j-showcase/ .
+4. Rename the downlaoded file to wte4j-showcase.war and copy the file in tomcats webapp folder.
 5. Start tomcat. Showcase will be available at http://localhost:8080/wte4j-showcase.
 
 For a more detailed documentation visit this project's wiki here: https://github.com/wte4j/wte4j/wiki
