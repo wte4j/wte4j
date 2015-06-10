@@ -182,9 +182,5 @@ If you have commit access, please follow this process for merging patches and cu
 
 ### Releasing a new version
 
-1. Include all new functional changes in the CHANGELOG.
-2. Use a dedicated commit to increment the version. The version needs to be
-   added to the `CHANGELOG.md` (inc. date).
-3. The commit message must be of `v0.0.0` format.
-4. Create an annotated tag for the version: `git tag -m "v0.0.0" v0.0.0`.
-5. Push the changes and tags to GitHub: `git push --tags origin master`.
+1. Include all new functional changes in the `CHANGELOG.md`.
+2. Release the version using this guide: [Release and Publish to Maven Central](https://github.com/wte4j/wte4j/wiki/Release-and-Publish-to-Maven-Central)
