@@ -107,16 +107,6 @@ public class TemplateManagerPanel extends Composite implements TemplateManagerDi
 		dialogBody.clear();
 		dialogBody.add(content);
 	}
-	
-	@Override
-	public String getAddTemplateCaption() {
-			return addTemplate.getText();
-	}
-
-	@Override
-	public String getAddTemplateFromFileCaption() {
-		return addTemplateFromFile.getText();
-	}
 
 	interface TemplateManagerPanelUiBinder extends UiBinder<Widget, TemplateManagerPanel> {
 	}

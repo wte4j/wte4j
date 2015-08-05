@@ -25,6 +25,7 @@ import org.wte4j.examples.showcase.client.management.TemplateManagerDisplay;
 import org.wte4j.examples.showcase.client.management.TemplateManagerPanel;
 import org.wte4j.examples.showcase.client.management.TemplateManagerPresenter;
 
+import com.google.gwt.dev.protobuf.DescriptorProtos.FieldDescriptorProto.Label;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -81,8 +82,7 @@ public class MainPresenter {
 
 	public void displayTemplatesContent() {
 		mainDisplay.setMainContent(templateManagerDisplay);
-		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_template_manager_helptext(
-		                                                  templateManagerDisplay.getAddTemplateCaption()));
+		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_template_manager_helptext(Application.LABELS.addTemplate()));
 		mainDisplay.setRightContent(helpText);
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
