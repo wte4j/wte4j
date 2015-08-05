@@ -33,5 +33,17 @@ public interface TemplateManagerDisplay extends IsWidget {
 	void addCreateTemplateFromFile(ClickHandler clickHandler);
 
 	void addAddTemplateClickHandler(ClickHandler clickHandler);
+	
+    /**
+	 * The method is used to deliver caption of Button responsible for adding Template on Form.
+	 * @return - Caption of Button
+	 */
+	String getAddTemplateCaption();
+
+	/**
+	 * The method is used to deliver caption of Button responsible for creating Template from File on Form.
+	 * @return - Caption of Button
+	 */
+	String getAddTemplateFromFileCaption();
 
 }

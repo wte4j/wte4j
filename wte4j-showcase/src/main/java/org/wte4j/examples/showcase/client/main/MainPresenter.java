@@ -81,7 +81,8 @@ public class MainPresenter {
 
 	public void displayTemplatesContent() {
 		mainDisplay.setMainContent(templateManagerDisplay);
-		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_template_manager_helptext());
+		IsWidget helpText = generateHelpText(Application.MESSAGES.wte4j_message_template_manager_helptext(
+		                                                  templateManagerDisplay.getAddTemplateCaption()));
 		mainDisplay.setRightContent(helpText);
 		mainDisplay.setGenerateDocumentActive(false);
 		mainDisplay.setManageTemplatesActive(true);
