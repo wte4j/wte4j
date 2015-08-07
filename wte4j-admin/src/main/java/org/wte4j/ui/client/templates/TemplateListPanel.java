@@ -169,7 +169,7 @@ public class TemplateListPanel extends Composite implements
 			}
 		};
 		editedAtColumn.setCellStyleNames("templates-editedAt-cell");
-		editedAtColumn.setHorizontalAlignment(Column.ALIGN_LEFT);
+		editedAtColumn.setHorizontalAlignment( Column.ALIGN_LEFT);
 		addColumntoTemplateTable(editedAtColumn, LABELS.templateEditedAt());
 
 	}
