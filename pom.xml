@@ -115,6 +115,7 @@
 					<excludes>
 						<exclude>**/NOTICE</exclude>
 						<exclude>**/LICENSE</exclude>
+						<exclude>**/.*</exclude>
 						<exclude>**/*.docx</exclude>
 					</excludes>
 				</configuration>
