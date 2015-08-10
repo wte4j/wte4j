@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wte4j/wte4j.svg?branch=master)](https://travis-ci.org/wte4j/wte4j)
+[![Build Status](https://travis-ci.org/wte4j/wte4j.svg?branch=master)](https://travis-ci.org/wte4j/wte4j)[![Coverage Status](https://coveralls.io/repos/wte4j/wte4j/badge.svg?branch=master&service=github)](https://coveralls.io/github/wte4j/wte4j?branch=master)
 
 # wte4j - word template engine for java
 
