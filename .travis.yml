@@ -1,9 +1,8 @@
 language: java
 jdk: oraclejdk7
 
-script: mvn test jacoco:report
+script: mvn test jacoco:report coveralls:report
 
 after_success:
-- mvn coveralls:report
 - echo "<settings><servers><server><id>ossrh</id><username>\${env.OSSRH_USER}</username><password>\${env.OSSRH_PASS}</password></server></servers></settings>" > ~/settings.xml
 - if [ -z ${TRAVIS_TAG} ]; then mvn deploy -DskipTests=true --settings ~/settings.xml; fi
