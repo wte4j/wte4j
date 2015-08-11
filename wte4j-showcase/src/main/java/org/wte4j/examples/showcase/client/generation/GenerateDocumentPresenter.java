@@ -18,8 +18,11 @@ package org.wte4j.examples.showcase.client.generation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wte4j.examples.showcase.client.Application;
 import org.wte4j.examples.showcase.shared.OrderDataDto;
 import org.wte4j.examples.showcase.shared.service.OrderServiceAsync;
+import org.wte4j.ui.client.dialog.DialogType;
+import org.wte4j.ui.client.dialog.MessageDialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -74,7 +77,7 @@ public class GenerateDocumentPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				showErrorOnFailure(caught);
 			}
 
 		});
@@ -87,6 +90,7 @@ public class GenerateDocumentPresenter {
 
 			@Override
 			public void onSuccess(List<String> templates) {
+				
 				List<TemplateItem> templateItems = new ArrayList<TemplateItem>();
 				for (String templateName : templates) {
 					templateItems.add(createTemplateItem(templateName));
@@ -98,7 +102,7 @@ public class GenerateDocumentPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				showErrorOnFailure(caught);
 			}
 		});
 
@@ -126,10 +130,17 @@ public class GenerateDocumentPresenter {
 					@Override
 					public void onFailure(Throwable caught) {
 						display.hideTemplateList();
-						Window.alert(caught.getMessage());
+						showErrorOnFailure(caught);
 					}
 				});
 
+	}
+	
+	private void showErrorOnFailure(Throwable caught){
+		String message  = ((caught == null || caught.getMessage()== null || "".equals(caught.getMessage()) 	|| caught.getMessage().length() < 4 ) )?
+				Application.MESSAGES.wte4j_message_document_generation_service_unavailable_text():caught.getMessage();
+		MessageDialog messageDialog = new MessageDialog(Application.MESSAGES.wte4j_message_document_generation_error_title(), message, DialogType.ERROR);
+		messageDialog.show();
 	}
 
 	private class TemplateClickHandler implements ClickHandler {
