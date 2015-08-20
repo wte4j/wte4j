@@ -30,7 +30,6 @@ import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.form.error.BasicEditorError;
 import org.gwtbootstrap3.client.ui.form.validator.Validator;
 import org.wte4j.examples.showcase.client.Application;
-import org.wte4j.ui.client.templates.TemplateListDisplay;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -67,8 +66,6 @@ public class NewTemplatePanel extends Composite implements NewTemplateDisplay {
 	Image loadingSpinner;
 
 	private Map<String, LinkedGroupItem> dataModelNameToItem = new HashMap<String, LinkedGroupItem>();
-
-	private TemplateListDisplay templateListDisplay;
 
 	public NewTemplatePanel() {
 		this.initWidget(uiBinder.createAndBindUi(this));

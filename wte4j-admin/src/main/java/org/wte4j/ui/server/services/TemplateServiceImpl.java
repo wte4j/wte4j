@@ -22,8 +22,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -195,14 +197,18 @@ public class TemplateServiceImpl implements TemplateService {
 	}
 
 	@Override
-	public List<String> listContendIds(String pathToFile) throws TemplateServiceException {
+	public List<String> listUniqueContentIds(String pathToFile) throws TemplateServiceException {
 		Path filePath = Paths.get(pathToFile);
 		if (!Files.exists(filePath)) {
 			throw createServiceException(MessageKey.TEMPLATE_NOT_FOUND);
 		}
 		try {
 			TemplateFile templateFile = templateEngine.asTemplateFile(filePath);
-			return templateFile.listContentIds();
+			List<String> contentIds = templateFile.listContentIds();
+			Set<String> uniqueContentIds = new HashSet<String>(contentIds);
+			contentIds.clear();
+			contentIds.addAll(uniqueContentIds);
+			return contentIds;
 		} catch (IOException e) {
 			throw createServiceException(MessageKey.INTERNAL_SERVER_ERROR, e);
 		} catch (WteException e) {

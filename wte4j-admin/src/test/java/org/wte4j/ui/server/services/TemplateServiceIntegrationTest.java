@@ -139,9 +139,9 @@ public class TemplateServiceIntegrationTest {
 	}
 
 	@Test
-	public void listContendIds() throws URISyntaxException {
+	public void listUniqueContendIds() throws URISyntaxException {
 		Path filePath = Paths.get(getClass().getResource("template.docx").toURI());
-		List<String> contentIds = templateService.listContendIds(filePath.toString());
+		List<String> contentIds = templateService.listUniqueContentIds(filePath.toString());
 		assertEquals(1, contentIds.size());
 		assertEquals("template", contentIds.get(0));
 	}
