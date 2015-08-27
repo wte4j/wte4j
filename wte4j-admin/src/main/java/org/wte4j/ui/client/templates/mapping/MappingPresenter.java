@@ -83,7 +83,7 @@ public class MappingPresenter {
 	protected void initMappingData() {
 		display.hideAlert();
 		display.resetTable();
-		templateService.listContendIds(uploadedTemplateFile, new AsyncCallback<List<String>>() {
+		templateService.listUniqueContentIds(uploadedTemplateFile, new AsyncCallback<List<String>>() {
 			@Override
 			public void onSuccess(List<String> contentIds) {
 				updateTemplateMappingData(contentIds);

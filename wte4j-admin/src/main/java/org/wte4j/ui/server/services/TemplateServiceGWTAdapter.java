@@ -61,8 +61,8 @@ public class TemplateServiceGWTAdapter extends RemoteServiceServlet implements T
 		return templateService.listModelElements(inputType, properties);
 	}
 
-	public List<String> listContendIds(String templateFile) throws TemplateServiceException {
-		return templateService.listContendIds(templateFile);
+	public List<String> listUniqueContentIds(String templateFile) throws TemplateServiceException {
+		return templateService.listUniqueContentIds(templateFile);
 	}
 
 	public TemplateDto saveTemplateData(TemplateDto templateDto, String uploadedTemplate) throws TemplateServiceException, InvalidTemplateServiceException {

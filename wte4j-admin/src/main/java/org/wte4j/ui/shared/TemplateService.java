@@ -34,16 +34,17 @@ public interface TemplateService extends RemoteService {
 	List<ModelElementDto> listModelElements(String inputType, Map<String, String> properties) throws TemplateServiceException;
 
 	/**
-	 * List all content ids for dynamic content in a template file. The file
-	 * must have been uploaded to the server bevor.
+	 * List all unique content ids for dynamic content in a template file. The file
+	 * must have been uploaded to the server before.
 	 * 
 	 * @param templateFile
 	 *            name of the file on server
 	 * @return
 	 */
-	List<String> listContendIds(String templateFile) throws TemplateServiceException;
+	List<String> listUniqueContentIds(String pathToFile) throws TemplateServiceException;
 
 	TemplateDto saveTemplateData(TemplateDto templateDto, String uploadedTemplate) throws TemplateServiceException, InvalidTemplateServiceException;
 
 	TemplateDto createTemplate(TemplateDto newTemplate, String templateFile) throws TemplateServiceException, InvalidTemplateServiceException;
+
 }
