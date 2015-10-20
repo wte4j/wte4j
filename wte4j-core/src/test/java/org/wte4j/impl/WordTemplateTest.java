@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -164,6 +163,23 @@ public class WordTemplateTest {
 			String content = XmlUtils.marshaltoString(wordMLPackage
 					.getMainDocumentPart().getContents(), true);
 			assertTrue(content.contains("test123"));
+		} finally {
+			generatedDocument.deleteOnExit();
+		}
+	}
+	
+	@Test
+	public void toPDFDocumentTest() throws IOException, Docx4JException {
+		WordTemplate<String> wordTemplate = createWordTemplate("org/wte4j/impl/simpleTemplate.docx");
+		when(templateContext.resolveValue("value")).thenReturn("test123");
+		File generatedDocument = File.createTempFile("generated", ".pdf");
+		try (OutputStream out = new FileOutputStream(generatedDocument)) {
+			wordTemplate.toPDFDocument("gugus", out);
+			assertTrue(generatedDocument.isFile());
+			assertTrue(generatedDocument.length() > 0);
+			List<String> lines = FileUtils.readLines(generatedDocument);
+			assertTrue(lines.size() > 0);
+			assertTrue(lines.get(0).contains("PDF"));
 		} finally {
 			generatedDocument.deleteOnExit();
 		}

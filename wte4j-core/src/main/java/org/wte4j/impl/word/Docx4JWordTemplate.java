@@ -26,7 +26,9 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.util.IOUtils;
+import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
+import org.docx4j.convert.out.FOSettings;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.model.structure.HeaderFooterPolicy;
 import org.docx4j.model.structure.SectionWrapper;
@@ -238,4 +240,26 @@ public class Docx4JWordTemplate {
 		}
 	}
 
+	/**
+	 * Writes this document as PDF to a OutputStream and closed the stream in
+	 * any case.
+	 * 
+	 * @param out
+	 *            - the Outputstream to write the document.
+	 * @throws IOException
+	 */
+	public void writeAsPDF(OutputStream out) throws IOException {
+
+        WordprocessingMLPackage mlPackage = getWordMLPackage();
+        
+        try {
+            FOSettings foSettings = Docx4J.createFOSettings();
+            foSettings.setWmlPackage(mlPackage);
+            Docx4J.toFO(foSettings, out, Docx4J.FLAG_EXPORT_PREFER_XSL);
+        } catch (Exception e) {
+        	throw new WteException("Unable to create PDF Document", e);
+        } finally {
+        	out.close();
+        }
+	}
 }

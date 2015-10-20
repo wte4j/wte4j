@@ -126,21 +126,6 @@
 			<artifactId>docx4j</artifactId>
 			<version>3.2.1</version>
 			<exclusions>
-				<!-- only needed for pdf export -->
-				<exclusion>
-					<artifactId>fop</artifactId>
-					<groupId>org.apache.xmlgraphics</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jaxb-xslfo</artifactId>
-					<groupId>org.plutext</groupId>
-				</exclusion>
-
-				<!-- (X)HTML, PDF export -->
-				<exclusion>
-					<artifactId>xalan</artifactId>
-					<groupId>xalan</groupId>
-				</exclusion>
 				<!-- Pptx export -->
 				<exclusion>
 					<artifactId>jaxb-svg11</artifactId>
