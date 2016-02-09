@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.docx4j.fonts.PhysicalFonts;
 import org.wte4j.InvalidTemplateException;
 import org.wte4j.LockingException;
 import org.wte4j.MappingDetail;
@@ -84,6 +85,18 @@ public class WordTemplate<E> implements Template<E> {
 		document.updateDynamicContent(context);
 		document.writeAsOpenXML(out);
 	}
+	
+	@Override
+	public void toPDFDocument(E data, OutputStream out) throws IOException {
+        PhysicalFonts.setRegex(null);
+        
+        prepareDocument();
+        TemplateContext<E> context = contextFactory.createTemplateContext(this);
+        context.bind(data);
+        document.updateDynamicContent(context);
+        document.writeAsPDF(out);
+}
+
 
 	@Override
 	public String getDocumentName() {
@@ -157,7 +170,7 @@ public class WordTemplate<E> implements Template<E> {
 		OutputStream out = FileUtils.openOutputStream(file);
 		write(out);
 	}
-
+	
 	@Override
 	public void write(OutputStream out) throws IOException {
 		persistentData.writeContent(out);

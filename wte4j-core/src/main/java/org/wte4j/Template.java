@@ -104,4 +104,6 @@ public interface Template<E> extends TemplateFile {
 	void toTestDocument(OutputStream out) throws IOException,
 			InvalidTemplateException;
 
+	void toPDFDocument(E data, OutputStream out) throws IOException;
+
 }
