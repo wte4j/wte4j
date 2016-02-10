@@ -16,11 +16,16 @@
 package org.wte4j;
 
 import javax.annotation.Generated;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class MappingDetail {
+	
+	@Column(name = "model_key", nullable = true, length = 250)
 	private String modelKey;
+	
+	@Column(name = "formatter_definition", nullable = true, length = 250)
 	private String formatterDefinition;
 
 	public String getModelKey() {
