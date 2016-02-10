@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.wte4j</groupId>
 		<artifactId>wte4j-parent</artifactId>
-		<version>0.1.3-SNAPSHOT</version>
+		<version>0.1.3</version>
 	</parent>
 	<artifactId>wte4j-admin</artifactId>
 	<packaging>jar</packaging>
