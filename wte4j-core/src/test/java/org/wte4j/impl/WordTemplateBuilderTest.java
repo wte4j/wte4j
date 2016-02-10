@@ -138,6 +138,7 @@ public class WordTemplateBuilderTest {
 			ZipEntry entry = zipFile.getEntry("word/document.xml");
 			InputStream documentIn = zipFile.getInputStream(entry);
 			String doucmentXml = IOUtils.toString(documentIn);
+			doucmentXml = doucmentXml.replaceAll("\\n\\s+", "");
 			String expected = "<w:sdt>"
 					+ "<w:sdtPr>"//
 					+ /*  */"<w:tag w:val=\"string\"/>"//
