@@ -81,9 +81,6 @@ public class PersistentTemplate {
 	private Map<String, String> properties;
 
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = MappingDetail.class)
-	@AttributeOverrides(value = {
-			@AttributeOverride(name = "value.modelKey", column = @Column(name = "model_key", nullable = true, length = 250)),
-			@AttributeOverride(name = "value.formatterDefinition", column = @Column(name = "formatter_definition", nullable = true, length = 250)) })
 	@CollectionTable(name = "wte4j_template_content_mapping", joinColumns = @JoinColumn(name = "template_id"))
 	@MapKeyColumn(name = "conentend_control_id")
 	private Map<String, MappingDetail> contentMapping;
