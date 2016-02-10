@@ -23,5 +23,5 @@
 	version="2.0">
 	<entity class="org.wte4j.impl.PersistentTemplate"/>
 	<embeddable class="org.wte4j.User"/>
-	<embeddable class="org.wte4j.MappingDetail"/>	
+	<embeddable class="org.wte4j.MappingDetail"/>
 </entity-mappings>

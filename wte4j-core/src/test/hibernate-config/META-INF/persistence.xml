@@ -22,9 +22,9 @@
 	version="2.0">	
 	<persistence-unit name="wte4j-templates" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
+		<mapping-file>META-INF/wte4j-mapping.xml</mapping-file>
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 		</properties>
 	</persistence-unit>
 </persistence>
