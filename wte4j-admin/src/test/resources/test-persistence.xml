@@ -19,8 +19,8 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-	<persistence-unit name="wte4j-templates" transaction-type="RESOURCE_LOCAL">		
-		<mapping-file>META-INF/wte-mapping.xml</mapping-file>
+	<persistence-unit name="wte4j-templates" transaction-type="RESOURCE_LOCAL">
+		<mapping-file>META-INF/wte4j-mapping.xml</mapping-file>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		</persistence-unit>
-</persistence> 
+	</persistence-unit>
+</persistence>
