@@ -203,7 +203,7 @@
 							<includedLicense>Public Domain</includedLicense>
 							<includedLicense>Common Development and Distribution License (CDDL), version 1.0</includedLicense>
 							<includedLicense>HSQLDB License, a BSD open source license</includedLicense>
-							<includedLicense>License Mozilla Public License version 1.1</includedLicense>
+							<includedLicense>Mozilla Public License version 1.1</includedLicense>
 						</includedLicenses>
 					</configuration>
 				</plugin>
