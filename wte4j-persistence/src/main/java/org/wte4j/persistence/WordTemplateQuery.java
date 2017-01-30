@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wte4j.impl;
+package org.wte4j.persistence;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +34,7 @@ import javax.persistence.criteria.Subquery;
 
 import org.wte4j.Template;
 import org.wte4j.TemplateQuery;
+import org.wte4j.impl.PersistentTemplate;
 
 public class WordTemplateQuery implements TemplateQuery {
 	private final WordTemplateRepository repository;
