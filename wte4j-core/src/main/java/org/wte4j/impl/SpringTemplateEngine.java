@@ -38,7 +38,7 @@ import org.wte4j.impl.word.WordTemplateFile;
 @Service("wordTemplateEngine")
 public class SpringTemplateEngine implements TemplateEngine {
 
-	@Autowired
+	@Autowired(required=false)
 	protected TemplateRepository templateRepository;
 
 	@Autowired(required = false)
@@ -61,7 +61,7 @@ public class SpringTemplateEngine implements TemplateEngine {
 	public Path createDocument(String documentName, String language, Object data)
 			throws IllegalArgumentException, InvalidTemplateException,
 			IOException {
-		Template<Object> template = templateRepository.getTemplate(
+		Template<Object> template = getTemplateRepository().getTemplate(
 				documentName, language);
 		if (template == null) {
 			throw new IllegalArgumentException(
@@ -81,6 +81,9 @@ public class SpringTemplateEngine implements TemplateEngine {
 
 	@Override
 	public TemplateRepository getTemplateRepository() {
+		if(templateRepository == null){
+			throw new IllegalStateException("repository not defined in spring context");
+		}
 		return templateRepository;
 	}
 
