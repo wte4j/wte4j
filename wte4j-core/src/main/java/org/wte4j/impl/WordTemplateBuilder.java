@@ -30,6 +30,8 @@ import org.wte4j.Template;
 import org.wte4j.TemplateBuildException;
 import org.wte4j.TemplateBuilder;
 import org.wte4j.TemplateExistException;
+import org.wte4j.TemplateData;
+import org.wte4j.TemplateDataImpl;
 import org.wte4j.User;
 import org.wte4j.WteException;
 import org.wte4j.WteModelService;
@@ -116,14 +118,14 @@ public class WordTemplateBuilder<E> implements TemplateBuilder<E> {
 	 */
 	public Template<E> build() throws TemplateBuildException {
 		validateBeforeBuild();
-		PersistentTemplate template = new PersistentTemplate();
+		TemplateDataImpl<E> template = new TemplateDataImpl<>();
 		template.setDocumentName(documentName);
 		template.setLanguage(language);
 		template.setInputType(inputType);
 		template.setProperties(modelProperties);
 		template.setEditor(user);
 		template.setContentMapping(mappingData);
-		template.setContent(getContent());
+		template.setContent(getContent(),user);
 		Date date = new Date();
 		template.setEditedAt(date);
 		template.setCreatedAt(date);

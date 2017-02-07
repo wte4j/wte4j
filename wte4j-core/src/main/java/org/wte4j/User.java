@@ -16,11 +16,9 @@
 package org.wte4j;
 
 import javax.annotation.Generated;
-import javax.persistence.Embeddable;
 
 import org.apache.commons.lang3.StringUtils;
 
-@Embeddable
 /**
  * A User has a id and a display name. The id is used to identify the user an must be unique
  */

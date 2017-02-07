@@ -39,6 +39,7 @@ import org.docx4j.XmlUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -47,6 +48,8 @@ import org.wte4j.ExpressionError;
 import org.wte4j.InvalidTemplateException;
 import org.wte4j.LockingException;
 import org.wte4j.Template;
+import org.wte4j.TemplateData;
+import org.wte4j.TemplateDataImpl;
 import org.wte4j.User;
 import org.wte4j.WteException;
 
@@ -68,7 +71,7 @@ public class WordTemplateTest {
 
 	@Test
 	public void writeTest() throws IOException {
-		PersistentTemplate template = new PersistentTemplate();
+		TemplateDataImpl<String> template = new TemplateDataImpl<>();
 		byte[] content = new byte[1];
 		Arrays.fill(content, Byte.MIN_VALUE);
 		template.setContent(content);
@@ -105,15 +108,17 @@ public class WordTemplateTest {
 	public void updateWithLockingUser() throws IOException {
 		User user = new User("user1", "user1");
 		WordTemplate<?> wordTemplate = createWordTemplate(TEST_TEXTFILE);
-		wordTemplate.getPersistentData().lock(user);
+		byte[] content=wordTemplate.getTemplateData().getContent();
+		wordTemplate.getTemplateData().setContent(content, user);		
 		updateContent(wordTemplate, user, EMPTY_WORD);
 		checkUpdateContent(wordTemplate, user, EMPTY_WORD);
 	}
 
 	@Test(expected = LockingException.class)
+	@Ignore //locking check will be done, when a template is saved
 	public void updateLockedWithDifferentEditor() throws IOException {
 		WordTemplate<?> wordTemplate = createWordTemplate(TEST_TEXTFILE);
-		wordTemplate.getPersistentData().lock(new User("user1", "user1"));
+		//wordTemplate.getPersistentData().lock(new User("user1", "user1"));
 		User user2 = new User("user2", "user 2");
 		updateContent(wordTemplate, user2, EMPTY_WORD);
 		fail("Exception expected");
@@ -239,7 +244,7 @@ public class WordTemplateTest {
 			String fileName) throws IOException {
 		File file = FileUtils.toFile(ClassLoader.getSystemResource(fileName));
 		byte[] expectedContent = FileUtils.readFileToByteArray(file);
-		byte[] currentContent = wordTemplate.getPersistentData().getContent();
+		byte[] currentContent = wordTemplate.getTemplateData().getContent();
 		assertTrue(Arrays.equals(expectedContent, currentContent));
 		assertEquals(user, wordTemplate.getEditor());
 		assertNotNull(wordTemplate.getEditedAt());
@@ -251,7 +256,7 @@ public class WordTemplateTest {
 				.getSystemResource(pathToTemplateFile));
 		byte[] templateContent = FileUtils
 				.readFileToByteArray(templateDocument);
-		PersistentTemplate persistentData = new PersistentTemplate();
+		TemplateDataImpl<String> persistentData = new TemplateDataImpl<>();
 		persistentData.setDocumentName("test");
 		persistentData.setLanguage("de");
 		persistentData.setInputType(String.class);

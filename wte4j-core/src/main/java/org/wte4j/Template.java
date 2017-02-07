@@ -54,10 +54,8 @@ public interface Template<E> extends TemplateFile {
 	 * @param editor
 	 *            - the editor of the content
 	 * @throws IOException
-	 * @throws LockingException
-	 *             if the template is locked by an other user
 	 */
-	void update(InputStream in, User editor) throws IOException, LockingException;
+	void update(InputStream in, User editor) throws IOException;
 
 	public Map<String, MappingDetail> getContentMapping();
 

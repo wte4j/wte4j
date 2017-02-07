@@ -32,6 +32,7 @@ import org.wte4j.InvalidTemplateException;
 import org.wte4j.LockingException;
 import org.wte4j.MappingDetail;
 import org.wte4j.Template;
+import org.wte4j.TemplateData;
 import org.wte4j.User;
 import org.wte4j.WteException;
 import org.wte4j.impl.word.WordTemplateFile;
@@ -43,18 +44,17 @@ import org.wte4j.impl.word.WordTemplateFile;
  *            see {@link Template}
  */
 public class WordTemplate<E> implements Template<E> {
-	private PersistentTemplate persistentData;
+	private TemplateData persistentData;
 	private TemplateContextFactory contextFactory;
 	private WordTemplateFile document;
 
-	public WordTemplate(PersistentTemplate template, TemplateContextFactory contextFactory) {
+	public WordTemplate(TemplateData template, TemplateContextFactory contextFactory) {
 		this.persistentData = template;
 		this.contextFactory = contextFactory;
 	}
 
 	@Override
-	public void toDocument(E data, OutputStream out) throws IOException,
-			InvalidTemplateException {
+	public void toDocument(E data, OutputStream out) throws IOException, InvalidTemplateException {
 		prepareDocument();
 		TemplateContext<E> context = contextFactory.createTemplateContext(this);
 		context.bind(data);
@@ -72,31 +72,28 @@ public class WordTemplate<E> implements Template<E> {
 		}
 	}
 
-	private WordTemplateFile createDocument(byte[] content)
-			throws IOException {
+	private WordTemplateFile createDocument(byte[] content) throws IOException {
 		return new WordTemplateFile(new ByteArrayInputStream(content));
 	}
 
 	@Override
-	public void toTestDocument(OutputStream out)
-			throws InvalidTemplateException, IOException {
+	public void toTestDocument(OutputStream out) throws InvalidTemplateException, IOException {
 		TemplateContext<E> context = contextFactory.createTemplateContext(this);
 		prepareDocument();
 		document.updateDynamicContent(context);
 		document.writeAsOpenXML(out);
 	}
-	
+
 	@Override
 	public void toPDFDocument(E data, OutputStream out) throws IOException {
-        PhysicalFonts.setRegex(null);
-        
-        prepareDocument();
-        TemplateContext<E> context = contextFactory.createTemplateContext(this);
-        context.bind(data);
-        document.updateDynamicContent(context);
-        document.writeAsPDF(out);
-}
+		PhysicalFonts.setRegex(null);
 
+		prepareDocument();
+		TemplateContext<E> context = contextFactory.createTemplateContext(this);
+		context.bind(data);
+		document.updateDynamicContent(context);
+		document.writeAsPDF(out);
+	}
 
 	@Override
 	public String getDocumentName() {
@@ -141,8 +138,7 @@ public class WordTemplate<E> implements Template<E> {
 	}
 
 	@Override
-	public void update(InputStream in, User editor) throws IOException,
-			InvalidTemplateException, LockingException {
+	public void update(InputStream in, User editor) throws IOException, InvalidTemplateException, LockingException {
 		byte[] content = IOUtils.toByteArray(in);
 		document = createDocument(content);
 		persistentData.setContent(content, editor);
@@ -170,13 +166,19 @@ public class WordTemplate<E> implements Template<E> {
 		OutputStream out = FileUtils.openOutputStream(file);
 		write(out);
 	}
-	
+
 	@Override
 	public void write(OutputStream out) throws IOException {
-		persistentData.writeContent(out);
+		try {
+			IOUtils.write(persistentData.getContent(), out);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
 	}
 
-	protected PersistentTemplate getPersistentData() {
+	public TemplateData getTemplateData() {
 		return persistentData;
 	}
+
+
 }
