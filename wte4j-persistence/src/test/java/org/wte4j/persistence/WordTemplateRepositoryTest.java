@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -62,7 +61,6 @@ import org.wte4j.Template;
 import org.wte4j.TemplateQuery;
 import org.wte4j.User;
 import org.wte4j.WteModelService;
-import org.wte4j.impl.PersistentTemplate;
 import org.wte4j.impl.TemplateContextFactory;
 import org.wte4j.impl.WordTemplate;
 
@@ -82,8 +80,6 @@ public class WordTemplateRepositoryTest {
 	@Before
 	public void initTest() throws Exception {
 		repository = new WordTemplateRepository(entityManager, contextFactory);
-		repository.em = entityManager;
-		repository.contextFactory = contextFactory;
 	}
 
 	@Test
@@ -151,8 +147,7 @@ public class WordTemplateRepositoryTest {
 	public void lockingTemplateParallel() {
 		Template<?> template1 = unlockedTemplate();
 		Template<?> template2 = unlockedTemplate();
-		template1 = repository.lockForEdit(template1,
-				new User("first", "First"));
+		template1 = repository.lockForEdit(template1, new User("first", "First"));
 		User second = new User("second", "Second User");
 		repository.lockForEdit(template2, second);
 		fail(LockingException.class + " expected");
@@ -197,8 +192,7 @@ public class WordTemplateRepositoryTest {
 		repository.setFileStore(fileStore);
 		try {
 			repository.persist(template);
-			File epected = FileUtils.toFile(getClass()
-					.getResource("empty.docx"));
+			File epected = FileUtils.toFile(getClass().getResource("empty.docx"));
 			assertTrue(FileUtils.contentEquals(epected, file));
 		} finally {
 			file.deleteOnExit();
@@ -210,10 +204,9 @@ public class WordTemplateRepositoryTest {
 	public void persistOfLocked() throws Exception {
 		Template<?> template1 = unlockedTemplate();
 		WordTemplate<?> template2 = unlockedTemplate();
-		template1 = repository.lockForEdit(template1,
-				new User("user1", "user1"));
+		template1 = repository.lockForEdit(template1, new User("user1", "user1"));
 		byte[] content = getContent("empty.docx");
-		template2.getPersistentData().setContent(content);
+		template2.getTemplateData().setContent(content, new User());
 		try {
 			repository.persist(template2);
 			fail("Exception expected");
@@ -242,11 +235,10 @@ public class WordTemplateRepositoryTest {
 		when(fileStore.getOutStream(anyString())).thenReturn(out);
 		repository.setFileStore(fileStore);
 		WordTemplate<?> template = unlockedTemplate();
-		template.getPersistentData().setContent(getContent("empty.docx"));
+		template.getTemplateData().setContent(getContent("empty.docx"), new User());
 		try {
 			repository.persist(template);
-			File expected = FileUtils.toFile(getClass().getResource(
-					"empty.docx"));
+			File expected = FileUtils.toFile(getClass().getResource("empty.docx"));
 			assertTrue(FileUtils.contentEquals(expected, file));
 		} finally {
 			file.deleteOnExit();
@@ -279,12 +271,11 @@ public class WordTemplateRepositoryTest {
 		FileStore fileStore = mock(FileStore.class);
 		repository.setFileStore(fileStore);
 		WordTemplate<?> template = unlockedTemplate();
+		PersistentTemplate templateData = (PersistentTemplate) template.getTemplateData();
 		repository.delete(template);
 		verify(fileStore, times(1)).deleteFile(anyString());
-		verify(fileStore, times(1)).deleteFile(
-				template.getPersistentData().getTemplateFileName());
-		assertFalse("template must not be in persistent context",
-				isVersionIncontext(template));
+		verify(fileStore, times(1)).deleteFile(templateData.getTemplateFileName());
+		assertFalse("template must not be in persistent context", isVersionIncontext(template));
 	}
 
 	@Test
@@ -367,12 +358,11 @@ public class WordTemplateRepositoryTest {
 
 	private boolean isVersionIncontext(Template<?> template) {
 		WordTemplate<?> wordTemplate = (WordTemplate<?>) template;
-		PersistentTemplate inContext = getTemplateInContext(wordTemplate
-				.getPersistentData().getId());
+		PersistentTemplate templateData = (PersistentTemplate) wordTemplate.getTemplateData();
+		PersistentTemplate inContext = getTemplateInContext(templateData.getId());
 		if (inContext == null) {
 			return false;
 		}
-		return inContext.getVersion() == wordTemplate.getPersistentData()
-				.getVersion();
+		return inContext.getVersion() == templateData.getVersion();
 	}
 }

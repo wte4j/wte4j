@@ -26,10 +26,6 @@
 		<version>0.1.4-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<openjpa.version>2.3.0</openjpa.version>
-	</properties>
-
 	<build>
 		<plugins>
 
@@ -58,6 +54,7 @@
 							<goal>test-enhance</goal>
 						</goals>
 						<configuration>
+							<persistenceXmlFile>${project.basedir}/src/test/resources/META-INF/persistence.xml</persistenceXmlFile>
 							<includes>**/PersistentTemplate.class, **/User.class, **/MappingDetail.class</includes>
 							<toolProperties>
 								<directory>${project.build.testOutputDirectory}</directory>

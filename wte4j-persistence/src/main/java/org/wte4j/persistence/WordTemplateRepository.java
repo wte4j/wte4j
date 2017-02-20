@@ -39,7 +39,6 @@ import org.wte4j.TemplateExistException;
 import org.wte4j.TemplateQuery;
 import org.wte4j.TemplateRepository;
 import org.wte4j.User;
-import org.wte4j.impl.PersistentTemplate;
 import org.wte4j.impl.TemplateContextFactory;
 import org.wte4j.impl.WordTemplate;
 
@@ -57,7 +56,7 @@ public class WordTemplateRepository implements TemplateRepository {
 	@Autowired(required = false)
 	protected FileStore fileStore;
 
-	protected WordTemplateRepository() {
+	public WordTemplateRepository() {
 	}
 
 	public WordTemplateRepository(EntityManager em, TemplateContextFactory contextFactory) {
@@ -150,7 +149,7 @@ public class WordTemplateRepository implements TemplateRepository {
 		}
 
 		return new WordTemplate<E>(unwrapped, contextFactory);
-
+ 
 	}
 
 	@Override
@@ -167,7 +166,21 @@ public class WordTemplateRepository implements TemplateRepository {
 
 	private PersistentTemplate unwrap(Template<?> aTemplate) {
 		WordTemplate<?> wt = (WordTemplate<?>) aTemplate;
-		return wt.getPersistentData();
+		if (wt.getTemplateData() instanceof PersistentTemplate) {
+			return (PersistentTemplate) wt.getTemplateData();			
+		}else{
+			PersistentTemplate pt = new PersistentTemplate();
+			pt.setContent(wt.getTemplateData().getContent());
+			pt.setContentMapping(wt.getContentMapping());
+			pt.setCreatedAt(wt.getCreatedAt());
+			pt.setDocumentName(wt.getDocumentName());
+			pt.setEditedAt(wt.getEditedAt());
+			pt.setEditor(wt.getEditor());
+			pt.setInputType(wt.getInputType());
+			pt.setLanguage(wt.getLanguage());
+			pt.setProperties(wt.getProperties());
+			return pt;
+		}
 	}
 
 	private void persist(PersistentTemplate toPersist) throws LockingException,
@@ -202,16 +215,13 @@ public class WordTemplateRepository implements TemplateRepository {
 	}
 
 	void updateFileStore(PersistentTemplate template) {
-		String fileName = template.getTemplateFileName();
-		OutputStream out = null;
-		try {
-			out = fileStore.getOutStream(fileName);
-			template.writeContent(out);
+		String fileName = template.getTemplateFileName();		
+		
+		try (OutputStream out=fileStore.getOutStream(fileName)) {
+			IOUtils.write(template.getContent(), out);
 		} catch (IOException e) {
 			logger.error("Error occured when storring {}", fileName, e);
-		} finally {
-			IOUtils.closeQuietly(out);
-		}
+		} 
 	}
 
 	@Transactional

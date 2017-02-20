@@ -16,10 +16,13 @@
 package org.wte4j.examples.showcase;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.wte4j.examples.showcase.server.config.RootApplicationConfig;
+import org.wte4j.persistence.config.Wte4jPersistenceConfig;
 
 @Configuration
+@Import(Wte4jPersistenceConfig.class)
 @PropertySource("classpath:/org/wte4j/examples/showcase/integration-test-application.properties")
 public class IntegrationTestApplicationConfig extends RootApplicationConfig {
 

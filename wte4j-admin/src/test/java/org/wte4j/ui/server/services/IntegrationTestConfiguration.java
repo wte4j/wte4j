@@ -35,10 +35,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.wte4j.WteModelService;
 import org.wte4j.impl.service.FlatBeanModelService;
+import org.wte4j.persistence.config.Wte4jPersistenceConfig;
 import org.wte4j.ui.server.config.Wte4jAdminConfig;
 
 @Configuration
-@Import(Wte4jAdminConfig.class)
+@Import({Wte4jAdminConfig.class,Wte4jPersistenceConfig.class})
 @ImportResource({ "classpath:wte4j-core-application-context.xml" })
 @EnableTransactionManagement
 public class IntegrationTestConfiguration {
@@ -78,5 +79,4 @@ public class IntegrationTestConfiguration {
 	WteModelService wteModelService() {
 		return new FlatBeanModelService();
 	}
-
 }

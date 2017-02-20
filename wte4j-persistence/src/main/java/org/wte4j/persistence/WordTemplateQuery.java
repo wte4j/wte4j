@@ -34,7 +34,6 @@ import javax.persistence.criteria.Subquery;
 
 import org.wte4j.Template;
 import org.wte4j.TemplateQuery;
-import org.wte4j.impl.PersistentTemplate;
 
 public class WordTemplateQuery implements TemplateQuery {
 	private final WordTemplateRepository repository;

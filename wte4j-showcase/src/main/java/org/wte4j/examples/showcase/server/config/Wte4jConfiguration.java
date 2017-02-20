@@ -30,13 +30,14 @@ import org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.wte4j.WteModelService;
 import org.wte4j.impl.service.FlatBeanModelService;
+import org.wte4j.persistence.config.Wte4jPersistenceConfig;
 import org.wte4j.ui.server.config.Wte4jAdminConfig;
 import org.wte4j.ui.server.services.MessageFactory;
 import org.wte4j.ui.server.services.MessageFactoryImpl;
 import org.wte4j.ui.server.services.ServiceContext;
 
 @Configuration
-@Import(Wte4jAdminConfig.class)
+@Import({Wte4jAdminConfig.class,Wte4jPersistenceConfig.class})
 public class Wte4jConfiguration {
 
 	@Autowired

@@ -78,7 +78,7 @@
 							<outputDirectory>${project.build.directory}</outputDirectory>
 							<thirdPartyFilename>NOTICE</thirdPartyFilename>
 							<fileTemplate>${basedir}/src/license/NOTICE-template.ftl</fileTemplate>
-							<excludedArtifacts>xbean-asm4-shaded|stax-api</excludedArtifacts>
+							<excludedArtifacts>xbean-asm5-shaded|stax-api</excludedArtifacts>
 						</configuration>
 					</execution>
 				</executions>
