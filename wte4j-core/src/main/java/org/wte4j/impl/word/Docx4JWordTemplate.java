@@ -25,7 +25,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.util.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
 import org.docx4j.convert.out.FOSettings;
