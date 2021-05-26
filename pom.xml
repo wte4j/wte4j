@@ -121,6 +121,7 @@
 						<exclude>**/.coveralls.yml</exclude>
 						<exclude>**/*.docx</exclude>
 						<exclude>**/*.dotx</exclude>
+						<exclude>.github/workflows/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
