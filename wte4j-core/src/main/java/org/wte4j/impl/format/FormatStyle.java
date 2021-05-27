@@ -18,7 +18,7 @@ package org.wte4j.impl.format;
 public enum FormatStyle {
 
 	SHORT("dd.MM.yyyy", "HH:mm"), //
-	MEDIUM("dd. MMM. yyyy", "HH:mm:ss"), //
+	MEDIUM("dd. MMM yyyy", "HH:mm:ss"), //
 	LONG("dd. MMMM yyyy", "HH:mm:ss.SSS z");
 
 	private final String datePattern;

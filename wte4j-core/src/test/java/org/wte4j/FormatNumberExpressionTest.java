@@ -66,7 +66,7 @@ public class FormatNumberExpressionTest {
 
 	@Test()
 	public void formateGroupingTest() {
-		testFormat(10000, "format:number(0, true) value", "10'000");
+		testFormat(10000, "format:number(0, true) value", "10’000");
 	}
 
 	@Test()
