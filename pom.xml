@@ -99,7 +99,7 @@
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
 		
-		<sonar.projectKey>wte4j_wte4j</sonar.projectKey>
+		<sonar.projectKey>org_wte4j_wte4j_parent</sonar.projectKey>
   		<sonar.organization>wte4j</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		
@@ -147,11 +147,6 @@
 					<releaseProfiles>release</releaseProfiles>
 					<goals>deploy</goals>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eluder.coveralls</groupId>
-				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>3.1.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
