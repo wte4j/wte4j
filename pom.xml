@@ -99,6 +99,10 @@
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
 		
+		<sonar.projectKey>wte4j_wte4j</sonar.projectKey>
+  		<sonar.organization>wte4j</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		
 		<argLine>-XX:MaxPermSize=96m</argLine>
 	</properties>
 
