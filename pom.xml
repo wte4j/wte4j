@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright (C) 2015 Born Informatik AG (www.born.ch)
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-            http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright (C) 2015 Born Informatik AG (www.born.ch) Licensed under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wte4j</groupId>
 	<artifactId>wte4j-parent</artifactId>
@@ -82,10 +74,10 @@
 		<openJPA.version>2.4.2</openJPA.version>
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
-		<sonar.coverage.jacoco.xmlReportPaths>**/target/jacoco.exec</sonar.coverage.jacoco.xmlReportPaths>
-  		<sonar.organization>wte4j</sonar.organization>
+		<sonar.coverage.jacoco.xmlReportPaths>**/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.organization>wte4j</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		
+
 		<argLine>-XX:MaxPermSize=96m</argLine>
 	</properties>
 
@@ -134,13 +126,20 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				 <version>0.8.7</version>
+				<version>0.8.7</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+						<phase>verify</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -172,14 +171,18 @@
 						<excludedGroups>${project.groupId}</excludedGroups>
 						<includedScopes>compile,runtime</includedScopes>
 						<licenseMerges>
-							<licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache Software License 2.0|Apache License, Version 2.0|
-								http://www.apache.org/licenses/LICENSE-2.0.txt|Apache License Version
+							<licenseMerge>The Apache Software License, Version 2.0|Apache
+								2|Apache Software License 2.0|Apache License, Version 2.0|
+								http://www.apache.org/licenses/LICENSE-2.0.txt|Apache License
+								Version
 								2|GWT Terms
 							</licenseMerge>
 							<licenseMerge>Apache Software Licenses|Apache Software License</licenseMerge>
 							<licenseMerge>BSD Style License|BSD|BSD style|BSD style License</licenseMerge>
 							<licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
-							<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|Common Public License Version 1.0</licenseMerge>
+							<licenseMerge>Common Development and Distribution License (CDDL),
+								version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
+								Version 1.0|Common Public License Version 1.0</licenseMerge>
 						</licenseMerges>
 						<includedLicenses>
 							<includedLicense>The Apache Software License, Version 2.0</includedLicense>
@@ -188,14 +191,16 @@
 							<includedLicense>BSD Style License</includedLicense>
 							<includedLicense>New BSD License</includedLicense>
 							<includedLicense>Public Domain</includedLicense>
-							<includedLicense>Common Development and Distribution License (CDDL), version 1.0</includedLicense>
+							<includedLicense>Common Development and Distribution License
+								(CDDL), version 1.0</includedLicense>
 							<includedLicense>HSQLDB License, a BSD open source license</includedLicense>
 							<includedLicense>Mozilla Public License version 1.1</includedLicense>
 						</includedLicenses>
 					</configuration>
 				</plugin>
-				
-						<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -424,7 +429,7 @@
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-			
+
 			<!-- GWT -->
 
 			<dependency>
@@ -466,8 +471,8 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
-		</dependency>	
-		
+		</dependency>
+
 
 		<!-- ===== Testing ===== -->
 		<!-- testing jsf components -->
