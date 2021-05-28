@@ -185,10 +185,10 @@
 								Version
 								2|GWT Terms
 							</licenseMerge>
-							<licenseMerge>Apache Software Licenses|Apache Software License</licenseMerge>
+							<licenseMerge>Apache Software Licenses|Apache Software License|Apache 2</licenseMerge>
 							<licenseMerge>BSD Style License|BSD|BSD style|BSD style License</licenseMerge>
 							<licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
-							<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|Common Public License Version 1.0|Common Public License Version 1.1</licenseMerge>
+							<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|Common Public License Version 1.0|Common Public License Version 1.1|CDDL + GPLv2 with classpath exception</licenseMerge>
 							<licenseMerge>Eclipse Distribution License - v 1.0|EDL 1.0</licenseMerge>
 						</licenseMerges>
 						<includedLicenses>
