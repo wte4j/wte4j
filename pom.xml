@@ -60,23 +60,7 @@
 		</license>
 	</licenses>
 
-	<developers>
-		<developer>
-			<name>Oliver Freivogel</name>
-			<email>oliver.freivogel@born.ch</email>
-		</developer>
 
-		<developer>
-			<name>Thomas Selber</name>
-			<email>thomas.selber@born.ch</email>
-		</developer>
-
-		<developer>
-			<name>Thomas Stettler</name>
-			<email>thomas.stettler@born.ch</email>
-		</developer>
-
-	</developers>
 
 	<modules>
 		<module>wte4j-core</module>
@@ -98,7 +82,7 @@
 		<openJPA.version>2.4.2</openJPA.version>
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
-		
+		<sonar.coverage.jacoco.xmlReportPaths>**/target/jacoco.exec</sonar.coverage.jacoco.xmlReportPaths>
   		<sonar.organization>wte4j</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		
