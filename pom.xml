@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2015 Born Informatik AG (www.born.ch) Licensed under the 
-	Apache License, Version 2.0 (the "License"); you may not use this file except 
-	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-	Unless required by applicable law or agreed to in writing, software distributed 
-	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
-	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-	the specific language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--
+
+    Copyright (C) 2015 Born Informatik AG (www.born.ch)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.wte4j</groupId>
 	<artifactId>wte4j-parent</artifactId>
@@ -180,9 +188,8 @@
 							<licenseMerge>Apache Software Licenses|Apache Software License</licenseMerge>
 							<licenseMerge>BSD Style License|BSD|BSD style|BSD style License</licenseMerge>
 							<licenseMerge>MIT License|MIT license|The MIT License</licenseMerge>
-							<licenseMerge>Common Development and Distribution License (CDDL),
-								version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
-								Version 1.0|Common Public License Version 1.0</licenseMerge>
+							<licenseMerge>Common Development and Distribution License (CDDL), version 1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0|Common Public License Version 1.0|Common Public License Version 1.1</licenseMerge>
+							<licenseMerge>Eclipse Distribution License - v 1.0|EDL 1.0</licenseMerge>
 						</licenseMerges>
 						<includedLicenses>
 							<includedLicense>The Apache Software License, Version 2.0</includedLicense>
@@ -191,10 +198,10 @@
 							<includedLicense>BSD Style License</includedLicense>
 							<includedLicense>New BSD License</includedLicense>
 							<includedLicense>Public Domain</includedLicense>
-							<includedLicense>Common Development and Distribution License
-								(CDDL), version 1.0</includedLicense>
+							<includedLicense>Common Development and Distribution License (CDDL), version 1.0</includedLicense>
 							<includedLicense>HSQLDB License, a BSD open source license</includedLicense>
 							<includedLicense>Mozilla Public License version 1.1</includedLicense>
+							<includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
 						</includedLicenses>
 					</configuration>
 				</plugin>
