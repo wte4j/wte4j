@@ -85,8 +85,6 @@
 		<sonar.coverage.jacoco.xmlReportPaths>**/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.organization>wte4j</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-
-		<argLine>-XX:MaxPermSize=96m</argLine>
 	</properties>
 
 	<build>
