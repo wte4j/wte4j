@@ -82,7 +82,9 @@
 		<openJPA.version>2.4.2</openJPA.version>
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
-		<sonar.coverage.jacoco.xmlReportPaths>**/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.coverage.jacoco.xmlReportPaths>
+			**/target/site/jacoco-aggregate/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.organization>wte4j</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
@@ -132,7 +134,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -143,7 +144,7 @@
 					<execution>
 						<id>report</id>
 						<goals>
-							<goal>report-aggregate</goal>
+							<goal>report</goal>
 						</goals>
 						<phase>verify</phase>
 					</execution>
@@ -202,6 +203,12 @@
 							<includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
 						</includedLicenses>
 					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.7</version>
 				</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
