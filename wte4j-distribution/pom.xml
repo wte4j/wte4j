@@ -31,16 +31,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		  <!-- NOTE: These dependency declarations are only required to sort this project to the 
-		       end of the line in the multimodule build. 
-		       
-		       Since we only include the child1 module in our assembly, we only need to ensure this
-		       distribution project builds AFTER that one...
-		  -->
 
 		<dependency>
 			<groupId> ${project.parent.groupId}</groupId>
 			<artifactId>wte4j-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId> ${project.parent.groupId}</groupId>
+			<artifactId>wte4j-persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -99,6 +99,20 @@
 							<goal>single</goal>
 						</goals>
 
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>report</id>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+						<phase>verify</phase>
 					</execution>
 				</executions>
 			</plugin>
