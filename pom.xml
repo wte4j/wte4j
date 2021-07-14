@@ -78,7 +78,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Framework Versions -->
-		<spring.version>4.3.10.RELEASE</spring.version>
+		<spring.version>4.3.21.RELEASE</spring.version>
 		<openJPA.version>2.4.2</openJPA.version>
 		<slf4j.version>1.7.8</slf4j.version>
 		<gwtVersion>2.8.2</gwtVersion>
